@@ -1,0 +1,16 @@
+
+
+
+mowa start
+    mowa idhi secret;
+    enchuko (4){
+        case 1 : mowa cheppu ("Hello no.1");
+        aagipo;
+        case 2 : mowa cheppu ("Hello no.2");
+        aagipo;
+        case 3 : mowa cheppu ("Hello no.3");
+        aagipo;
+        default : mowa cheppu ("Hello AP");
+        aagipo
+    }
+mowa end
