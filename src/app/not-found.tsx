@@ -18,6 +18,8 @@ export default function NotFound() {
         <Image
           src="/hero-bg.svg"
           alt="Hero Background"
+          height={100}
+          width={100}
           className="w-full h-full object-cover select-none"
           draggable={false}
         />
@@ -28,7 +30,6 @@ export default function NotFound() {
         <TextHoverEffect text="404" />
       </div>
 
-      {/* Message and Button */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -39,7 +40,6 @@ export default function NotFound() {
           MOWA!! Thappu Page ki Vachesaav. Back ki Vellipo.. 🤦‍♂️
         </p>
 
-        {/* Button */}
         <motion.div
           className="mt-6 flex justify-center gap-4 select-none"
           initial={{ opacity: 0, y: 20 }}

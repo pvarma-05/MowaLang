@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useState } from "react";
 import { TextGenerateEffect } from "../components/ui/text-generate-effect";
 import Image from "next/image";
 import { FeaturesSectionDemo } from "../components/ui/features";
@@ -7,11 +8,57 @@ import { motion } from "framer-motion";
 // import Footer from "./components/Footer";
 
 const words = `MOWA-LANG`;
+const translations = {
+  en: {
+    heading: (
+      <>
+        What is <span className="underline underline-offset-8">MOWA-LANG</span>?
+      </>
+    ),
+    description:
+      "MOWA-LANG is a fun and quirky Telugu-based programming language written in GO. Designed to make coding more entertaining and engaging, with a unique syntax. Whether you're a beginner looking for an enjoyable way to learn coding or an experienced developer seeking something new, MOWA-LANG is here to add excitement to your coding journey!",
+    whyMowa: (
+      <>
+        Why <span className="underline underline-offset-8">MOWA-LANG</span>?
+      </>
+    ),
+  },
+  mowa: {
+    heading: (
+      <>
+        <span className="underline underline-offset-8">MOWA-LANG</span> Antey?
+      </>
+    ),
+    description:
+      "MOWA-LANG oka masth fun telugu basha programming language ra! Idi GO lo rayabadindi. Kodtha syntax tho coding chaala enjoy ga untundi! Beginner aina sare, coding chadhavadaniki idi next level ra!",
+    whyMowa: (
+      <>
+        Endhuku <span className="underline underline-offset-8">MOWA-LANG</span>?
+      </>
+    ),
+  },
+};
+
 // const words2 = `Raa Mowa Coding Nerchukundham...`;
 
 export default function Home() {
+  const [language, setLanguage] = useState<"en" | "mowa">("mowa");
   return (
     <div className="flex flex-col">
+
+      <motion.div
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8 }}
+        className="fixed top-5 left-5 z-50"
+      >
+        <button
+          className="px-4 py-2 bg-[#F9CB43] cursor-pointer font-outfit text-black font-bold rounded-lg"
+          onClick={() => setLanguage(language === "en" ? "mowa" : "en")}
+        >
+          {language === "en" ? "Switch to Mowa" : "Switch to English"}
+        </button>
+      </motion.div>
 
       <section className="relative w-full h-screen flex items-center justify-center text-white">
 
@@ -24,6 +71,8 @@ export default function Home() {
           <Image
             src="/hero-bg.svg"
             alt="Hero Background"
+            height={100}
+            width={100}
             className="w-full h-full object-cover select-none"
             draggable={false}
           />
@@ -60,12 +109,10 @@ export default function Home() {
           className="w-full lg:w-2/4 flex flex-col gap-6 lg:gap-12"
         >
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-gw select-none sm:text-center lg:text-left">
-            What is <span className="underline-offset-8 underline">MOWA-LANG</span>?
+            {translations[language].heading}
           </h1>
           <p className="text-lg lg:text-xl text-gray-200 font-outfit select-none">
-            <span className="text-[#F9CB43] font-semibold sm:text-left">MOWA-LANG</span> is a fun and quirky Telugu-based programming language written in GO.
-            Designed to make coding more entertaining and engaging, with a unique syntax. Whether you're a beginner looking for an enjoyable way to learn coding
-            or an experienced developer seeking something new, MOWA-LANG is here to add excitement to your coding journey!
+            <span className="text-[#F9CB43] font-semibold sm:text-left">MOWA-LANG</span> {translations[language].description}
           </p>
         </motion.div>
 
@@ -95,7 +142,7 @@ export default function Home() {
           viewport={{ once: true }}
           className="text-3xl md:text-5xl lg:text-6xl font-gw select-none sm:text-center"
         >
-          Why <span className="underline-offset-8 underline">MOWA-LANG</span>?
+          {translations[language].whyMowa}
         </motion.h1>
 
         <motion.div
