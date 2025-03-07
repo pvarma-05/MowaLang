@@ -4,6 +4,8 @@ import (
 	"os"
 
 	"github.com/pvarma-05/MowaLang/src/lexer"
+	"github.com/pvarma-05/MowaLang/src/parser"
+	"github.com/sanity-io/litter"
 )
 
 func main() {
@@ -15,7 +17,10 @@ func main() {
 
 	tokens := lexer.Tokenize(string(bytes))
 
-	for _, token := range tokens {
-		token.Debug()
-	}
+	// for _, token := range tokens {
+	// 	token.Debug()
+	// }
+
+	ast := parser.Parse(tokens) // PARSER TESTING
+	litter.Dump(ast)
 }
