@@ -30,7 +30,7 @@ const translations = {
       </>
     ),
     description:
-      "MOWA-LANG oka masth fun telugu basha programming language ra! Idi GO lo rayabadindi. Kodtha syntax tho coding chaala enjoy ga untundi! Beginner aina sare, coding chadhavadaniki idi next level ra!",
+      "anedhi oka kotha telugu toy programming language mowa! Idhi GO vaadi cheyabadindhi. Mana Basha lo coding chaala soukarayam ga untundi! Elanti vaalu aina sarey chaala easy ga nerchukoni coding cheseyvidhanga untaadhi",
     whyMowa: (
       <>
         Endhuku <span className="underline underline-offset-8">MOWA-LANG</span>?
@@ -108,7 +108,7 @@ export default function Home() {
           viewport={{ once: true }}
           className="w-full lg:w-2/4 flex flex-col gap-6 lg:gap-12"
         >
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-gw select-none sm:text-center lg:text-left">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-gw select-none sm:text-center lg:text-left text-[#F9CB43] ">
             {translations[language].heading}
           </h1>
           <p className="text-lg lg:text-xl text-gray-200 font-outfit select-none">
@@ -140,7 +140,7 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-3xl md:text-5xl lg:text-6xl font-gw select-none sm:text-center"
+          className="text-3xl md:text-5xl lg:text-6xl font-gw select-none sm:text-center text-[#F9CB43]"
         >
           {translations[language].whyMowa}
         </motion.h1>

@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
-import "./globals.css";
-import { myfont } from "./assets/fonts";
+import './global.css';
+import { RootProvider } from 'fumadocs-ui/provider';
+import { Outfit } from 'next/font/google';
+import type { ReactNode } from 'react';
 
+import { myfont } from "./assets/fonts";
 
 const outfit = Outfit({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -10,22 +11,11 @@ const outfit = Outfit({
   variable: "--font-outfit",
 });
 
-export const metadata: Metadata = {
-  title: "MowaLang",
-  description: "A Telugu Based Toy Programming Language",
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="scrollbar-thin scrollbar-thumb-[#263238] scrollbar-track-[#001220]">
-      <body
-        className={`${outfit.variable} ${myfont.variable} antialiased`}
-      >
-        {children}
+    <html lang="en" className={`${outfit.variable} ${myfont.variable} antialiased`} suppressHydrationWarning>
+      <body className="flex flex-col min-h-screen scrollbar-thin scrollbar-thumb-[#263238] scrollbar-track-[#001220] ">
+        <RootProvider>{children}</RootProvider>
       </body>
     </html>
   );
