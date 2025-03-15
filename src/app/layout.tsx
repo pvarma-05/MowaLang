@@ -2,7 +2,6 @@ import './global.css';
 import { RootProvider } from 'fumadocs-ui/provider';
 import { Outfit } from 'next/font/google';
 import type { ReactNode } from 'react';
-
 import { myfont } from "./assets/fonts";
 
 const outfit = Outfit({
