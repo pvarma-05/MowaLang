@@ -12,6 +12,8 @@
   font-family: var(--font-outfit);
 }
 
+
+
 @plugin 'tailwind-scrollbar' {
   nocompatible: true;
   preferredStrategy: 'pseudoelements';

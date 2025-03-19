@@ -5,6 +5,7 @@ import {
   IconWorld,
   IconMessageDots,
 } from "@tabler/icons-react";
+import { motion } from "framer-motion";
 
 export function FeaturesSectionDemo() {
   const features = [
@@ -12,32 +13,50 @@ export function FeaturesSectionDemo() {
       title: "Fun Telugu Syntax",
       description:
         "Code like you speak! MOWA-LANG uses Telugu slang to make programming more enjoyable and natural.",
-      icon: <IconLanguage className="w-10 h-10 text-[#F9CB43]" />,
+      icon: <IconLanguage className="w-12 h-12 text-[#F9CB43]" />,
     },
     {
       title: "CLI & Web Execution",
       description:
         "Run your code seamlessly on both the command line and an interactive web playground.",
-      icon: <IconDeviceDesktopCode className="w-10 h-10 text-[#F9CB43]" />,
+      icon: <IconDeviceDesktopCode className="w-12 h-12 text-[#F9CB43]" />,
     },
     {
       title: "Cross-Platform Support",
-      description: "MOWA-LANG runs on Windows, macOS, and Linux, so you can code anywhere, anytime.",
-      icon: <IconWorld className="w-10 h-10 text-[#F9CB43]" />,
+      description:
+        "MOWA-LANG runs on Windows, macOS, and Linux, so you can code anywhere, anytime.",
+      icon: <IconWorld className="w-12 h-12 text-[#F9CB43]" />,
     },
     {
       title: "Movie Dialogues for Errors",
       description:
         "Get error and success messages in iconic Telugu movie dialogues, customizable by your favorite hero!",
-      icon: <IconMessageDots className="w-10 h-10 text-[#F9CB43]" />,
+      icon: <IconMessageDots className="w-12 h-12 text-[#F9CB43]" />,
     },
   ];
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4  relative z-10 py-10 max-w-7xl mx-auto font-outfit">
+    <motion.div
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10 py-12 max-w-7xl mx-auto font-outfit"
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+    >
       {features.map((feature, index) => (
         <Feature key={feature.title} {...feature} index={index} />
       ))}
-    </div>
+    </motion.div>
   );
 }
 
@@ -52,32 +71,106 @@ const Feature = ({
   icon: React.ReactNode;
   index: number;
 }) => {
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+        type: "spring",
+        bounce: 0.3
+      }
+    },
+    hover: {
+      scale: 1.05,
+      y: -10,
+      boxShadow: "0 15px 30px rgba(249, 203, 67, 0.2)",
+      transition: {
+        duration: 0.3,
+        type: "spring",
+        stiffness: 300
+      }
+    }
+  };
+
+  const iconVariants = {
+    hidden: { scale: 0, rotate: -180 },
+    visible: {
+      scale: 1,
+      rotate: 0,
+      transition: {
+        duration: 0.5,
+        delay: 0.2
+      }
+    },
+    hover: {
+      rotate: 360,
+      transition: {
+        duration: 0.8
+      }
+    }
+  };
+
   return (
-    <div
+    <motion.div
+      variants={cardVariants}
+      initial="hidden"
+      whileInView="visible"
+      whileHover="hover"
+      viewport={{ once: true }}
       className={cn(
-        "flex flex-col lg:border-r  py-10 relative group/feature dark:border-neutral-800",
-        (index === 0 || index === 4) && "lg:border-l dark:border-neutral-800",
-        index < 4 && "lg:border-b dark:border-neutral-800"
+        "flex flex-col p-6 bg-[#002b45]/30 rounded-xl border border-[#F9CB43]/20",
+        "backdrop-blur-md relative overflow-hidden group/feature",
+        "transition-all duration-300 select-none"
       )}
     >
-      {index < 4 && (
-        <div className="select-none opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-neutral-100 dark:from-neutral-800 to-transparent pointer-events-none" />
-      )}
-      {index >= 4 && (
-        <div className="select-none opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-b from-neutral-100 dark:from-neutral-800 to-transparent pointer-events-none" />
-      )}
-      <div className="select-none mb-4 relative z-10 px-10 text-neutral-600 dark:text-neutral-400">
+      {/* Background glow effect */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-br from-[#F9CB43]/10 to-transparent opacity-0 group-hover/feature:opacity-100"
+        transition={{ duration: 0.3 }}
+      />
+
+      {/* Icon container */}
+      <motion.div
+        variants={iconVariants}
+        className="mb-6 flex justify-center z-10"
+      >
         {icon}
-      </div>
-      <div className="select-none text-lg font-bold mb-2 relative z-10 px-10">
-        <div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-neutral-300 dark:bg-neutral-700 group-hover/feature:bg-[#F9CB43] transition-all duration-200 origin-center" />
-        <span className="group-hover/feature:translate-x-2 transition duration-200 inline-block text-neutral-800 dark:text-neutral-100">
+      </motion.div>
+
+      {/* Title */}
+      <div className="text-xl font-bold mb-3 relative z-10 text-center">
+        <motion.span
+          className="inline-block text-neutral-100 group-hover/feature:text-[#F9CB43]"
+          initial={{ x: -20, opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          viewport={{ once: true }}
+        >
           {title}
-        </span>
+        </motion.span>
+        <motion.div
+          className="h-1 w-16 bg-[#F9CB43] rounded-full mx-auto mt-2"
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
+          viewport={{ once: true }}
+        />
       </div>
-      <p className="select-none text-sm text-neutral-600 dark:text-neutral-300 max-w-xs relative z-10 px-10">
+
+      {/* Description */}
+      <motion.p
+        className="text-sm text-neutral-300 text-center z-10"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+        viewport={{ once: true }}
+      >
         {description}
-      </p>
-    </div>
+      </motion.p>
+    </motion.div>
   );
 };
