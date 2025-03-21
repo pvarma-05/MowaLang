@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/pvarma-05/MowaLang/src/lexer"
@@ -10,17 +11,21 @@ import (
 
 func main() {
 	bytes, err := os.ReadFile("examples/hello.mowa")
-
 	if err != nil {
-		panic(err)
+		fmt.Printf("File read cheyaleka ra: %v\n", err)
+		os.Exit(1)
 	}
 
-	tokens := lexer.Tokenize(string(bytes))
+	tokens, lexErrors := lexer.Tokenize(string(bytes))
+	if lexErrors.HasErrors() {
+		lexErrors.PrintErrors()
+		os.Exit(1)
+	}
 
-	// for _, token := range tokens {
-	// 	token.Debug()
-	// }
-
-	ast := parser.Parse(tokens) // PARSER TESTING
+	ast, parseErrors := parser.Parse(tokens)
+	parseErrors.PrintErrors()
+	if parseErrors.HasErrors() {
+		os.Exit(1)
+	}
 	litter.Dump(ast)
 }

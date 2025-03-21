@@ -3,6 +3,8 @@ package lexer
 import (
 	"fmt"
 	"regexp"
+
+	"github.com/pvarma-05/MowaLang/src/errors"
 )
 
 type regexHandler func(lex *lexer, regex *regexp.Regexp)
@@ -17,6 +19,7 @@ type lexer struct {
 	source   string
 	Tokens   []Token
 	patterns []regexPattern
+	errors   *errors.ErrorReporter
 }
 
 func (lex *lexer) advanceN(n int) {
@@ -35,12 +38,11 @@ func (lex *lexer) at_eof() bool {
 	return lex.pos >= len(lex.source)
 }
 
-func Tokenize(source string) []Token {
+func Tokenize(source string) ([]Token, *errors.ErrorReporter) {
 	lex := createLexer(source)
 
 	for !lex.at_eof() {
 		matched := false
-
 		for _, pattern := range lex.patterns {
 			loc := pattern.regex.FindStringIndex(lex.remainder())
 			if loc != nil && loc[0] == 0 {
@@ -49,13 +51,13 @@ func Tokenize(source string) []Token {
 				break
 			}
 		}
-
 		if !matched {
-			panic(fmt.Sprintf("Lexer Error : Error -> unrecognized token near %s\n", lex.remainder()))
+			lex.errors.Report(fmt.Sprintf("lexer problem Mowa, unrecognized token near '%s'", lex.remainder()))
+			break
 		}
 	}
 	lex.push(newToken(EOF, "EOF"))
-	return lex.Tokens
+	return lex.Tokens, lex.errors
 }
 
 func defaultHandler(kind TokenKind, value string) regexHandler {
@@ -70,6 +72,7 @@ func createLexer(source string) *lexer {
 		pos:    0,
 		source: source,
 		Tokens: make([]Token, 0),
+		errors: errors.NewErrorReporter(),
 		patterns: []regexPattern{
 			{regexp.MustCompile(`[a-zA-Z_][A-Za-z0-9_]*`), symbolHandler},
 			{regexp.MustCompile(`[0-9]+(\.[0-9]+)?`), numberHandler},

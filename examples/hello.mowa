@@ -1,7 +1,7 @@
-
+// lexer test
 // mowa start
 //     mowa idhi secret;
-//     enchuko (4){
+//     enchuko (secret){
 //         case 1 : mowa cheppu "Hello no.1";
 //         aagipo;
 //         case 2 : mowa cheppu "Hello no.2";
@@ -13,5 +13,37 @@
 //     }
 // mowa end
 
+//parser test-1
+// 10 + 4 * 2;
 
-10 + 4 * 2;
+//parser test-2
+// mowa idhi a = 5;
+// mowa idhi b = a * 10;
+//
+// mowa idhi isGreater = a > 10;
+
+//parser test-3
+// mowa idhi a = -40.5;
+// mowa idhi b = a * 10 + (45 / 10 - -5);
+//
+// a = a+10;
+// a += 10;
+
+//parser test-4
+//mowa idhi a : number = 8;
+//mowa cheppu a;
+// mowa idhi b : []number;
+
+
+
+//mowa idhi a : number = 42;
+//mowa idhi b : string = "Hello";
+//mowa idhi c = nijam;
+//mowa idhi d : []number;       // Valid
+//mowa idhi e : []string;       // Valid
+// mowa idhi f : []bool;      // Should fail (uncomment to test error)
+//mowa cheppu a, b, c, "World", 10;  // Print multiple values
+
+mowa idhi a : number = 42;
+mowa theesko b;
+mowa cheppu a, "Hello", b, c;

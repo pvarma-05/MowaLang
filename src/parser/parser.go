@@ -4,39 +4,61 @@ import (
 	"fmt"
 
 	"github.com/pvarma-05/MowaLang/src/ast"
+	"github.com/pvarma-05/MowaLang/src/errors"
 	"github.com/pvarma-05/MowaLang/src/lexer"
 )
 
 type parser struct {
-	// errors []error
 	tokens []lexer.Token
 	pos    int
+	errors *errors.ErrorReporter
 }
 
 func createParser(tokens []lexer.Token) *parser {
 	createTokenLookups()
+	createTypeTokenLookups()
 	return &parser{
-		tokens: tokens, pos: 0,
+		tokens: tokens,
+		pos:    0,
+		errors: errors.NewErrorReporter(),
 	}
 }
 
-func Parse(tokens []lexer.Token) ast.BlockStmt {
-
+func Parse(tokens []lexer.Token) (ast.BlockStmt, *errors.ErrorReporter) {
 	Body := make([]ast.Stmt, 0)
 	p := createParser(tokens)
 
 	for p.hasTokens() {
-		Body = append(Body, parse_stmt(p))
+		stmt := parse_stmt(p)
+		if stmt != nil {
+			Body = append(Body, stmt)
+		}
+		if p.errors.HasErrors() {
+			// Skip to next semicolon or EOF to recover, then stop
+			for p.hasTokens() && p.currentTokenKind() != lexer.SEMI_COLON && p.currentTokenKind() != lexer.EOF {
+				p.advance()
+			}
+			if p.currentTokenKind() == lexer.SEMI_COLON {
+				p.advance()
+			}
+			break
+		}
+		// Expect a semicolon after each statement; if missing, report and recover
+		if p.hasTokens() && p.currentTokenKind() != lexer.SEMI_COLON {
+			p.expectError(lexer.SEMI_COLON, "Statement end ki semicolon undaali Mowa")
+			for p.hasTokens() && p.currentTokenKind() != lexer.SEMI_COLON && p.currentTokenKind() != lexer.EOF {
+				p.advance()
+			}
+			if p.currentTokenKind() == lexer.SEMI_COLON {
+				p.advance()
+			}
+		} else if p.hasTokens() {
+			p.advance() // Consume the semicolon
+		}
 	}
 
-	return ast.BlockStmt{
-		Body: Body,
-	}
+	return ast.BlockStmt{Body: Body}, p.errors
 }
-
-// -----------------
-// HELPER FUNCTIONS
-// -----------------
 
 func (p *parser) currentToken() lexer.Token {
 	return p.tokens[p.pos]
@@ -46,7 +68,6 @@ func (p *parser) advance() lexer.Token {
 	tk := p.currentToken()
 	p.pos++
 	return tk
-
 }
 
 func (p *parser) currentTokenKind() lexer.TokenKind {
@@ -60,12 +81,12 @@ func (p *parser) hasTokens() bool {
 func (p *parser) expectError(expectedKind lexer.TokenKind, err any) lexer.Token {
 	token := p.currentToken()
 	kind := token.Kind
-
 	if kind != expectedKind {
-		if err == nil {
-			err = fmt.Sprintf("Expected %s but recieved %s\n", lexer.TokenKindString(expectedKind), lexer.TokenKindString(kind))
+		msg := fmt.Sprintf("Mowa anukundhi okati : '%s' vachindhi okati : '%s'", lexer.TokenKindString(expectedKind), lexer.TokenKindString(kind))
+		if err != nil {
+			msg = fmt.Sprintf("%s: %v", msg, err)
 		}
-		panic(err)
+		p.errors.Report(msg)
 	}
 	return p.advance()
 }
