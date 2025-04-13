@@ -50,7 +50,7 @@ func stmt(kind lexer.TokenKind, stmt_fn stmt_handler) {
 }
 
 func createTokenLookups() {
-
+	// Assignment operators
 	led(lexer.ASSIGNMENT, assignment, parse_assignment_expr)
 	led(lexer.PLUS_EQUALS, assignment, parse_assignment_expr)
 	led(lexer.MINUS_EQUALS, assignment, parse_assignment_expr)
@@ -58,7 +58,15 @@ func createTokenLookups() {
 	led(lexer.SLASH_EQUALS, assignment, parse_assignment_expr)
 	led(lexer.PERCENT_EQUALS, assignment, parse_assignment_expr)
 
-	// Numbers & Symobls & Booleans
+	// Postfix operators
+	led(lexer.PLUS_PLUS, unary, parse_postfix_expr)   // a++
+	led(lexer.MINUS_MINUS, unary, parse_postfix_expr) // a--
+
+	// Prefix operators
+	nud(lexer.PLUS_PLUS, parse_prefix_expr)   // ++a
+	nud(lexer.MINUS_MINUS, parse_prefix_expr) // --a
+
+	// Numbers, Symbols, Booleans, Grouping
 	nud(lexer.NUMBER, parse_primary_expr)
 	nud(lexer.STRING, parse_primary_expr)
 	nud(lexer.IDENTIFIER, parse_primary_expr)
@@ -68,31 +76,47 @@ func createTokenLookups() {
 	nud(lexer.FALSE, parse_primary_expr)
 
 	// Binary Expr
-
-	// Logical - bp(3)
 	led(lexer.AND, logical, parse_binary_expr)
 	led(lexer.OR, logical, parse_binary_expr)
 	led(lexer.DOT_DOT, logical, parse_binary_expr)
-
-	// Relational - bp(4)
 	led(lexer.LESS, relational, parse_binary_expr)
 	led(lexer.LESS_EQUALS, relational, parse_binary_expr)
 	led(lexer.GREATER, relational, parse_binary_expr)
 	led(lexer.GREATER_EQUALS, relational, parse_binary_expr)
 	led(lexer.EQUALS, relational, parse_binary_expr)
 	led(lexer.NOT_EQUALS, relational, parse_binary_expr)
-
-	// Additive & Multiplicative - bp(5,6)
 	led(lexer.PLUS, additive, parse_binary_expr)
 	led(lexer.DASH, additive, parse_binary_expr)
-
 	led(lexer.STAR, multiplicative, parse_binary_expr)
 	led(lexer.SLASH, multiplicative, parse_binary_expr)
 	led(lexer.PERCENT, multiplicative, parse_binary_expr)
+	led(lexer.STAR_STAR, multiplicative, parse_binary_expr)
 
 	// Statements
-
 	stmt(lexer.IDHI, parse_decl_stmt)
 	stmt(lexer.PRINT, parse_print_stmt)
 	stmt(lexer.INPUT, parse_input_stmt)
+	stmt(lexer.IF, parse_if_stmt)
+	stmt(lexer.SWITCH, parse_switch_stmt)
+	stmt(lexer.BREAK, parse_break_stmt) // Added BREAK statement handler
+	stmt(lexer.FOR, parse_for_stmt)
+	stmt(lexer.CONTINUE, parse_continue_stmt)
+}
+
+func parse_postfix_expr(p *parser, left ast.Expr, bp binding_power) ast.Expr {
+	operatorToken := p.advance()
+	return ast.PostfixExpr{
+		LeftExpr: left, // Operand is on the left for postfix
+		Operator: operatorToken,
+	}
+}
+
+func parse_break_stmt(p *parser) ast.Stmt {
+	p.expect(lexer.BREAK) // Consume 'aagipo'
+	return ast.BreakStmt{}
+}
+
+func parse_continue_stmt(p *parser) ast.Stmt {
+	p.expect(lexer.CONTINUE) // Consume 'kaani'
+	return ast.ContinueStmt{}
 }

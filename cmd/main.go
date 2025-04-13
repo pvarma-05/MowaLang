@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/pvarma-05/MowaLang/src/eval"
 	"github.com/pvarma-05/MowaLang/src/lexer"
 	"github.com/pvarma-05/MowaLang/src/parser"
-	"github.com/sanity-io/litter"
 )
 
 func main() {
 	bytes, err := os.ReadFile("examples/hello.mowa")
 	if err != nil {
-		fmt.Printf("File read cheyaleka ra: %v\n", err)
+		fmt.Printf("File ledhu Mowa : %v\n", err)
 		os.Exit(1)
 	}
 
@@ -23,9 +23,15 @@ func main() {
 	}
 
 	ast, parseErrors := parser.Parse(tokens)
-	parseErrors.PrintErrors()
 	if parseErrors.HasErrors() {
+		parseErrors.PrintErrors()
 		os.Exit(1)
 	}
-	litter.Dump(ast)
+
+	evaluator := eval.NewEvaluator()
+	evalErrors := evaluator.Evaluate(ast)
+	evalErrors.PrintErrors()
+	if evalErrors.HasErrors() {
+		os.Exit(1)
+	}
 }

@@ -51,6 +51,13 @@ type PrefixExpr struct {
 
 func (n PrefixExpr) expr() {}
 
+type PostfixExpr struct {
+	LeftExpr Expr
+	Operator lexer.Token
+}
+
+func (n PostfixExpr) expr() {}
+
 type AssignmentExpr struct {
 	Assignee Expr
 	Operator lexer.Token

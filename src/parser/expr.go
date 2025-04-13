@@ -12,7 +12,7 @@ func parse_expr(p *parser, bp binding_power) ast.Expr {
 	tokenKind := p.currentTokenKind()
 	nud_fn, exists := nud_lu[tokenKind]
 	if !exists {
-		p.errors.Report(fmt.Sprintf("token '%s' ki NUD handler undaali Mowa", lexer.TokenKindString(tokenKind)))
+		p.errors.Report(fmt.Sprintf("token '%s' ki NUD handler undaali Mowa", lexer.TokenKindString(tokenKind)), p.line)
 		return nil // Return nil to allow parsing to continue
 	}
 	left := nud_fn(p)
@@ -21,7 +21,7 @@ func parse_expr(p *parser, bp binding_power) ast.Expr {
 		tokenKind = p.currentTokenKind()
 		led_fn, exists := led_lu[tokenKind]
 		if !exists {
-			p.errors.Report(fmt.Sprintf("token '%s' ki LED handler undaali Mowa", lexer.TokenKindString(tokenKind)))
+			p.errors.Report(fmt.Sprintf("token '%s' ki LED handler undaali Mowa", lexer.TokenKindString(tokenKind)), p.line)
 			return left // Stop here but return what we have
 		}
 		left = led_fn(p, left, bp_lu[p.currentTokenKind()])
@@ -34,7 +34,7 @@ func parse_primary_expr(p *parser) ast.Expr {
 	case lexer.NUMBER, lexer.STRING, lexer.IDENTIFIER, lexer.TRUE, lexer.FALSE:
 		return p.parse_primary_expr_helper()
 	default:
-		p.errors.Report(fmt.Sprintf("'%s' vaadi expression cheyyalem Mowa", lexer.TokenKindString(p.currentTokenKind())))
+		p.errors.Report(fmt.Sprintf("'%s' vaadi expression cheyyalem Mowa", lexer.TokenKindString(p.currentTokenKind())), p.line)
 		return nil
 	}
 }

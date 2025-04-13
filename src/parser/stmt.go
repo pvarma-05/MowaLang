@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"fmt"
+
 	"github.com/pvarma-05/MowaLang/src/ast"
 	"github.com/pvarma-05/MowaLang/src/lexer"
 )
@@ -12,7 +14,7 @@ func parse_stmt(p *parser) ast.Stmt {
 	}
 	expression := parse_expr(p, default_bp)
 	if expression != nil {
-		return ast.ExprStmt{Expression: expression} // Semicolon handled in Parse
+		return ast.ExprStmt{Expression: expression}
 	}
 	return nil
 }
@@ -28,11 +30,22 @@ func parse_decl_stmt(p *parser) ast.Stmt {
 		explicitType = parse_type(p, default_bp)
 	}
 
-	if p.currentTokenKind() != lexer.SEMI_COLON {
-		p.expect(lexer.ASSIGNMENT)
+	if p.currentTokenKind() == lexer.ASSIGNMENT {
+		p.advance()
 		assignedValue = parse_expr(p, assignment)
-	} else if explicitType == nil {
-		p.errors.Report("Mowa, variable ki ayithe value undali lekapothey type undaali!")
+	} else if p.currentTokenKind() != lexer.SEMI_COLON {
+		lastToken := p.currentToken()
+		if p.pos > 0 {
+			lastToken = p.tokens[p.pos-1]
+		}
+		p.errors.Report(fmt.Sprintf("Mowa anukundhi okati : 'semi_colon' vachindhi okati : '%s': Variable declaration ki semicolon undaali Mowa '%s' tarvatha",
+			lexer.TokenKindString(p.currentTokenKind()), lastToken.Value), lastToken.Line)
+		return nil
+	}
+
+	if explicitType == nil && assignedValue == nil {
+		p.errors.Report("Mowa, variable ki ayithe value undali lekapothey type undaali!", p.line)
+		return nil
 	}
 
 	return ast.VarDeclStmt{
@@ -53,8 +66,8 @@ func parse_print_stmt(p *parser) ast.Stmt {
 		if p.currentTokenKind() == lexer.COMMA {
 			p.advance()
 		} else if p.currentTokenKind() != lexer.SEMI_COLON {
-			p.errors.Report("Comma lekapothey semicolon expect chesthunna Mowa!")
-			break // Let Parse handle recovery
+			p.errors.Report("Comma lekapothey semicolon expect chesthunna Mowa!", p.line)
+			break
 		}
 	}
 	return ast.PrintStmt{Expressions: expressions}
@@ -69,5 +82,182 @@ func parse_input_stmt(p *parser) ast.Stmt {
 	varName := p.advance().Value
 	return ast.InputStmt{
 		VarName: varName,
+	}
+}
+
+func parse_if_stmt(p *parser) ast.Stmt {
+	p.expect(lexer.IF)
+	p.expect(lexer.OPEN_PAREN)
+	condition := parse_expr(p, default_bp)
+	if condition == nil {
+		p.errors.Report("Mowa, if ki condition undaali ra!", p.line)
+		return nil
+	}
+	p.expect(lexer.CLOSE_PAREN)
+	p.expect(lexer.THEN)
+	p.expect(lexer.OPEN_CURLY)
+	thenBody := parse_block(p)
+	p.expect(lexer.CLOSE_CURLY)
+
+	var elseIfs []ast.ElseIfBranch
+	for p.hasTokens() && p.currentTokenKind() == lexer.ELSE_IF {
+		p.advance()
+		p.expect(lexer.OPEN_PAREN)
+		elseIfCondition := parse_expr(p, default_bp)
+		if elseIfCondition == nil {
+			p.errors.Report("Mowa, else if ki condition undaali ra!", p.line)
+			return nil
+		}
+		p.expect(lexer.CLOSE_PAREN)
+		p.expect(lexer.OPEN_CURLY)
+		elseIfBody := parse_block(p)
+		p.expect(lexer.CLOSE_CURLY)
+		elseIfs = append(elseIfs, ast.ElseIfBranch{
+			Condition: elseIfCondition,
+			Body:      elseIfBody,
+		})
+	}
+
+	var elseBranch *ast.BlockStmt
+	if p.hasTokens() && p.currentTokenKind() == lexer.ELSE {
+		p.advance()
+		p.expect(lexer.OPEN_CURLY)
+		elseBody := parse_block(p)
+		p.expect(lexer.CLOSE_CURLY)
+		elseBranch = &elseBody
+	}
+
+	return ast.IfStmt{
+		Condition:  condition,
+		ThenBranch: thenBody,
+		ElseIfs:    elseIfs,
+		ElseBranch: elseBranch,
+	}
+}
+
+func parse_switch_stmt(p *parser) ast.Stmt {
+	p.expect(lexer.SWITCH)
+	p.expect(lexer.OPEN_PAREN)
+	expr := parse_expr(p, default_bp)
+	if expr == nil {
+		p.errors.Report("Mowa, switch ki expression undaali ra!", p.line)
+		return nil
+	}
+	p.expect(lexer.CLOSE_PAREN)
+	p.expect(lexer.OPEN_CURLY)
+
+	cases := []ast.CaseBranch{}
+	var defaultBranch *ast.BlockStmt
+
+	for p.hasTokens() && p.currentTokenKind() != lexer.CLOSE_CURLY {
+		if p.currentTokenKind() == lexer.CASE {
+			p.advance()
+			caseValue := parse_expr(p, default_bp)
+			if caseValue == nil {
+				p.errors.Report("Mowa, case ki value undaali ra!", p.line)
+				return nil
+			}
+			p.expect(lexer.COLON)
+			body := []ast.Stmt{}
+			for p.hasTokens() && p.currentTokenKind() != lexer.CASE && p.currentTokenKind() != lexer.DEFAULT && p.currentTokenKind() != lexer.CLOSE_CURLY {
+				stmt := parse_stmt(p)
+				if stmt != nil {
+					body = append(body, stmt)
+				}
+				if p.errors.HasErrors() {
+					break
+				}
+				if p.hasTokens() && p.currentTokenKind() == lexer.SEMI_COLON {
+					p.advance()
+				}
+			}
+			cases = append(cases, ast.CaseBranch{
+				Value: caseValue,
+				Body:  ast.BlockStmt{Body: body},
+			})
+		} else if p.currentTokenKind() == lexer.DEFAULT {
+			p.advance()
+			p.expect(lexer.COLON)
+			body := []ast.Stmt{}
+			for p.hasTokens() && p.currentTokenKind() != lexer.CASE && p.currentTokenKind() != lexer.DEFAULT && p.currentTokenKind() != lexer.CLOSE_CURLY {
+				stmt := parse_stmt(p)
+				if stmt != nil {
+					body = append(body, stmt)
+				}
+				if p.errors.HasErrors() {
+					break
+				}
+				if p.hasTokens() && p.currentTokenKind() == lexer.SEMI_COLON {
+					p.advance()
+				}
+			}
+			if defaultBranch != nil {
+				p.errors.Report("Mowa, switch lo okka default matrame undali ra!", p.line)
+				return nil
+			}
+			defaultBranch = &ast.BlockStmt{Body: body}
+		} else {
+			p.errors.Report(fmt.Sprintf("Mowa, 'case' or 'default' expect chesthunna, '%s' vachindhi ra!", lexer.TokenKindString(p.currentTokenKind())), p.line)
+			return nil
+		}
+	}
+	p.expect(lexer.CLOSE_CURLY)
+
+	return ast.SwitchStmt{
+		Expression: expr,
+		Cases:      cases,
+		Default:    defaultBranch,
+	}
+}
+
+func parse_block(p *parser) ast.BlockStmt {
+	body := []ast.Stmt{}
+	for p.hasTokens() && p.currentTokenKind() != lexer.CLOSE_CURLY {
+		stmt := parse_stmt(p)
+		if stmt != nil {
+			body = append(body, stmt)
+		}
+		if p.errors.HasErrors() {
+			break
+		}
+		// Only consume semicolon if present, otherwise continue to next statement or end
+		if p.hasTokens() && p.currentTokenKind() == lexer.SEMI_COLON {
+			p.advance()
+		} else if p.currentTokenKind() != lexer.CLOSE_CURLY {
+			// If not a semicolon or closing curly, it’s fine—next iteration will parse the next statement
+			continue
+		}
+	}
+	return ast.BlockStmt{Body: body}
+}
+
+func parse_for_stmt(p *parser) ast.Stmt {
+	p.expect(lexer.FOR)
+	p.expect(lexer.OPEN_PAREN)
+
+	var init ast.Stmt
+	if p.currentTokenKind() == lexer.IDHI {
+		init = parse_decl_stmt(p)
+	} else {
+		initExpr := parse_expr(p, default_bp)
+		init = ast.ExprStmt{Expression: initExpr}
+	}
+	p.expect(lexer.SEMI_COLON)
+
+	condition := parse_expr(p, default_bp)
+	p.expect(lexer.SEMI_COLON)
+
+	increment := parse_expr(p, default_bp)
+	p.expect(lexer.CLOSE_PAREN)
+
+	p.expect(lexer.OPEN_CURLY)
+	body := parse_block(p)
+	p.expect(lexer.CLOSE_CURLY)
+
+	return ast.ForStmt{
+		Init:      init,
+		Condition: condition,
+		Increment: increment,
+		Body:      body,
 	}
 }

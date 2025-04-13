@@ -3,6 +3,7 @@ package lexer
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/pvarma-05/MowaLang/src/errors"
 )
@@ -20,9 +21,14 @@ type lexer struct {
 	Tokens   []Token
 	patterns []regexPattern
 	errors   *errors.ErrorReporter
+	line     int // Track current line
 }
 
 func (lex *lexer) advanceN(n int) {
+	// Count newlines in the advanced section
+	slice := lex.source[lex.pos : lex.pos+n]
+	newlines := strings.Count(slice, "\n")
+	lex.line += newlines
 	lex.pos += n
 }
 
@@ -52,18 +58,18 @@ func Tokenize(source string) ([]Token, *errors.ErrorReporter) {
 			}
 		}
 		if !matched {
-			lex.errors.Report(fmt.Sprintf("lexer problem Mowa, unrecognized token near '%s'", lex.remainder()))
+			lex.errors.Report(fmt.Sprintf("lexer problem Mowa, unrecognized token near '%s'", lex.remainder()), lex.line)
 			break
 		}
 	}
-	lex.push(newToken(EOF, "EOF"))
+	lex.push(newToken(EOF, "EOF", lex.line))
 	return lex.Tokens, lex.errors
 }
 
 func defaultHandler(kind TokenKind, value string) regexHandler {
 	return func(lex *lexer, regex *regexp.Regexp) {
 		lex.advanceN(len(value))
-		lex.push(newToken(kind, value))
+		lex.push(newToken(kind, value, lex.line))
 	}
 }
 
@@ -73,6 +79,7 @@ func createLexer(source string) *lexer {
 		source: source,
 		Tokens: make([]Token, 0),
 		errors: errors.NewErrorReporter(),
+		line:   1, // Start at line 1
 		patterns: []regexPattern{
 			{regexp.MustCompile(`[a-zA-Z_][A-Za-z0-9_]*`), symbolHandler},
 			{regexp.MustCompile(`[0-9]+(\.[0-9]+)?`), numberHandler},
@@ -104,6 +111,7 @@ func createLexer(source string) *lexer {
 			{regexp.MustCompile(`,`), defaultHandler(COMMA, ",")},
 			{regexp.MustCompile(`\+\+`), defaultHandler(PLUS_PLUS, "++")},
 			{regexp.MustCompile(`--`), defaultHandler(MINUS_MINUS, "--")},
+			{regexp.MustCompile(`\*\*`), defaultHandler(STAR_STAR, "**")},
 			{regexp.MustCompile(`\+=`), defaultHandler(PLUS_EQUALS, "+=")},
 			{regexp.MustCompile(`-=`), defaultHandler(MINUS_EQUALS, "-=")},
 			{regexp.MustCompile(`\*=`), defaultHandler(STAR_EQUALS, "*=")},
@@ -126,13 +134,13 @@ func skipHandler(lex *lexer, regex *regexp.Regexp) {
 func stringHandler(lex *lexer, regex *regexp.Regexp) {
 	match := regex.FindStringIndex(lex.remainder())
 	stringLiteral := lex.remainder()[match[0]:match[1]]
-	lex.push(newToken(STRING, stringLiteral))
+	lex.push(newToken(STRING, stringLiteral, lex.line))
 	lex.advanceN(len(stringLiteral))
 }
 
 func numberHandler(lex *lexer, regex *regexp.Regexp) {
 	match := regex.FindString(lex.remainder())
-	lex.push(newToken(NUMBER, match))
+	lex.push(newToken(NUMBER, match, lex.line))
 	lex.advanceN(len(match))
 }
 
@@ -154,11 +162,11 @@ func symbolHandler(lex *lexer, regex *regexp.Regexp) {
 
 	if longestMatch != "" {
 		lex.advanceN(len(longestMatch))
-		lex.push(newToken(matchingToken, longestMatch))
+		lex.push(newToken(matchingToken, longestMatch, lex.line))
 	} else {
 		// Default case: Treat it as an identifier
-		match := regex.FindString(remainder)
+		match := regex.FindString(lex.remainder())
 		lex.advanceN(len(match))
-		lex.push(newToken(IDENTIFIER, match))
+		lex.push(newToken(IDENTIFIER, match, lex.line))
 	}
 }

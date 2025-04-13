@@ -37,8 +37,9 @@ const (
 	QUESTION   // ?
 	COMMA      // ,
 
-	PLUS_PLUS      // ++
-	MINUS_MINUS    // --
+	PLUS_PLUS   // ++
+	MINUS_MINUS // --
+	STAR_STAR
 	PLUS_EQUALS    // +=
 	MINUS_EQUALS   // -=
 	STAR_EQUALS    // *=
@@ -51,13 +52,10 @@ const (
 	SLASH   // /
 	PERCENT // %
 
-	MOWA_START // mowa start
-	MOWA_END   // mowa end
-
 	IDHI  // Variable declaration
 	ANUKO // in loop variable declaration
 
-	IF      // mowa okavela (cond) ayithe
+	IF      // okavela (cond) ayithe
 	THEN    // ayithe
 	ELSE_IF // ledhante (cond)
 	ELSE    // ledha
@@ -69,7 +67,7 @@ const (
 	FN     // pani
 	RETURN // ichey
 
-	PRINT // mowa cheppu
+	PRINT // mowa
 	INPUT // theesko
 
 	TRUE  // nijam
@@ -77,44 +75,39 @@ const (
 	NULL  // bokka
 
 	BREAK    // aagipo
-	CONTINUE // konasaagu
+	CONTINUE // kaani
 	TYPEOF   // rakam
 
-	WHILE    // mowa ayye varaku
-	DO_WHILE // mowa modhalu { } ayye varaku
-	FOR      // mowa sarlu (anuko variable ; cond ; inc/dec)
+	FOR // varaku (anuko variable ; cond ; inc/dec)
 )
 
 var reserved_lu map[string]TokenKind = map[string]TokenKind{
-	"mowa start":       MOWA_START,
-	"mowa end":         MOWA_END,
-	"mowa idhi":        IDHI,
-	"anuko":            ANUKO,
-	"mowa okavela":     IF,
-	"ayithe":           THEN,
-	"ledhante":         ELSE_IF,
-	"ledha":            ELSE,
-	"enchuko":          SWITCH,
-	"case":             CASE,
-	"default":          DEFAULT,
-	"pani":             FN,
-	"ichey":            RETURN,
-	"mowa cheppu":      PRINT,
-	"mowa theesko":     INPUT,
-	"nijam":            TRUE,
-	"abadham":          FALSE,
-	"bokka":            NULL,
-	"aagipo":           BREAK,
-	"konasaagu":        CONTINUE,
-	"rakam":            TYPEOF,
-	"mowa ayye varaku": WHILE,
-	"mowa modhalu":     DO_WHILE,
-	"mowa sarlu":       FOR,
+	"idhi":     IDHI,
+	"anuko":    ANUKO,
+	"okavela":  IF,
+	"ayithe":   THEN,
+	"ledhante": ELSE_IF,
+	"ledha":    ELSE,
+	"enchuko":  SWITCH,
+	"case":     CASE,
+	"default":  DEFAULT,
+	"pani":     FN,
+	"ichey":    RETURN,
+	"mowa":     PRINT,
+	"theesko":  INPUT,
+	"nijam":    TRUE,
+	"abadham":  FALSE,
+	"bokka":    NULL,
+	"aagipo":   BREAK,
+	"kaani":    CONTINUE,
+	"rakam":    TYPEOF,
+	"varaku":   FOR,
 }
 
 type Token struct {
 	Kind  TokenKind
 	Value string
+	Line  int // Added for line number tracking
 }
 
 func (token Token) isOneOfMany(expectedTokens ...TokenKind) bool {
@@ -128,15 +121,17 @@ func (token Token) isOneOfMany(expectedTokens ...TokenKind) bool {
 
 func (token Token) Debug() {
 	if token.isOneOfMany(IDENTIFIER, NUMBER, STRING) {
-		fmt.Printf("%s (%s)\n", TokenKindString(token.Kind), token.Value)
+		fmt.Printf("%s (%s) [line %d]\n", TokenKindString(token.Kind), token.Value, token.Line) // Updated to show line
 	} else {
-		fmt.Printf("%s ()\n", TokenKindString(token.Kind))
+		fmt.Printf("%s () [line %d]\n", TokenKindString(token.Kind), token.Line)
 	}
 }
 
-func newToken(kind TokenKind, value string) Token {
+func newToken(kind TokenKind, value string, line int) Token {
 	return Token{
-		kind, value,
+		Kind:  kind,
+		Value: value,
+		Line:  line,
 	}
 }
 
@@ -198,6 +193,8 @@ func TokenKindString(kind TokenKind) string {
 		return "plus_plus"
 	case MINUS_MINUS:
 		return "minus_minus"
+	case STAR_STAR:
+		return "star_star"
 	case PLUS_EQUALS:
 		return "plus_equals"
 	case MINUS_EQUALS:
@@ -212,12 +209,8 @@ func TokenKindString(kind TokenKind) string {
 		return "star"
 	case PERCENT:
 		return "percent"
-	case MOWA_START:
-		return "mowa_start"
-	case MOWA_END:
-		return "mowa_end"
 	case PRINT:
-		return "cheppu"
+		return "mowa"
 	case IDHI:
 		return "idhi"
 	case ANUKO:
@@ -249,15 +242,11 @@ func TokenKindString(kind TokenKind) string {
 	case BREAK:
 		return "aagipo"
 	case CONTINUE:
-		return "konasaagu"
+		return "kaani"
 	case TYPEOF:
 		return "rakam"
-	case WHILE:
-		return "mowa ayye varaku"
-	case DO_WHILE:
-		return "mowa modhalu"
 	case FOR:
-		return "mowa sarlu"
+		return "varaku"
 	default:
 		return fmt.Sprintf("unknown(%d)", kind)
 	}

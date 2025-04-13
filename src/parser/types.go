@@ -45,7 +45,7 @@ func parse_array_type(p *parser) ast.Type {
 	if underlying != nil {
 		if sym, ok := underlying.(ast.SymbolType); ok {
 			if sym.Name != "number" && sym.Name != "string" {
-				p.errors.Report(fmt.Sprintf("Arrays ki ayithe 'number' undaali lekapothey 'string' Mowa! '%s' undakodadhu", sym.Name))
+				p.errors.Report(fmt.Sprintf("Arrays ki ayithe 'number' undaali lekapothey 'string' Mowa! '%s' undakodadhu", sym.Name), p.line)
 				return nil
 			}
 		}
@@ -57,7 +57,7 @@ func parse_type(p *parser, bp binding_power) ast.Type {
 	tokenKind := p.currentTokenKind()
 	nud_fn, exists := type_nud_lu[tokenKind]
 	if !exists {
-		p.errors.Report(fmt.Sprintf("Type handler missing ra for '%s'", lexer.TokenKindString(tokenKind)))
+		p.errors.Report(fmt.Sprintf("Type handler missing ra for '%s'", lexer.TokenKindString(tokenKind)), p.line)
 		return nil
 	}
 	left := nud_fn(p)
@@ -65,12 +65,10 @@ func parse_type(p *parser, bp binding_power) ast.Type {
 	for type_bp_lu[p.currentTokenKind()] > bp {
 		tokenKind = p.currentTokenKind()
 		led_fn, exists := type_led_lu[tokenKind]
-
 		if !exists {
 			panic(fmt.Sprintf("Token %s ki LED Handler expect chesthunna Mowa\n", lexer.TokenKindString(tokenKind)))
 		}
 		left = led_fn(p, left, type_bp_lu[p.currentTokenKind()])
 	}
 	return left
-
 }
