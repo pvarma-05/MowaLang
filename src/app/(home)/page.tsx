@@ -125,7 +125,7 @@ export default function Home() {
           >
             <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
               <Link
-                className="p-4 bg-[#F9CB43] w-40 text-black font-medium font-outfit text-xl rounded-lg transition-all duration-300"
+                className="px-10 py-4 bg-[#F9CB43] w-40 text-black font-medium font-outfit text-xl rounded-lg transition-all duration-300"
                 href={"/play"}
               >
                 Try It
@@ -133,7 +133,7 @@ export default function Home() {
             </motion.div>
             <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
               <Link
-                className="p-4 bg-[#F9CB43] w-40 text-black font-medium font-outfit text-xl rounded-lg transition-all duration-300"
+                className="px-10 py-4 bg-[#F9CB43] w-40 text-black font-medium font-outfit text-xl rounded-lg transition-all duration-300"
                 href={"/docs"}
               >
                 Docs
