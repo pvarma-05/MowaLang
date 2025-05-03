@@ -2,86 +2,73 @@ package lexer
 
 import "fmt"
 
+// TokenKind represents the type of a token in MowaLang.
 type TokenKind int
 
+// Token kind constants for MowaLang's syntax.
 const (
-	EOF TokenKind = iota
-	NUMBER
-	STRING
-	IDENTIFIER
-
-	OPEN_BRACKET  // [
-	CLOSE_BRACKET // ]
-	OPEN_CURLY    // {
-	CLOSE_CURLY   // }
-	OPEN_PAREN    // (
-	CLOSE_PAREN   // )
-
-	ASSIGNMENT // =
-	EQUALS     // ==
-	NOT        // !
-	NOT_EQUALS // !=
-
-	LESS           // <
-	LESS_EQUALS    // <=
-	GREATER        // >
-	GREATER_EQUALS // >=
-
-	OR  // ||
-	AND // &&
-
-	DOT        // .
-	DOT_DOT    // ..
-	SEMI_COLON // ;
-	COLON      // :
-	QUESTION   // ?
-	COMMA      // ,
-
-	PLUS_PLUS   // ++
-	MINUS_MINUS // --
-	STAR_STAR
-	PLUS_EQUALS    // +=
-	MINUS_EQUALS   // -=
-	STAR_EQUALS    // *=
-	SLASH_EQUALS   // /=
-	PERCENT_EQUALS // %=
-
-	PLUS    // +
-	DASH    // -
-	STAR    // *
-	SLASH   // /
-	PERCENT // %
-
-	IDHI  // Variable declaration
-	ANUKO // in loop variable declaration
-
-	IF      // okavela (cond) ayithe
-	THEN    // ayithe
-	ELSE_IF // ledhante (cond)
-	ELSE    // ledha
-
-	SWITCH  // enchuko
-	CASE    // case
-	DEFAULT // default
-
-	FN     // pani
-	RETURN // ichey
-
-	PRINT // mowa
-	INPUT // theesko
-
-	TRUE  // nijam
-	FALSE // abadham
-	NULL  // bokka
-
-	BREAK    // aagipo
-	CONTINUE // kaani
-	TYPEOF   // rakam
-
-	FOR // varaku (anuko variable ; cond ; inc/dec)
+	EOF            TokenKind = iota // End of file
+	NUMBER                          // Numeric literal (e.g., "123", "3.14")
+	STRING                          // String literal (e.g., "\"hello\"")
+	IDENTIFIER                      // Variable or type name (e.g., "a", "number")
+	OPEN_BRACKET                    // [ (array start)
+	CLOSE_BRACKET                   // ] (array end)
+	OPEN_CURLY                      // { (block start)
+	CLOSE_CURLY                     // } (block end)
+	OPEN_PAREN                      // ( (grouping or condition)
+	CLOSE_PAREN                     // ) (grouping or condition end)
+	ASSIGNMENT                      // = (assignment)
+	EQUALS                          // == (equality)
+	NOT                             // ! (logical not)
+	NOT_EQUALS                      // != (inequality)
+	LESS                            // < (less than)
+	LESS_EQUALS                     // <= (less than or equal)
+	GREATER                         // > (greater than)
+	GREATER_EQUALS                  // >= (greater than or equal)
+	OR                              // || (logical or)
+	AND                             // && (logical and)
+	DOT                             // . (member access, e.g., arr.length)
+	DOT_DOT                         // .. (range, not currently used)
+	SEMI_COLON                      // ; (statement separator)
+	COLON                           // : (type annotation)
+	QUESTION                        // ? (not currently used)
+	COMMA                           // , (expression separator)
+	PLUS_PLUS                       // ++ (increment)
+	MINUS_MINUS                     // -- (decrement)
+	STAR_STAR                       // ** (exponentiation)
+	PLUS_EQUALS                     // += (add and assign)
+	MINUS_EQUALS                    // -= (subtract and assign)
+	STAR_EQUALS                     // *= (multiply and assign)
+	SLASH_EQUALS                    // /= (divide and assign)
+	PERCENT_EQUALS                  // %= (modulo and assign)
+	PLUS                            // + (addition or concatenation)
+	DASH                            // - (subtraction)
+	STAR                            // * (multiplication)
+	SLASH                           // / (division)
+	PERCENT                         // % (modulo)
+	IDHI                            // idhi (variable declaration)
+	ANUKO                           // anuko (loop variable declaration)
+	IF                              // okavela (if)
+	THEN                            // ayithe (then)
+	ELSE_IF                         // ledhante (else if)
+	ELSE                            // ledha (else)
+	SWITCH                          // enchuko (switch)
+	CASE                            // case (case)
+	DEFAULT                         // default (default case)
+	FN                              // pani (function, not implemented)
+	RETURN                          // ichey (return, not implemented)
+	PRINT                           // mowa (print)
+	INPUT                           // theesko (input)
+	TRUE                            // nijam (true)
+	FALSE                           // abadham (false)
+	BREAK                           // aagipo (break)
+	CONTINUE                        // kaani (continue)
+	TYPEOF                          // rakam (typeof, not implemented)
+	FOR                             // varaku (for loop)
+	// NULL                            bokka (null, not implemented)
 )
 
-var reserved_lu map[string]TokenKind = map[string]TokenKind{
+var reserved_lu = map[string]TokenKind{
 	"idhi":     IDHI,
 	"anuko":    ANUKO,
 	"okavela":  IF,
@@ -97,19 +84,20 @@ var reserved_lu map[string]TokenKind = map[string]TokenKind{
 	"theesko":  INPUT,
 	"nijam":    TRUE,
 	"abadham":  FALSE,
-	"bokka":    NULL,
-	"aagipo":   BREAK,
-	"kaani":    CONTINUE,
-	"rakam":    TYPEOF,
-	"varaku":   FOR,
+	// "bokka":    NULL,
+	"aagipo": BREAK,
+	"kaani":  CONTINUE,
+	"rakam":  TYPEOF,
+	"varaku": FOR,
 }
 
 type Token struct {
 	Kind  TokenKind
 	Value string
-	Line  int // Added for line number tracking
+	Line  int
 }
 
+// isOneOfMany checks if the token's kind matches any of the provided kinds.
 func (token Token) isOneOfMany(expectedTokens ...TokenKind) bool {
 	for _, expected := range expectedTokens {
 		if expected == token.Kind {
@@ -121,7 +109,7 @@ func (token Token) isOneOfMany(expectedTokens ...TokenKind) bool {
 
 func (token Token) Debug() {
 	if token.isOneOfMany(IDENTIFIER, NUMBER, STRING) {
-		fmt.Printf("%s (%s) [line %d]\n", TokenKindString(token.Kind), token.Value, token.Line) // Updated to show line
+		fmt.Printf("%s (%s) [line %d]\n", TokenKindString(token.Kind), token.Value, token.Line)
 	} else {
 		fmt.Printf("%s () [line %d]\n", TokenKindString(token.Kind), token.Line)
 	}
@@ -237,8 +225,8 @@ func TokenKindString(kind TokenKind) string {
 		return "nijam"
 	case FALSE:
 		return "abadham"
-	case NULL:
-		return "bokka"
+	// case NULL:
+	// 	return "bokka"
 	case BREAK:
 		return "aagipo"
 	case CONTINUE:

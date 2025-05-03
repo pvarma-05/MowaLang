@@ -4,13 +4,13 @@ type BlockStmt struct {
 	Body []Stmt
 }
 
-func (n BlockStmt) stmt() {}
+func (BlockStmt) stmt() {}
 
 type ExprStmt struct {
 	Expression Expr
 }
 
-func (n ExprStmt) stmt() {}
+func (ExprStmt) stmt() {}
 
 type VarDeclStmt struct {
 	VarName       string
@@ -18,25 +18,32 @@ type VarDeclStmt struct {
 	ExplicitType  Type
 }
 
-func (n VarDeclStmt) stmt() {}
+func (VarDeclStmt) stmt() {}
 
 type PrintStmt struct {
 	Expressions []Expr
 }
 
-func (n PrintStmt) stmt() {}
+func (PrintStmt) stmt() {}
 
 type InputStmt struct {
 	VarName string
 }
 
-func (n InputStmt) stmt() {}
+func (InputStmt) stmt() {}
+
+type InputIndexStmt struct {
+	Array Expr
+	Index Expr
+}
+
+func (InputIndexStmt) stmt() {}
 
 type IfStmt struct {
-	Condition  Expr           // Condition to evaluate (e.g., a > b)
-	ThenBranch BlockStmt      // Statements if condition is true
-	ElseIfs    []ElseIfBranch // Optional else-if branches
-	ElseBranch *BlockStmt     // Optional else branch (nil if absent)
+	Condition  Expr
+	ThenBranch BlockStmt
+	ElseIfs    []ElseIfBranch
+	ElseBranch *BlockStmt
 }
 
 type ElseIfBranch struct {
@@ -44,34 +51,54 @@ type ElseIfBranch struct {
 	Body      BlockStmt
 }
 
-func (n IfStmt) stmt() {}
+func (IfStmt) stmt() {}
 
 type SwitchStmt struct {
-	Expression Expr         // The value to switch on (e.g., a)
-	Cases      []CaseBranch // List of case branches
-	Default    *BlockStmt   // Optional default branch (nil if absent)
+	Expression Expr
+	Cases      []CaseBranch
+	Default    *BlockStmt
 }
 
 type CaseBranch struct {
-	Value Expr      // The value to match (e.g., 1, "hello")
-	Body  BlockStmt // Statements to execute if matched
+	Value Expr
+	Body  BlockStmt
 }
 
-func (n SwitchStmt) stmt() {}
+func (SwitchStmt) stmt() {}
 
 type BreakStmt struct{}
 
-func (n BreakStmt) stmt() {}
-
-type ForStmt struct {
-	Init      Stmt      // e.g., VarDeclStmt or AssignmentExpr
-	Condition Expr      // e.g., BinaryExpr (i < 5)
-	Increment Expr      // e.g., PostfixExpr (i++)
-	Body      BlockStmt // Loop body
-}
-
-func (n ForStmt) stmt() {}
+func (BreakStmt) stmt() {}
 
 type ContinueStmt struct{}
 
-func (n ContinueStmt) stmt() {}
+func (ContinueStmt) stmt() {}
+
+type ForStmt struct {
+	Init      Stmt
+	Condition Expr
+	Increment Expr
+	Body      BlockStmt
+}
+
+func (ForStmt) stmt() {}
+
+type FunctionDeclStmt struct {
+	Name       string
+	Parameters []Parameter
+	ReturnType Type
+	Body       BlockStmt
+}
+
+type Parameter struct {
+	Name string
+	Type Type
+}
+
+func (FunctionDeclStmt) stmt() {}
+
+type ReturnStmt struct {
+	Value Expr
+}
+
+func (ReturnStmt) stmt() {}

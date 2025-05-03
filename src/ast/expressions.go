@@ -1,8 +1,6 @@
 package ast
 
-import (
-	"github.com/pvarma-05/MowaLang/src/lexer"
-)
+import "github.com/pvarma-05/MowaLang/src/lexer"
 
 // -------------------
 // LITERAL EXPRESSIONS
@@ -12,25 +10,25 @@ type NumberExpr struct {
 	Value float64
 }
 
-func (n NumberExpr) expr() {}
+func (NumberExpr) expr() {}
 
 type StringExpr struct {
 	Value string
 }
 
-func (n StringExpr) expr() {}
+func (StringExpr) expr() {}
 
 type SymbolExpr struct {
 	Value string
 }
 
-func (n SymbolExpr) expr() {}
+func (SymbolExpr) expr() {}
 
 type BoolExpr struct {
 	Value bool
 }
 
-func (n BoolExpr) expr() {}
+func (BoolExpr) expr() {}
 
 // -------------------
 // COMPLEX EXPRESSIONS
@@ -42,21 +40,21 @@ type BinaryExpr struct {
 	Right    Expr
 }
 
-func (n BinaryExpr) expr() {}
+func (BinaryExpr) expr() {}
 
 type PrefixExpr struct {
 	Operator  lexer.Token
 	RightExpr Expr
 }
 
-func (n PrefixExpr) expr() {}
+func (PrefixExpr) expr() {}
 
 type PostfixExpr struct {
 	LeftExpr Expr
 	Operator lexer.Token
 }
 
-func (n PostfixExpr) expr() {}
+func (PostfixExpr) expr() {}
 
 type AssignmentExpr struct {
 	Assignee Expr
@@ -64,4 +62,38 @@ type AssignmentExpr struct {
 	Value    Expr
 }
 
-func (n AssignmentExpr) expr() {}
+func (AssignmentExpr) expr() {}
+
+type ArrayLiteralExpr struct {
+	Elements []Expr
+}
+
+func (ArrayLiteralExpr) expr() {}
+
+type ArrayIndexExpr struct {
+	Array Expr
+	Index Expr
+}
+
+func (ArrayIndexExpr) expr() {}
+
+type MemberAccessExpr struct {
+	Object   Expr
+	Property string
+}
+
+func (MemberAccessExpr) expr() {}
+
+type CallExpr struct {
+	Function  Expr
+	Arguments []Expr
+}
+
+func (CallExpr) expr() {}
+
+type TypeofExpr struct {
+	Operator lexer.Token
+	Right    Expr
+}
+
+func (TypeofExpr) expr() {}

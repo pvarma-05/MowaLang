@@ -6,17 +6,17 @@ import (
 	"time"
 )
 
-// stores a message and line number
 type MowaError struct {
 	Message    string
 	LineNumber int
 }
 
+// Error implements the error interface for MowaError.
 func (e MowaError) Error() string {
 	return e.Message
 }
 
-// to collect and manage errors
+// ErrorReporter collects and manages errors during lexing, parsing, or evaluation.
 type ErrorReporter struct {
 	Errors []MowaError
 }
@@ -26,20 +26,20 @@ func NewErrorReporter() *ErrorReporter {
 	return &ErrorReporter{Errors: []MowaError{}}
 }
 
+// Report adds an error with a message and line number to the Errors list.
 func (r *ErrorReporter) Report(message string, lineNumber int) {
 	r.Errors = append(r.Errors, MowaError{Message: message, LineNumber: lineNumber})
 }
 
-// Report with a line number
+// ReportSimple adds an error without a line number (fallback).
 func (r *ErrorReporter) ReportSimple(message string) {
-	r.Report(message, 0) // Fallback to 0 for compatibility
+	r.Report(message, 0)
 }
 
 func (r *ErrorReporter) HasErrors() bool {
 	return len(r.Errors) > 0
 }
 
-// Movie dialogues
 var successDialogues = []string{
 	"Prabhas: 'Jai Maahishmathi!'",
 	"AA: 'Mowa... Assala Thaggedeley'",
@@ -52,26 +52,25 @@ var failureDialogues = []string{
 	"Bhramhanandham: 'Arey Tuppas Edhava, Thappu Chesavu ra'",
 }
 
-// PrintErrors with movie dialogues and colors
+// Uses ANSI colors: red for failure, green for success.
 func (r *ErrorReporter) PrintErrors() {
 	if !r.HasErrors() {
-		// Success case: green dialogue
 		dialogue := successDialogues[rand.Intn(len(successDialogues))]
 		fmt.Printf("\n\n\033[32m%s\033[0m\n", dialogue)
 		return
 	}
-	// Failure case: red dialogue
 	dialogue := failureDialogues[rand.Intn(len(failureDialogues))]
 	fmt.Printf("\n\033[31m%s\033[0m\nArey, errors unnai ra:\n", dialogue)
 	for _, err := range r.Errors {
 		if err.LineNumber > 0 {
 			fmt.Printf("ln %d: %s\n", err.LineNumber, err.Message)
 		} else {
-			fmt.Printf("-: %s\n", err.Message) // Fallback
+			fmt.Printf("-: %s\n", err.Message) // Fallback for errors without line numbers
 		}
 	}
 }
 
-func (r *ErrorReporter) Clear() {
-	r.Errors = []MowaError{}
-}
+// // Clear resets the error list (not currently used but available for future extensions).
+// func (r *ErrorReporter) Clear() {
+// 	r.Errors = []MowaError{}
+// }

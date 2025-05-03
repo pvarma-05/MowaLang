@@ -75,14 +75,25 @@ func parse_print_stmt(p *parser) ast.Stmt {
 
 func parse_input_stmt(p *parser) ast.Stmt {
 	p.expect(lexer.INPUT)
-	if p.currentTokenKind() != lexer.IDENTIFIER {
-		p.expectError(lexer.IDENTIFIER, "Input ki variable name undaali Mowa")
-		return nil
+	if p.currentTokenKind() == lexer.IDENTIFIER {
+		varName := p.advance().Value
+		if p.currentTokenKind() == lexer.OPEN_BRACKET {
+			p.advance() // Consume OPEN_BRACKET
+			index := parse_expr(p, default_bp)
+			if index == nil {
+				p.errors.Report("Mowa, array index expression undaali ra!", p.line)
+				return nil
+			}
+			p.expect(lexer.CLOSE_BRACKET)
+			return ast.InputIndexStmt{
+				Array: ast.SymbolExpr{Value: varName},
+				Index: index,
+			}
+		}
+		return ast.InputStmt{VarName: varName}
 	}
-	varName := p.advance().Value
-	return ast.InputStmt{
-		VarName: varName,
-	}
+	p.expectError(lexer.IDENTIFIER, "Input ki variable name undaali Mowa")
+	return nil
 }
 
 func parse_if_stmt(p *parser) ast.Stmt {
@@ -220,12 +231,36 @@ func parse_block(p *parser) ast.BlockStmt {
 		if p.errors.HasErrors() {
 			break
 		}
-		// Only consume semicolon if present, otherwise continue to next statement or end
-		if p.hasTokens() && p.currentTokenKind() == lexer.SEMI_COLON {
-			p.advance()
-		} else if p.currentTokenKind() != lexer.CLOSE_CURLY {
-			// If not a semicolon or closing curly, it’s fine—next iteration will parse the next statement
-			continue
+		// Check if the statement requires a semicolon
+		isBlockStmt := false
+		if stmt != nil {
+			switch stmt.(type) {
+			case ast.IfStmt, ast.ForStmt, ast.SwitchStmt, ast.FunctionDeclStmt:
+				isBlockStmt = true
+			}
+		}
+		if !isBlockStmt && p.currentTokenKind() != lexer.CLOSE_CURLY {
+			// Expect semicolon for non-block statements
+			if p.currentTokenKind() != lexer.SEMI_COLON {
+				lastToken := p.currentToken()
+				errorLine := p.line
+				if p.pos > 0 {
+					lastToken = p.tokens[p.pos-1]
+					errorLine = lastToken.Line
+				}
+				p.errors.Report(fmt.Sprintf("Mowa ravalsindhi 'semi_colon' kaani vachindhi '%s'.: Statement end ki semicolon undaali Mowa '%s' tarvatha",
+					lexer.TokenKindString(p.currentTokenKind()), lastToken.Value), errorLine)
+				// Skip to next semicolon or closing curly to recover
+				for p.hasTokens() && p.currentTokenKind() != lexer.SEMI_COLON && p.currentTokenKind() != lexer.CLOSE_CURLY {
+					p.advance()
+				}
+				if p.currentTokenKind() == lexer.SEMI_COLON {
+					p.advance()
+				}
+			} else {
+				// Consume semicolon
+				p.advance()
+			}
 		}
 	}
 	return ast.BlockStmt{Body: body}
@@ -261,3 +296,87 @@ func parse_for_stmt(p *parser) ast.Stmt {
 		Body:      body,
 	}
 }
+
+func parse_function_decl_stmt(p *parser) ast.Stmt {
+	p.expect(lexer.FN)
+	name := p.expectError(lexer.IDENTIFIER, "Function name expect chesthunna Mowa!").Value
+
+	// Parse parameters (e.g., (a: number, b: number))
+	p.expect(lexer.OPEN_PAREN)
+	parameters := []ast.Parameter{}
+	if p.currentTokenKind() != lexer.CLOSE_PAREN {
+		for {
+			paramName := p.expectError(lexer.IDENTIFIER, "Parameter name expect chesthunna Mowa!").Value
+			p.expect(lexer.COLON)
+			paramType := parse_type(p, default_bp)
+			if paramType == nil {
+				p.errors.Report("Mowa, parameter type undaali ra!", p.line)
+				return nil
+			}
+			parameters = append(parameters, ast.Parameter{Name: paramName, Type: paramType})
+			if p.currentTokenKind() != lexer.COMMA {
+				break
+			}
+			p.advance()
+		}
+	}
+	p.expect(lexer.CLOSE_PAREN)
+
+	// Parse return type (optional)
+	var returnType ast.Type
+	if p.currentTokenKind() == lexer.COLON {
+		p.advance()
+		returnType = parse_type(p, default_bp)
+		if returnType == nil {
+			p.errors.Report("Mowa, return type parse cheyalenu ra!", p.line)
+			return nil
+		}
+	}
+
+	// Parse function body
+	p.expect(lexer.OPEN_CURLY)
+	body := parse_block(p)
+	p.expect(lexer.CLOSE_CURLY)
+
+	return ast.FunctionDeclStmt{
+		Name:       name,
+		Parameters: parameters,
+		ReturnType: returnType,
+		Body:       body,
+	}
+}
+
+func parse_return_stmt(p *parser) ast.Stmt {
+	p.expect(lexer.RETURN)
+	var value ast.Expr
+	if p.currentTokenKind() != lexer.SEMI_COLON {
+		value = parse_expr(p, default_bp)
+		if value == nil {
+			p.errors.Report("Mowa, return value parse cheyalenu ra!", p.line)
+			return nil
+		}
+	}
+	return ast.ReturnStmt{Value: value}
+}
+
+// parse_call_expr parses a function call (e.g., add(1, 2)).
+// func parse_call_expr(p *parser, left ast.Expr, bp binding_power) ast.Expr {
+// 	p.advance() // Consume OPEN_PAREN
+// 	arguments := []ast.Expr{}
+// 	if p.currentTokenKind() != lexer.CLOSE_PAREN {
+// 		for {
+// 			arg := parse_expr(p, default_bp)
+// 			if arg == nil {
+// 				p.errors.Report("Mowa, argument expression parse cheyalenu ra!", p.line)
+// 				return nil
+// 			}
+// 			arguments = append(arguments, arg)
+// 			if p.currentTokenKind() != lexer.COMMA {
+// 				break
+// 			}
+// 			p.advance() // Consume comma
+// 		}
+// 	}
+// 	p.expect(lexer.CLOSE_PAREN)
+// 	return ast.CallExpr{Function: left, Arguments: arguments}
+// }

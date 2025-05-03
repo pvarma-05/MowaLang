@@ -16,18 +16,21 @@ func main() {
 		os.Exit(1)
 	}
 
+	// Step 1: Lexing
 	tokens, lexErrors := lexer.Tokenize(string(bytes))
 	if lexErrors.HasErrors() {
 		lexErrors.PrintErrors()
 		os.Exit(1)
 	}
 
+	// Step 2: Parsing
 	ast, parseErrors := parser.Parse(tokens)
 	if parseErrors.HasErrors() {
 		parseErrors.PrintErrors()
 		os.Exit(1)
 	}
 
+	// Step 3: Evaluation
 	evaluator := eval.NewEvaluator()
 	evalErrors := evaluator.Evaluate(ast)
 	evalErrors.PrintErrors()

@@ -18,10 +18,10 @@ var type_bp_lu = type_bp_lookup{}
 var type_nud_lu = type_nud_lookup{}
 var type_led_lu = type_led_lookup{}
 
-func type_led(kind lexer.TokenKind, bp binding_power, led_fn type_led_handler) {
-	type_bp_lu[kind] = bp
-	type_led_lu[kind] = led_fn
-}
+// func type_led(kind lexer.TokenKind, bp binding_power, led_fn type_led_handler) {
+// 	type_bp_lu[kind] = bp
+// 	type_led_lu[kind] = led_fn
+// }
 
 func type_nud(kind lexer.TokenKind, nud_fn type_nud_handler) {
 	type_nud_lu[kind] = nud_fn
@@ -39,18 +39,30 @@ func parse_symbol_type(p *parser) ast.Type {
 }
 
 func parse_array_type(p *parser) ast.Type {
-	p.advance()
-	p.expect(lexer.CLOSE_BRACKET)
+	p.advance() // Consume OPEN_BRACKET
 	underlying := parse_type(p, default_bp)
-	if underlying != nil {
-		if sym, ok := underlying.(ast.SymbolType); ok {
-			if sym.Name != "number" && sym.Name != "string" {
-				p.errors.Report(fmt.Sprintf("Arrays ki ayithe 'number' undaali lekapothey 'string' Mowa! '%s' undakodadhu", sym.Name), p.line)
-				return nil
-			}
+	if underlying == nil {
+		p.errors.Report("Mowa, array type lo underlying type undaali ra!", p.line)
+		return nil
+	}
+	var size ast.Expr
+	if p.currentTokenKind() == lexer.OPEN_PAREN {
+		p.advance() // Consume OPEN_PAREN
+		size = parse_expr(p, default_bp)
+		if size == nil {
+			p.errors.Report("Mowa, array size expression undaali ra!", p.line)
+			return nil
+		}
+		p.expect(lexer.CLOSE_PAREN)
+	}
+	p.expect(lexer.CLOSE_BRACKET)
+	if sym, ok := underlying.(ast.SymbolType); ok {
+		if sym.Name != "number" && sym.Name != "string" {
+			p.errors.Report(fmt.Sprintf("Arrays ki ayithe 'number' undaali lekapothey 'string' Mowa! '%s' undakodadhu", sym.Name), p.line)
+			return nil
 		}
 	}
-	return ast.ArrayType{Underlying: underlying}
+	return ast.ArrayType{Underlying: underlying, Size: size}
 }
 
 func parse_type(p *parser, bp binding_power) ast.Type {

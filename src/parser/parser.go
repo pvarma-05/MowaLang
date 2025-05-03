@@ -8,18 +8,17 @@ import (
 	"github.com/pvarma-05/MowaLang/src/lexer"
 )
 
+// parser holds the state of the parsing process.
 type parser struct {
 	tokens []lexer.Token
 	pos    int
 	errors *errors.ErrorReporter
-	line   int // Track current line
+	line   int
 }
 
-func (p *parser) error(s string) {
-	panic("unimplemented")
-}
-
+// createParser initializes a parser with tokens and sets up lookups.
 func createParser(tokens []lexer.Token) *parser {
+	// Initialize token and type lookup tables (defined in lookups.go, types.go).
 	createTokenLookups()
 	createTypeTokenLookups()
 	p := &parser{
@@ -34,36 +33,46 @@ func createParser(tokens []lexer.Token) *parser {
 	return p
 }
 
+// Parse converts tokens into an AST (BlockStmt representing the program).
+// Returns the AST and any parsing errors.
 func Parse(tokens []lexer.Token) (ast.BlockStmt, *errors.ErrorReporter) {
 	Body := make([]ast.Stmt, 0)
 	p := createParser(tokens)
 
+	// Parse statements until no tokens remain or an error stops parsing.
 	for p.hasTokens() {
 		stmt := parse_stmt(p)
 		if stmt != nil {
 			Body = append(Body, stmt)
 		}
 		if p.errors.HasErrors() {
+			// Skip to next semicolon or EOF to recover
 			for p.hasTokens() && p.currentTokenKind() != lexer.SEMI_COLON && p.currentTokenKind() != lexer.EOF {
 				p.advance()
 			}
 			if p.currentTokenKind() == lexer.SEMI_COLON {
 				p.advance()
 			}
-			break
+			continue
 		}
-		if p.hasTokens() && p.currentTokenKind() != lexer.SEMI_COLON && stmt != nil {
-			switch stmt.(type) {
-			case ast.IfStmt:
-				continue // If statements don’t need semicolons at top level
-			default:
+		if p.hasTokens() && p.currentTokenKind() != lexer.SEMI_COLON {
+			// Check if the statement is a block statement (no semicolon required)
+			isBlockStmt := false
+			if stmt != nil {
+				switch stmt.(type) {
+				case ast.IfStmt, ast.ForStmt, ast.SwitchStmt, ast.FunctionDeclStmt:
+					isBlockStmt = true
+				}
+			}
+			if !isBlockStmt {
+				// Report missing semicolon for non-block statements
 				lastToken := p.currentToken()
 				errorLine := p.line
 				if p.pos > 0 {
 					lastToken = p.tokens[p.pos-1]
 					errorLine = lastToken.Line
 				}
-				p.errors.Report(fmt.Sprintf("Mowa anukundhi okati : 'semi_colon' vachindhi okati : '%s': Statement end ki semicolon undaali Mowa '%s' tarvatha",
+				p.errors.Report(fmt.Sprintf("Mowa ravalsindhi 'semi_colon' kaani vachindhi '%s'.: Statement end ki semicolon undaali Mowa '%s' tarvatha",
 					lexer.TokenKindString(p.currentTokenKind()), lastToken.Value), errorLine)
 				for p.hasTokens() && p.currentTokenKind() != lexer.SEMI_COLON && p.currentTokenKind() != lexer.EOF {
 					p.advance()
@@ -73,7 +82,8 @@ func Parse(tokens []lexer.Token) (ast.BlockStmt, *errors.ErrorReporter) {
 				}
 			}
 		} else if p.hasTokens() {
-			p.advance() // Consume the semicolon
+			// Consume semicolon if present
+			p.advance()
 			if p.pos < len(p.tokens) {
 				p.line = p.tokens[p.pos].Line
 			}
@@ -83,6 +93,7 @@ func Parse(tokens []lexer.Token) (ast.BlockStmt, *errors.ErrorReporter) {
 	return ast.BlockStmt{Body: Body}, p.errors
 }
 
+// currentToken returns the current token.
 func (p *parser) currentToken() lexer.Token {
 	if p.pos >= len(p.tokens) {
 		return lexer.Token{Kind: lexer.EOF, Value: "EOF", Line: p.line}
@@ -115,7 +126,7 @@ func (p *parser) expectError(expectedKind lexer.TokenKind, err any) lexer.Token 
 		if err != nil {
 			msg = fmt.Sprintf("%s: %v", msg, err)
 		}
-		p.errors.Report(msg, token.Line) // Use token's line number
+		p.errors.Report(msg, token.Line)
 	}
 	return p.advance()
 }

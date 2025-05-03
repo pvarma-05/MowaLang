@@ -13,7 +13,7 @@ func parse_expr(p *parser, bp binding_power) ast.Expr {
 	nud_fn, exists := nud_lu[tokenKind]
 	if !exists {
 		p.errors.Report(fmt.Sprintf("token '%s' ki NUD handler undaali Mowa", lexer.TokenKindString(tokenKind)), p.line)
-		return nil // Return nil to allow parsing to continue
+		return nil
 	}
 	left := nud_fn(p)
 
@@ -22,7 +22,7 @@ func parse_expr(p *parser, bp binding_power) ast.Expr {
 		led_fn, exists := led_lu[tokenKind]
 		if !exists {
 			p.errors.Report(fmt.Sprintf("token '%s' ki LED handler undaali Mowa", lexer.TokenKindString(tokenKind)), p.line)
-			return left // Stop here but return what we have
+			return left
 		}
 		left = led_fn(p, left, bp_lu[p.currentTokenKind()])
 	}
@@ -42,7 +42,6 @@ func parse_primary_expr(p *parser) ast.Expr {
 func parse_binary_expr(p *parser, left ast.Expr, bp binding_power) ast.Expr {
 	operatorToken := p.advance()
 	right := parse_expr(p, bp)
-
 	return ast.BinaryExpr{
 		Left:     left,
 		Operator: operatorToken,
@@ -52,8 +51,7 @@ func parse_binary_expr(p *parser, left ast.Expr, bp binding_power) ast.Expr {
 
 func parse_prefix_expr(p *parser) ast.Expr {
 	op := p.advance()
-	rhs := parse_expr(p, default_bp)
-
+	rhs := parse_expr(p, unary)
 	return ast.PrefixExpr{
 		Operator:  op,
 		RightExpr: rhs,
@@ -63,7 +61,6 @@ func parse_prefix_expr(p *parser) ast.Expr {
 func parse_assignment_expr(p *parser, left ast.Expr, bp binding_power) ast.Expr {
 	op := p.advance()
 	rhs := parse_expr(p, bp)
-
 	return ast.AssignmentExpr{
 		Operator: op,
 		Value:    rhs,
@@ -78,7 +75,61 @@ func parse_grouping_expr(p *parser) ast.Expr {
 	return expr
 }
 
-// Helper to avoid duplication
+func parse_array_literal_expr(p *parser) ast.Expr {
+	p.advance()
+	elements := []ast.Expr{}
+	if p.currentTokenKind() != lexer.CLOSE_BRACKET {
+		elements = append(elements, parse_expr(p, default_bp))
+		for p.currentTokenKind() == lexer.COMMA {
+			p.advance()
+			if p.currentTokenKind() == lexer.CLOSE_BRACKET {
+				break
+			}
+			elements = append(elements, parse_expr(p, default_bp))
+		}
+	}
+	p.expect(lexer.CLOSE_BRACKET)
+	return ast.ArrayLiteralExpr{Elements: elements}
+}
+
+func parse_array_index_expr(p *parser, left ast.Expr, bp binding_power) ast.Expr {
+	p.advance()
+	index := parse_expr(p, default_bp)
+	p.expect(lexer.CLOSE_BRACKET)
+	return ast.ArrayIndexExpr{Array: left, Index: index}
+}
+
+func parse_member_access_expr(p *parser, left ast.Expr, bp binding_power) ast.Expr {
+	p.advance()
+	if p.currentTokenKind() != lexer.IDENTIFIER {
+		p.errors.Report(fmt.Sprintf("Expected identifier after '.', got '%s'", lexer.TokenKindString(p.currentTokenKind())), p.line)
+		return nil
+	}
+	property := p.advance().Value
+	return ast.MemberAccessExpr{Object: left, Property: property}
+}
+
+func parse_call_expr(p *parser, left ast.Expr, bp binding_power) ast.Expr {
+	p.advance() // Consume OPEN_PAREN
+	arguments := []ast.Expr{}
+	if p.currentTokenKind() != lexer.CLOSE_PAREN {
+		for {
+			arg := parse_expr(p, default_bp)
+			if arg == nil {
+				p.errors.Report("Mowa, argument expression parse cheyalenu ra!", p.line)
+				return nil
+			}
+			arguments = append(arguments, arg)
+			if p.currentTokenKind() != lexer.COMMA {
+				break
+			}
+			p.advance() // Consume comma
+		}
+	}
+	p.expect(lexer.CLOSE_PAREN)
+	return ast.CallExpr{Function: left, Arguments: arguments}
+}
+
 func (p *parser) parse_primary_expr_helper() ast.Expr {
 	switch p.currentTokenKind() {
 	case lexer.NUMBER:
