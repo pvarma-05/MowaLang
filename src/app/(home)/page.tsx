@@ -7,39 +7,8 @@ import { FeaturesSectionDemo } from "../components/ui/features";
 import { motion } from "framer-motion";
 
 const words = `MOWA-LANG`;
-const translations = {
-  en: {
-    heading: (
-      <>
-        What is <span className="underline underline-offset-8">MOWA-LANG</span>?
-      </>
-    ),
-    description:
-      " is your ticket to coding in Telugu style! Built with GO, this playful language mixes our native slang with programming fun. Perfect for beginners to kickstart coding with a smile or for pros to explore a fresh, entertaining twist. Get ready to code, laugh, and learn – all in mana basha!",
-    whyMowa: (
-      <>
-        Why <span className="underline underline-offset-8">MOWA-LANG</span>?
-      </>
-    ),
-  },
-  mowa: {
-    heading: (
-      <>
-        <span className="underline underline-offset-8">MOWA-LANG</span> Antey?
-      </>
-    ),
-    description:
-      " antey mana Telugu style lo coding ticket mowa! GO tho banchesina ee language, mana slang ni programming tho mix chesi chaala fun isthundi. Koddisepu nerchukunte chaalu – beginners ki easy start, pros ki kotha kick. Mana basha lo code chey, navvu, nerchukov – full josh!",
-    whyMowa: (
-      <>
-        Endhuku <span className="underline underline-offset-8">MOWA-LANG</span>?
-      </>
-    ),
-  },
-};
 
 export default function Home() {
-  const [language, setLanguage] = useState<"en" | "mowa">("mowa");
 
   const buttonVariants = {
     hover: {
@@ -50,28 +19,10 @@ export default function Home() {
     tap: { scale: 0.95 },
   };
 
-  const tagline = language === "en"
-    ? "Code in Telugu, Fun in Every Line! 🧑🏻‍💻"
-    : "Ra Mowa Coding Chedhaam! 🧑🏻‍💻";
+  const tagline = "Ra Mowa Coding Chedhaam! 🧑🏻‍💻";
 
   return (
     <div className="flex flex-col min-h-screen">
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="fixed top-5 left-5 z-50"
-      >
-        <motion.button
-          variants={buttonVariants}
-          whileHover="hover"
-          whileTap="tap"
-          className="px-4 py-2 bg-[#F9CB43] cursor-pointer font-outfit text-black font-bold rounded-lg shadow-lg"
-          onClick={() => setLanguage(language === "en" ? "mowa" : "en")}
-        >
-          {language === "en" ? "Switch to Mowa" : "Switch to English"}
-        </motion.button>
-      </motion.div>
 
       <section className="relative w-full h-screen flex items-center justify-center text-white overflow-hidden">
         <motion.div
@@ -160,7 +111,7 @@ export default function Home() {
           className="w-full lg:w-2/4 flex flex-col gap-6 lg:gap-12"
         >
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-gw select-none sm:text-center lg:text-left text-[#F9CB43]">
-            {translations[language].heading}
+            What is <span className="underline underline-offset-8">MOWA-LANG</span>?
           </h1>
           <motion.p
             className="text-lg lg:text-xl text-gray-200 font-outfit select-none"
@@ -169,8 +120,9 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.4 }}
             viewport={{ once: true }}
           >
-            <span className="text-[#F9CB43] font-semibold">MOWA-LANG</span>{" "}
-            {translations[language].description}
+            <span className="text-[#F9CB43] font-semibold">MOWA-LANG</span> is a fun and quirky Telugu-based programming language written in GO.
+             It is Designed to make coding more entertaining and engaging, with a unique syntax. Whether you're a beginner looking for an enjoyable way to learn coding
+             or an experienced developer seeking something new, MOWA-LANG is here to add excitement to your coding journey!
           </motion.p>
         </motion.div>
 
@@ -202,7 +154,7 @@ export default function Home() {
           viewport={{ once: true }}
           className="text-3xl md:text-5xl lg:text-6xl font-gw select-none text-center text-[#F9CB43] mb-12"
         >
-          {translations[language].whyMowa}
+          Why <span className="underline underline-offset-8">MOWA-LANG</span>?
         </motion.h1>
         <FeaturesSectionDemo />
       </section>
