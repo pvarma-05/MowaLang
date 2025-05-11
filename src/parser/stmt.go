@@ -81,7 +81,7 @@ func parse_input_stmt(p *parser) ast.Stmt {
 			p.advance() // Consume OPEN_BRACKET
 			index := parse_expr(p, default_bp)
 			if index == nil {
-				p.errors.Report("Mowa, array index expression undaali ra!", p.line)
+				p.errors.Report("Mowa, array index expression undaali mowa!", p.line)
 				return nil
 			}
 			p.expect(lexer.CLOSE_BRACKET)
@@ -101,7 +101,7 @@ func parse_if_stmt(p *parser) ast.Stmt {
 	p.expect(lexer.OPEN_PAREN)
 	condition := parse_expr(p, default_bp)
 	if condition == nil {
-		p.errors.Report("Mowa, if ki condition undaali ra!", p.line)
+		p.errors.Report("Mowa, if ki condition undaali mowa!", p.line)
 		return nil
 	}
 	p.expect(lexer.CLOSE_PAREN)
@@ -116,7 +116,7 @@ func parse_if_stmt(p *parser) ast.Stmt {
 		p.expect(lexer.OPEN_PAREN)
 		elseIfCondition := parse_expr(p, default_bp)
 		if elseIfCondition == nil {
-			p.errors.Report("Mowa, else if ki condition undaali ra!", p.line)
+			p.errors.Report("Mowa, else if ki condition undaali mowa!", p.line)
 			return nil
 		}
 		p.expect(lexer.CLOSE_PAREN)
@@ -151,7 +151,7 @@ func parse_switch_stmt(p *parser) ast.Stmt {
 	p.expect(lexer.OPEN_PAREN)
 	expr := parse_expr(p, default_bp)
 	if expr == nil {
-		p.errors.Report("Mowa, switch ki expression undaali ra!", p.line)
+		p.errors.Report("Mowa, switch ki expression undaali mowa!", p.line)
 		return nil
 	}
 	p.expect(lexer.CLOSE_PAREN)
@@ -165,7 +165,7 @@ func parse_switch_stmt(p *parser) ast.Stmt {
 			p.advance()
 			caseValue := parse_expr(p, default_bp)
 			if caseValue == nil {
-				p.errors.Report("Mowa, case ki value undaali ra!", p.line)
+				p.errors.Report("Mowa, case ki value undaali mowa!", p.line)
 				return nil
 			}
 			p.expect(lexer.COLON)
@@ -203,12 +203,12 @@ func parse_switch_stmt(p *parser) ast.Stmt {
 				}
 			}
 			if defaultBranch != nil {
-				p.errors.Report("Mowa, switch lo okka default matrame undali ra!", p.line)
+				p.errors.Report("Mowa, switch lo okka default matrame undali mowa!", p.line)
 				return nil
 			}
 			defaultBranch = &ast.BlockStmt{Body: body}
 		} else {
-			p.errors.Report(fmt.Sprintf("Mowa, 'case' or 'default' expect chesthunna, '%s' vachindhi ra!", lexer.TokenKindString(p.currentTokenKind())), p.line)
+			p.errors.Report(fmt.Sprintf("Mowa, 'case' or 'default' expect chesthunna, '%s' vachindhi mowa!", lexer.TokenKindString(p.currentTokenKind())), p.line)
 			return nil
 		}
 	}
@@ -310,7 +310,7 @@ func parse_function_decl_stmt(p *parser) ast.Stmt {
 			p.expect(lexer.COLON)
 			paramType := parse_type(p, default_bp)
 			if paramType == nil {
-				p.errors.Report("Mowa, parameter type undaali ra!", p.line)
+				p.errors.Report("Mowa, parameter type undaali mowa!", p.line)
 				return nil
 			}
 			parameters = append(parameters, ast.Parameter{Name: paramName, Type: paramType})
@@ -328,7 +328,7 @@ func parse_function_decl_stmt(p *parser) ast.Stmt {
 		p.advance()
 		returnType = parse_type(p, default_bp)
 		if returnType == nil {
-			p.errors.Report("Mowa, return type parse cheyalenu ra!", p.line)
+			p.errors.Report("Mowa, return type parse cheyalenu mowa!", p.line)
 			return nil
 		}
 	}
@@ -352,7 +352,7 @@ func parse_return_stmt(p *parser) ast.Stmt {
 	if p.currentTokenKind() != lexer.SEMI_COLON {
 		value = parse_expr(p, default_bp)
 		if value == nil {
-			p.errors.Report("Mowa, return value parse cheyalenu ra!", p.line)
+			p.errors.Report("Mowa, return value parse cheyalenu mowa!", p.line)
 			return nil
 		}
 	}
@@ -367,7 +367,7 @@ func parse_return_stmt(p *parser) ast.Stmt {
 // 		for {
 // 			arg := parse_expr(p, default_bp)
 // 			if arg == nil {
-// 				p.errors.Report("Mowa, argument expression parse cheyalenu ra!", p.line)
+// 				p.errors.Report("Mowa, argument expression parse cheyalenu mowa!", p.line)
 // 				return nil
 // 			}
 // 			arguments = append(arguments, arg)

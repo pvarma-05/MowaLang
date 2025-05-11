@@ -1,37 +1,58 @@
 package errors
 
 import (
+	"embed"
+	"encoding/json"
 	"fmt"
 	"math/rand"
+	"os"
+	"path/filepath"
 	"time"
 )
+
+//go:embed dialogues.json
+var DialoguesFS embed.FS
 
 type MowaError struct {
 	Message    string
 	LineNumber int
 }
 
-// Error implements the error interface for MowaError.
 func (e MowaError) Error() string {
 	return e.Message
 }
 
-// ErrorReporter collects and manages errors during lexing, parsing, or evaluation.
 type ErrorReporter struct {
 	Errors []MowaError
 }
 
-func NewErrorReporter() *ErrorReporter {
+type ActorDialogues struct {
+	Success []string `json:"success"`
+	Failure []string `json:"failure"`
+}
+
+var dialogues map[string]ActorDialogues
+
+func init() {
+	// Load dialogues from embedded JSON
+	data, err := DialoguesFS.ReadFile("dialogues.json")
+	if err != nil {
+		panic(fmt.Sprintf("Mowa, dialogues.json load cheyalenu mowa: %v", err))
+	}
+	if err := json.Unmarshal(data, &dialogues); err != nil {
+		panic(fmt.Sprintf("Mowa, dialogues.json parse cheyalenu mowa: %v", err))
+	}
 	rand.Seed(time.Now().UnixNano())
+}
+
+func NewErrorReporter() *ErrorReporter {
 	return &ErrorReporter{Errors: []MowaError{}}
 }
 
-// Report adds an error with a message and line number to the Errors list.
 func (r *ErrorReporter) Report(message string, lineNumber int) {
 	r.Errors = append(r.Errors, MowaError{Message: message, LineNumber: lineNumber})
 }
 
-// ReportSimple adds an error without a line number (fallback).
 func (r *ErrorReporter) ReportSimple(message string) {
 	r.Report(message, 0)
 }
@@ -40,37 +61,37 @@ func (r *ErrorReporter) HasErrors() bool {
 	return len(r.Errors) > 0
 }
 
-var successDialogues = []string{
-	"Prabhas: 'Jai Maahishmathi!'",
-	"AA: 'Mowa... Assala Thaggedeley'",
-	"NTR: 'Devara code raasinadu ante program run ayindhani ardham.'",
-}
-
-var failureDialogues = []string{
-	"Prabhas: 'Thappu chesaav Devasena ...'",
-	"AA: 'Konni Saarlu gelavadam kante, odipodame goppa'",
-	"Bhramhanandham: 'Arey Tuppas Edhava, Thappu Chesavu ra'",
-}
-
-// Uses ANSI colors: red for failure, green for success.
 func (r *ErrorReporter) PrintErrors() {
+	// Load actor preference
+	actor := "all"
+	configPath := filepath.Join(os.Getenv("HOME"), ".mowalang", "config.json")
+	if configData, err := os.ReadFile(configPath); err == nil {
+		var config map[string]string
+		if json.Unmarshal(configData, &config) == nil {
+			if pref, exists := config["actor"]; exists {
+				actor = pref
+			}
+		}
+	}
+
+	// Select dialogues based on preference
+	actorDialogues, exists := dialogues[actor]
+	if !exists {
+		actorDialogues = dialogues["all"] // Fallback to "all"
+	}
+
 	if !r.HasErrors() {
-		dialogue := successDialogues[rand.Intn(len(successDialogues))]
+		dialogue := actorDialogues.Success[rand.Intn(len(actorDialogues.Success))]
 		fmt.Printf("\n\n\033[32m%s\033[0m\n", dialogue)
 		return
 	}
-	dialogue := failureDialogues[rand.Intn(len(failureDialogues))]
-	fmt.Printf("\n\033[31m%s\033[0m\nArey, errors unnai ra:\n", dialogue)
+	dialogue := actorDialogues.Failure[rand.Intn(len(actorDialogues.Failure))]
+	fmt.Printf("\n\033[31m%s\033[0m\nMowa, errors unnai mowa:\n", dialogue)
 	for _, err := range r.Errors {
 		if err.LineNumber > 0 {
 			fmt.Printf("ln %d: %s\n", err.LineNumber, err.Message)
 		} else {
-			fmt.Printf("-: %s\n", err.Message) // Fallback for errors without line numbers
+			fmt.Printf("-: %s\n", err.Message)
 		}
 	}
 }
-
-// // Clear resets the error list (not currently used but available for future extensions).
-// func (r *ErrorReporter) Clear() {
-// 	r.Errors = []MowaError{}
-// }

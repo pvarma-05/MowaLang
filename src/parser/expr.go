@@ -116,7 +116,7 @@ func parse_call_expr(p *parser, left ast.Expr, bp binding_power) ast.Expr {
 		for {
 			arg := parse_expr(p, default_bp)
 			if arg == nil {
-				p.errors.Report("Mowa, argument expression parse cheyalenu ra!", p.line)
+				p.errors.Report("Mowa, argument expression parse cheyalenu mowa!", p.line)
 				return nil
 			}
 			arguments = append(arguments, arg)

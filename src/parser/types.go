@@ -42,7 +42,7 @@ func parse_array_type(p *parser) ast.Type {
 	p.advance() // Consume OPEN_BRACKET
 	underlying := parse_type(p, default_bp)
 	if underlying == nil {
-		p.errors.Report("Mowa, array type lo underlying type undaali ra!", p.line)
+		p.errors.Report("Mowa, array type lo underlying type undaali mowa!", p.line)
 		return nil
 	}
 	var size ast.Expr
@@ -50,7 +50,7 @@ func parse_array_type(p *parser) ast.Type {
 		p.advance() // Consume OPEN_PAREN
 		size = parse_expr(p, default_bp)
 		if size == nil {
-			p.errors.Report("Mowa, array size expression undaali ra!", p.line)
+			p.errors.Report("Mowa, array size expression undaali mowa!", p.line)
 			return nil
 		}
 		p.expect(lexer.CLOSE_PAREN)
@@ -69,7 +69,7 @@ func parse_type(p *parser, bp binding_power) ast.Type {
 	tokenKind := p.currentTokenKind()
 	nud_fn, exists := type_nud_lu[tokenKind]
 	if !exists {
-		p.errors.Report(fmt.Sprintf("Type handler missing ra for '%s'", lexer.TokenKindString(tokenKind)), p.line)
+		p.errors.Report(fmt.Sprintf("Type handler missing mowa for '%s'", lexer.TokenKindString(tokenKind)), p.line)
 		return nil
 	}
 	left := nud_fn(p)

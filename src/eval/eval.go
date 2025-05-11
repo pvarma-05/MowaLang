@@ -77,41 +77,41 @@ func (env *Environment) Define(name string, value Value, lineNumber int, errors 
 		switch typ {
 		case "number":
 			if _, ok := value.(float64); !ok {
-				errors.Report(fmt.Sprintf("Mowa, '%s' number type ki '%v' ivvakudadhu ra!", name, value), lineNumber)
+				errors.Report(fmt.Sprintf("Mowa, '%s' number type ki '%v' ivvakudadhu mowa!", name, value), lineNumber)
 				return
 			}
 		case "string":
 			if _, ok := value.(string); !ok {
-				errors.Report(fmt.Sprintf("Mowa, '%s' string type ki '%v' ivvakudadhu ra!", name, value), lineNumber)
+				errors.Report(fmt.Sprintf("Mowa, '%s' string type ki '%v' ivvakudadhu mowa!", name, value), lineNumber)
 				return
 			}
 		case "boolean":
 			if _, ok := value.(bool); !ok {
-				errors.Report(fmt.Sprintf("Mowa, '%s' boolean type ki '%v' ivvakudadhu ra!", name, value), lineNumber)
+				errors.Report(fmt.Sprintf("Mowa, '%s' boolean type ki '%v' ivvakudadhu mowa!", name, value), lineNumber)
 				return
 			}
 		case "[number]":
 			if arr, ok := value.([]Value); ok {
 				for _, elem := range arr {
 					if _, ok := elem.(float64); !ok {
-						errors.Report(fmt.Sprintf("Mowa, '%s' array lo number undaali, '%v' undhi ra!", name, elem), lineNumber)
+						errors.Report(fmt.Sprintf("Mowa, '%s' array lo number undaali, '%v' undhi mowa!", name, elem), lineNumber)
 						return
 					}
 				}
 			} else {
-				errors.Report(fmt.Sprintf("Mowa, '%s' array type ki '%v' ivvakudadhu ra!", name, value), lineNumber)
+				errors.Report(fmt.Sprintf("Mowa, '%s' array type ki '%v' ivvakudadhu mowa!", name, value), lineNumber)
 				return
 			}
 		case "[string]":
 			if arr, ok := value.([]Value); ok {
 				for _, elem := range arr {
 					if _, ok := elem.(string); !ok {
-						errors.Report(fmt.Sprintf("Mowa, '%s' array lo string undaali, '%v' undhi ra!", name, elem), lineNumber)
+						errors.Report(fmt.Sprintf("Mowa, '%s' array lo string undaali, '%v' undhi mowa!", name, elem), lineNumber)
 						return
 					}
 				}
 			} else {
-				errors.Report(fmt.Sprintf("Mowa, '%s' array type ki '%v' ivvakudadhu ra!", name, value), lineNumber)
+				errors.Report(fmt.Sprintf("Mowa, '%s' array type ki '%v' ivvakudadhu mowa!", name, value), lineNumber)
 				return
 			}
 		}
@@ -128,7 +128,7 @@ func (env *Environment) Get(name string) (Value, error) {
 	if env.parent != nil {
 		return env.parent.Get(name)
 	}
-	return nil, fmt.Errorf("mowa, '%s' ane variable define cheyaledhu ra", name)
+	return nil, fmt.Errorf("mowa, '%s' ane variable define cheyaledhu mowa", name)
 }
 
 // GetFunction retrieves a function, searching parent scopes if needed.
@@ -139,7 +139,7 @@ func (env *Environment) GetFunction(name string) (Function, error) {
 	if env.parent != nil {
 		return env.parent.GetFunction(name)
 	}
-	return Function{}, fmt.Errorf("mowa, '%s' ane function define cheyaledhu ra", name)
+	return Function{}, fmt.Errorf("mowa, '%s' ane function define cheyaledhu mowa", name)
 }
 
 // IsDeclared checks if a variable or function was declared, searching parent scopes.
@@ -251,7 +251,7 @@ func (e *Evaluator) evalVarDeclStmt(stmt ast.VarDeclStmt) {
 		}
 		size, ok := sizeVal.(float64)
 		if !ok || size != float64(int(size)) || size < 0 {
-			e.errors.Report(fmt.Sprintf("Mowa, array size '%v' positive integer undaali ra!", sizeVal), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, array size '%v' positive integer undaali mowa!", sizeVal), e.line)
 			return
 		}
 		// Initialize empty array of specified size
@@ -283,7 +283,7 @@ func (e *Evaluator) evalVarDeclStmt(stmt ast.VarDeclStmt) {
 			case string:
 				inferredType = ast.ArrayType{Underlying: ast.SymbolType{Name: "string"}}
 			default:
-				e.errors.Report("Mowa, array type infer cheyalenu ra!", e.line)
+				e.errors.Report("Mowa, array type infer cheyalenu mowa!", e.line)
 				return
 			}
 			e.env.Declare(stmt.VarName, inferredType)
@@ -307,14 +307,14 @@ func (e *Evaluator) evalInputStmt(stmt ast.InputStmt) {
 	input = strings.TrimSpace(input)
 	typ, exists := e.env.types[stmt.VarName]
 	if !exists {
-		e.errors.Report(fmt.Sprintf("Mowa, '%s' type define cheyaledhu ra!", stmt.VarName), e.line)
+		e.errors.Report(fmt.Sprintf("Mowa, '%s' type define cheyaledhu mowa!", stmt.VarName), e.line)
 		return
 	}
 	if typ == "number" {
 		if num, err := strconv.ParseFloat(input, 64); err == nil {
 			e.env.Define(stmt.VarName, num, e.line, e.errors)
 		} else {
-			e.errors.Report(fmt.Sprintf("Mowa, '%s' number undaali ra, '%s' ichav!", stmt.VarName, input), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, '%s' number undaali mowa, '%s' ichav!", stmt.VarName, input), e.line)
 		}
 	} else if typ == "string" {
 		e.env.Define(stmt.VarName, input, e.line, e.errors)
@@ -325,10 +325,10 @@ func (e *Evaluator) evalInputStmt(stmt ast.InputStmt) {
 		} else if input == "adhey" || input == "false" {
 			e.env.Define(stmt.VarName, false, e.line, e.errors)
 		} else {
-			e.errors.Report(fmt.Sprintf("Mowa, '%s' boolean undaali ra, '%s' ichav!", stmt.VarName, input), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, '%s' boolean undaali mowa, '%s' ichav!", stmt.VarName, input), e.line)
 		}
 	} else {
-		e.errors.Report(fmt.Sprintf("Mowa, '%s' scalar type undaali ra for direct input!", stmt.VarName), e.line)
+		e.errors.Report(fmt.Sprintf("Mowa, '%s' scalar type undaali mowa for direct input!", stmt.VarName), e.line)
 	}
 }
 
@@ -339,7 +339,7 @@ func (e *Evaluator) evalInputIndexStmt(stmt ast.InputIndexStmt) {
 	}
 	arr, ok := array.([]Value)
 	if !ok {
-		e.errors.Report(fmt.Sprintf("Mowa, '%v' array kaadhu ra!", array), e.line)
+		e.errors.Report(fmt.Sprintf("Mowa, '%v' array kaadhu mowa!", array), e.line)
 		return
 	}
 	index := e.evalExpr(stmt.Index)
@@ -348,7 +348,7 @@ func (e *Evaluator) evalInputIndexStmt(stmt ast.InputIndexStmt) {
 	}
 	idx, ok := index.(float64)
 	if !ok || idx != float64(int(idx)) || idx < 0 || int(idx) >= len(arr) {
-		e.errors.Report(fmt.Sprintf("Mowa, invalid array index '%v' ra!", index), e.line)
+		e.errors.Report(fmt.Sprintf("Mowa, invalid array index '%v' mowa!", index), e.line)
 		return
 	}
 	reader := bufio.NewReader(os.Stdin)
@@ -357,7 +357,7 @@ func (e *Evaluator) evalInputIndexStmt(stmt ast.InputIndexStmt) {
 	varName := stmt.Array.(ast.SymbolExpr).Value
 	typ, exists := e.env.types[varName]
 	if !exists {
-		e.errors.Report(fmt.Sprintf("Mowa, '%s' type define cheyaledhu ra!", varName), e.line)
+		e.errors.Report(fmt.Sprintf("Mowa, '%s' type define cheyaledhu mowa!", varName), e.line)
 		return
 	}
 	var value Value
@@ -365,13 +365,13 @@ func (e *Evaluator) evalInputIndexStmt(stmt ast.InputIndexStmt) {
 		if num, err := strconv.ParseFloat(input, 64); err == nil {
 			value = num
 		} else {
-			e.errors.Report(fmt.Sprintf("Mowa, array '%s' lo number undaali ra, '%s' ichav!", varName, input), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, array '%s' lo number undaali mowa, '%s' ichav!", varName, input), e.line)
 			return
 		}
 	} else if typ == "[string]" {
 		value = input
 	} else {
-		e.errors.Report(fmt.Sprintf("Mowa, '%s' array type undaali ra!", varName), e.line)
+		e.errors.Report(fmt.Sprintf("Mowa, '%s' array type undaali mowa!", varName), e.line)
 		return
 	}
 	arr[int(idx)] = value
@@ -499,11 +499,11 @@ func (e *Evaluator) evalForStmt(stmt ast.ForStmt) string {
 			if assignExpr, ok := init.Expression.(ast.AssignmentExpr); ok {
 				symbol, ok := assignExpr.Assignee.(ast.SymbolExpr)
 				if !ok {
-					e.errors.Report("Mowa, for loop init lo assignment ki variable undaali ra!", e.line)
+					e.errors.Report("Mowa, for loop init lo assignment ki variable undaali mowa!", e.line)
 					return "none"
 				}
 				if !e.env.IsDeclared(symbol.Value) {
-					e.errors.Report(fmt.Sprintf("Mowa, '%s' declare chesaka init cheyyali ra!", symbol.Value), e.line)
+					e.errors.Report(fmt.Sprintf("Mowa, '%s' declare chesaka init cheyyali mowa!", symbol.Value), e.line)
 					return "none"
 				}
 				rhs := e.evalExpr(assignExpr.Value)
@@ -593,7 +593,7 @@ func toBool(value Value, line int, errors *errors.ErrorReporter) bool {
 	case nil:
 		return false
 	default:
-		errors.Report(fmt.Sprintf("Mowa, '%v' ni boolean ki convert cheyalenu ra!", v), line)
+		errors.Report(fmt.Sprintf("Mowa, '%v' ni boolean ki convert cheyalenu mowa!", v), line)
 		return false
 	}
 }
@@ -664,7 +664,7 @@ func (e *Evaluator) evalTypeofExpr(expr ast.TypeofExpr) Value {
 			return nil
 		}
 	default:
-		e.errors.Report("Mowa, rakam function variable or array index thiskuntadhi ra!", e.line)
+		e.errors.Report("Mowa, rakam function variable or array index thiskuntadhi mowa!", e.line)
 		return nil
 	}
 
@@ -689,7 +689,7 @@ func (e *Evaluator) evalTypeofExpr(expr ast.TypeofExpr) Value {
 		}
 		return "[unknown]"
 	default:
-		e.errors.Report(fmt.Sprintf("Mowa, '%v' type determine cheyalenu ra!", v), e.line)
+		e.errors.Report(fmt.Sprintf("Mowa, '%v' type determine cheyalenu mowa!", v), e.line)
 		return nil
 	}
 }
@@ -697,7 +697,7 @@ func (e *Evaluator) evalTypeofExpr(expr ast.TypeofExpr) Value {
 func (e *Evaluator) evalCallExpr(expr ast.CallExpr) Value {
 	symbol, isSymbol := expr.Function.(ast.SymbolExpr)
 	if !isSymbol {
-		e.errors.Report("Mowa, function call lo variable name undaali ra!", e.line)
+		e.errors.Report("Mowa, function call lo variable name undaali mowa!", e.line)
 		return nil
 	}
 
@@ -717,7 +717,7 @@ func (e *Evaluator) evalCallExpr(expr ast.CallExpr) Value {
 	}
 
 	if len(args) != len(fn.Decl.Parameters) {
-		e.errors.Report(fmt.Sprintf("Mowa, '%s' function %d parameters expect chesthundi, %d ichav ra!", fn.Decl.Name, len(fn.Decl.Parameters), len(args)), e.line)
+		e.errors.Report(fmt.Sprintf("Mowa, '%s' function %d parameters expect chesthundi, %d ichav mowa!", fn.Decl.Name, len(fn.Decl.Parameters), len(args)), e.line)
 		return nil
 	}
 
@@ -742,7 +742,7 @@ func (e *Evaluator) evalCallExpr(expr ast.CallExpr) Value {
 	retVal, err := callEnv.Get("_return")
 	if err != nil {
 		if fn.Decl.ReturnType != nil {
-			e.errors.Report(fmt.Sprintf("Mowa, '%s' function return cheyyali ra!", fn.Decl.Name), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, '%s' function return cheyyali mowa!", fn.Decl.Name), e.line)
 			return nil
 		}
 		return nil
@@ -754,17 +754,17 @@ func (e *Evaluator) evalCallExpr(expr ast.CallExpr) Value {
 			switch rt.Name {
 			case "number":
 				if _, ok := retVal.(float64); !ok {
-					e.errors.Report(fmt.Sprintf("Mowa, '%s' function number return cheyyali, '%v' ichav ra!", fn.Decl.Name, retVal), e.line)
+					e.errors.Report(fmt.Sprintf("Mowa, '%s' function number return cheyyali, '%v' ichav mowa!", fn.Decl.Name, retVal), e.line)
 					return nil
 				}
 			case "string":
 				if _, ok := retVal.(string); !ok {
-					e.errors.Report(fmt.Sprintf("Mowa, '%s' function string return cheyyali, '%v' ichav ra!", fn.Decl.Name, retVal), e.line)
+					e.errors.Report(fmt.Sprintf("Mowa, '%s' function string return cheyyali, '%v' ichav mowa!", fn.Decl.Name, retVal), e.line)
 					return nil
 				}
 			case "boolean":
 				if _, ok := retVal.(bool); !ok {
-					e.errors.Report(fmt.Sprintf("Mowa, '%s' function boolean return cheyyali, '%v' ichav ra!", fn.Decl.Name, retVal), e.line)
+					e.errors.Report(fmt.Sprintf("Mowa, '%s' function boolean return cheyyali, '%v' ichav mowa", fn.Decl.Name, retVal), e.line)
 					return nil
 				}
 			}
@@ -772,21 +772,21 @@ func (e *Evaluator) evalCallExpr(expr ast.CallExpr) Value {
 			if arr, ok := retVal.([]Value); ok {
 				underlying, ok := rt.Underlying.(ast.SymbolType)
 				if !ok {
-					e.errors.Report("Mowa, array underlying type symbol undaali ra!", e.line)
+					e.errors.Report("Mowa, array underlying type symbol undaali mowa!", e.line)
 					return nil
 				}
 				for _, elem := range arr {
 					if underlying.Name == "number" && !isNumber(elem) {
-						e.errors.Report(fmt.Sprintf("Mowa, '%s' array lo number undaali, '%v' undhi ra!", fn.Decl.Name, elem), e.line)
+						e.errors.Report(fmt.Sprintf("Mowa, '%s' array lo number undaali, '%v' undhi mowa!", fn.Decl.Name, elem), e.line)
 						return nil
 					}
 					if underlying.Name == "string" && !isString(elem) {
-						e.errors.Report(fmt.Sprintf("Mowa, '%s' array lo string undaali, '%v' undhi ra!", fn.Decl.Name, elem), e.line)
+						e.errors.Report(fmt.Sprintf("Mowa, '%s' array lo string undaali, '%v' undhi mowa!", fn.Decl.Name, elem), e.line)
 						return nil
 					}
 				}
 			} else {
-				e.errors.Report(fmt.Sprintf("Mowa, '%s' array return cheyyali ra!", fn.Decl.Name), e.line)
+				e.errors.Report(fmt.Sprintf("Mowa, '%s' array return cheyyali mowa!", fn.Decl.Name), e.line)
 				return nil
 			}
 		}
@@ -826,12 +826,12 @@ func (e *Evaluator) evalArrayIndexExpr(expr ast.ArrayIndexExpr) Value {
 	}
 	arr, ok := array.([]Value)
 	if !ok {
-		e.errors.Report(fmt.Sprintf("Mowa, '%v' array kaadhu ra!", array), e.line)
+		e.errors.Report(fmt.Sprintf("Mowa, '%v' array kaadhu mowa!", array), e.line)
 		return nil
 	}
 	idx, ok := index.(float64)
 	if !ok || idx != float64(int(idx)) || idx < 0 || int(idx) >= len(arr) {
-		e.errors.Report(fmt.Sprintf("Mowa, invalid array index '%v' ra!", index), e.line)
+		e.errors.Report(fmt.Sprintf("Mowa, invalid array index '%v' mowa!", index), e.line)
 		return nil
 	}
 	return arr[int(idx)]
@@ -844,13 +844,13 @@ func (e *Evaluator) evalMemberAccessExpr(expr ast.MemberAccessExpr) Value {
 	}
 	arr, ok := object.([]Value)
 	if !ok {
-		e.errors.Report(fmt.Sprintf("Mowa, '%v' array kaadhu ra!", object), e.line)
+		e.errors.Report(fmt.Sprintf("Mowa, '%v' array kaadhu mowa!", object), e.line)
 		return nil
 	}
 	if expr.Property == "length" {
 		return float64(len(arr))
 	}
-	e.errors.Report(fmt.Sprintf("Mowa, unknown property '%s' ra!", expr.Property), e.line)
+	e.errors.Report(fmt.Sprintf("Mowa, unknown property '%s' mowa!", expr.Property), e.line)
 	return nil
 }
 
@@ -859,7 +859,7 @@ func (e *Evaluator) evalPrefixExpr(expr ast.PrefixExpr) Value {
 	case lexer.PLUS_PLUS, lexer.MINUS_MINUS:
 		symbolExpr, ok := expr.RightExpr.(ast.SymbolExpr)
 		if !ok {
-			e.errors.Report("Mowa, prefix ++ or -- ki variable undaali ra!", e.line)
+			e.errors.Report("Mowa, prefix ++ or -- ki variable undaali mowa!", e.line)
 			return nil
 		}
 		currentVal, err := e.env.Get(symbolExpr.Value)
@@ -869,7 +869,7 @@ func (e *Evaluator) evalPrefixExpr(expr ast.PrefixExpr) Value {
 		}
 		num, ok := currentVal.(float64)
 		if !ok {
-			e.errors.Report(fmt.Sprintf("Mowa, '%s' number undaali ra for ++ or --!", symbolExpr.Value), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, '%s' number undaali mowa for ++ or --!", symbolExpr.Value), e.line)
 			return nil
 		}
 		var newVal float64
@@ -884,7 +884,7 @@ func (e *Evaluator) evalPrefixExpr(expr ast.PrefixExpr) Value {
 		}
 		return newVal
 	default:
-		e.errors.Report(fmt.Sprintf("Mowa, operator '%s' handle cheyalenu ra!", expr.Operator.Value), e.line)
+		e.errors.Report(fmt.Sprintf("Mowa, operator '%s' handle cheyalenu mowa!", expr.Operator.Value), e.line)
 		return nil
 	}
 }
@@ -894,7 +894,7 @@ func (e *Evaluator) evalPostfixExpr(expr ast.PostfixExpr) Value {
 	case lexer.PLUS_PLUS, lexer.MINUS_MINUS:
 		symbolExpr, ok := expr.LeftExpr.(ast.SymbolExpr)
 		if !ok {
-			e.errors.Report("Mowa, postfix ++ or -- ki variable undaali ra!", e.line)
+			e.errors.Report("Mowa, postfix ++ or -- ki variable undaali mowa!", e.line)
 			return nil
 		}
 		currentVal, err := e.env.Get(symbolExpr.Value)
@@ -904,7 +904,7 @@ func (e *Evaluator) evalPostfixExpr(expr ast.PostfixExpr) Value {
 		}
 		num, ok := currentVal.(float64)
 		if !ok {
-			e.errors.Report(fmt.Sprintf("Mowa, '%s' number undaali ra for ++ or --!", symbolExpr.Value), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, '%s' number undaali mowa for ++ or --!", symbolExpr.Value), e.line)
 			return nil
 		}
 		var newVal float64
@@ -919,7 +919,7 @@ func (e *Evaluator) evalPostfixExpr(expr ast.PostfixExpr) Value {
 		}
 		return num
 	default:
-		e.errors.Report(fmt.Sprintf("Mowa, operator '%s' handle cheyalenu ra!", expr.Operator.Value), e.line)
+		e.errors.Report(fmt.Sprintf("Mowa, operator '%s' handle cheyalenu mowa!", expr.Operator.Value), e.line)
 		return nil
 	}
 }
@@ -933,7 +933,7 @@ func (e *Evaluator) evalAssignmentExpr(expr ast.AssignmentExpr) Value {
 	switch assignee := expr.Assignee.(type) {
 	case ast.SymbolExpr:
 		if !e.env.IsDeclared(assignee.Value) {
-			e.errors.Report(fmt.Sprintf("Mowa, '%s' declare cheyaledhu ra before assignment!", assignee.Value), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, '%s' declare cheyaledhu mowa before assignment!", assignee.Value), e.line)
 			return nil
 		}
 		currentVal, err := e.env.Get(assignee.Value)
@@ -944,7 +944,7 @@ func (e *Evaluator) evalAssignmentExpr(expr ast.AssignmentExpr) Value {
 		lhsNum, lhsOk := currentVal.(float64)
 		rhsNum, rhsOk := rhs.(float64)
 		if !lhsOk || !rhsOk {
-			e.errors.Report(fmt.Sprintf("Mowa, '%s' and '%v' numbers undaali ra for %s!", assignee.Value, rhs, expr.Operator.Value), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, '%s' and '%v' numbers undaali mowa for %s!", assignee.Value, rhs, expr.Operator.Value), e.line)
 			return nil
 		}
 		var result float64
@@ -959,18 +959,18 @@ func (e *Evaluator) evalAssignmentExpr(expr ast.AssignmentExpr) Value {
 			result = lhsNum * rhsNum
 		case lexer.SLASH_EQUALS:
 			if rhsNum == 0 {
-				e.errors.Report("Mowa, zero tho divide cheyakudadhu ra!", e.line)
+				e.errors.Report("Mowa, zero tho divide cheyakudadhu mowa!", e.line)
 				return nil
 			}
 			result = lhsNum / rhsNum
 		case lexer.PERCENT_EQUALS:
 			if rhsNum == 0 {
-				e.errors.Report("Mowa, zero tho modulo cheyakudadhu ra!", e.line)
+				e.errors.Report("Mowa, zero tho modulo cheyakudadhu mowa!", e.line)
 				return nil
 			}
 			result = math.Mod(lhsNum, rhsNum)
 		default:
-			e.errors.Report(fmt.Sprintf("Mowa, assignment operator '%s' handle cheyalenu ra!", expr.Operator.Value), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, assignment operator '%s' handle cheyalenu mowa!", expr.Operator.Value), e.line)
 			return nil
 		}
 		e.env.Define(assignee.Value, result, e.line, e.errors)
@@ -983,7 +983,7 @@ func (e *Evaluator) evalAssignmentExpr(expr ast.AssignmentExpr) Value {
 		}
 		arr, ok := array.([]Value)
 		if !ok {
-			e.errors.Report(fmt.Sprintf("Mowa, '%v' array kaadhu ra!", array), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, '%v' array kaadhu mowa!", array), e.line)
 			return nil
 		}
 		index := e.evalExpr(assignee.Index)
@@ -992,19 +992,19 @@ func (e *Evaluator) evalAssignmentExpr(expr ast.AssignmentExpr) Value {
 		}
 		idx, ok := index.(float64)
 		if !ok || idx != float64(int(idx)) || idx < 0 || int(idx) >= len(arr) {
-			e.errors.Report(fmt.Sprintf("Mowa, invalid array index '%v' ra!", index), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, invalid array index '%v' mowa!", index), e.line)
 			return nil
 		}
 		typ, exists := e.env.types[assignee.Array.(ast.SymbolExpr).Value]
 		if exists {
 			if typ == "[number]" {
 				if _, ok := rhs.(float64); !ok {
-					e.errors.Report(fmt.Sprintf("Mowa, array '%s' lo number undaali, '%v' undhi ra!", assignee.Array.(ast.SymbolExpr).Value, rhs), e.line)
+					e.errors.Report(fmt.Sprintf("Mowa, array '%s' lo number undaali, '%v' undhi mowa!", assignee.Array.(ast.SymbolExpr).Value, rhs), e.line)
 					return nil
 				}
 			} else if typ == "[string]" {
 				if _, ok := rhs.(string); !ok {
-					e.errors.Report(fmt.Sprintf("Mowa, array '%s' lo string undaali, '%v' undhi ra!", assignee.Array.(ast.SymbolExpr).Value, rhs), e.line)
+					e.errors.Report(fmt.Sprintf("Mowa, array '%s' lo string undaali, '%v' undhi mowa!", assignee.Array.(ast.SymbolExpr).Value, rhs), e.line)
 					return nil
 				}
 			}
@@ -1013,7 +1013,7 @@ func (e *Evaluator) evalAssignmentExpr(expr ast.AssignmentExpr) Value {
 		e.env.Define(assignee.Array.(ast.SymbolExpr).Value, arr, e.line, e.errors)
 		return rhs
 	default:
-		e.errors.Report("Mowa, assignment ki variable or array index undaali ra!", e.line)
+		e.errors.Report("Mowa, assignment ki variable or array index undaali mowa!", e.line)
 		return nil
 	}
 }
@@ -1034,28 +1034,28 @@ func (e *Evaluator) evalBinaryExpr(expr ast.BinaryExpr) Value {
 			if r, ok := right.(float64); ok {
 				return l + r
 			}
-			e.errors.Report(fmt.Sprintf("Mowa, number '%v' + non-number '%v' operation cheyakudadhu ra!", l, right), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, number '%v' + non-number '%v' operation cheyakudadhu mowa!", l, right), e.line)
 		case string:
 			if r, ok := right.(string); ok {
 				return l + r
 			}
-			e.errors.Report(fmt.Sprintf("Mowa, string '%v' + non-string '%v' concatenate cheyakudadhu ra!", l, right), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, string '%v' + non-string '%v' concatenate cheyakudadhu mowa!", l, right), e.line)
 		default:
-			e.errors.Report(fmt.Sprintf("Mowa, '%v' + '%v' types match avvatledu ra!", l, right), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, '%v' + '%v' types match avvatledu mowa!", l, right), e.line)
 		}
 	case lexer.DASH:
 		if l, ok := left.(float64); ok {
 			if r, ok := right.(float64); ok {
 				return l - r
 			}
-			e.errors.Report(fmt.Sprintf("Mowa, '%v' - '%v' types match avvatledu ra!", l, right), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, '%v' - '%v' types match avvatledu mowa!", l, right), e.line)
 		}
 	case lexer.STAR:
 		if l, ok := left.(float64); ok {
 			if r, ok := right.(float64); ok {
 				return l * r
 			}
-			e.errors.Report(fmt.Sprintf("Mowa, '%v' * '%v' types match avvatledu ra!", l, right), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, '%v' * '%v' types match avvatledu mowa!", l, right), e.line)
 		}
 	case lexer.SLASH:
 		if l, ok := left.(float64); ok {
@@ -1066,24 +1066,24 @@ func (e *Evaluator) evalBinaryExpr(expr ast.BinaryExpr) Value {
 				}
 				return l / r
 			}
-			e.errors.Report(fmt.Sprintf("Mowa, '%v' / '%v' types match avvatledu ra!", l, right), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, '%v' / '%v' types match avvatledu mowa!", l, right), e.line)
 		}
 	case lexer.PERCENT:
 		if l, ok := left.(float64); ok {
 			if r, ok := right.(float64); ok {
 				if r == 0 {
-					e.errors.Report("Mowa, zero tho modulo cheyakudadhu ra!", e.line)
+					e.errors.Report("Mowa, zero tho modulo cheyakudadhu mowa!", e.line)
 				}
 				return math.Mod(l, r)
 			}
-			e.errors.Report(fmt.Sprintf("Mowa, '%v' %% '%v' types match avvatledu ra!", l, right), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, '%v' %% '%v' types match avvatledu mowa!", l, right), e.line)
 		}
 	case lexer.STAR_STAR:
 		if l, ok := left.(float64); ok {
 			if r, ok := right.(float64); ok {
 				return math.Pow(l, r)
 			}
-			e.errors.Report(fmt.Sprintf("Mowa, '%v' ** '%v' types match avvatledu ra!", l, right), e.line)
+			e.errors.Report(fmt.Sprintf("Mowa, '%v' ** '%v' types match avvatledu mowa!", l, right), e.line)
 		}
 	case lexer.EQUALS:
 		return equals(left, right)
@@ -1095,28 +1095,28 @@ func (e *Evaluator) evalBinaryExpr(expr ast.BinaryExpr) Value {
 				return l < r
 			}
 		}
-		e.errors.Report(fmt.Sprintf("Mowa, '%v' < '%v' compare cheyalenu ra!", left, right), e.line)
+		e.errors.Report(fmt.Sprintf("Mowa, '%v' < '%v' compare cheyalenu mowa!", left, right), e.line)
 	case lexer.LESS_EQUALS:
 		if l, ok := left.(float64); ok {
 			if r, ok := right.(float64); ok {
 				return l <= r
 			}
 		}
-		e.errors.Report(fmt.Sprintf("Mowa, '%v' <= '%v' compare cheyalenu ra!", left, right), e.line)
+		e.errors.Report(fmt.Sprintf("Mowa, '%v' <= '%v' compare cheyalenu mowa!", left, right), e.line)
 	case lexer.GREATER:
 		if l, ok := left.(float64); ok {
 			if r, ok := right.(float64); ok {
 				return l > r
 			}
 		}
-		e.errors.Report(fmt.Sprintf("Mowa, '%v' > '%v' compare cheyalenu ra!", left, right), e.line)
+		e.errors.Report(fmt.Sprintf("Mowa, '%v' > '%v' compare cheyalenu mowa!", left, right), e.line)
 	case lexer.GREATER_EQUALS:
 		if l, ok := left.(float64); ok {
 			if r, ok := right.(float64); ok {
 				return l >= r
 			}
 		}
-		e.errors.Report(fmt.Sprintf("Mowa, '%v' >= '%v' compare cheyalenu ra!", left, right), e.line)
+		e.errors.Report(fmt.Sprintf("Mowa, '%v' >= '%v' compare cheyalenu mowa!", left, right), e.line)
 	case lexer.AND:
 		lBool := toBool(left, e.line, e.errors)
 		if e.errors.HasErrors() {

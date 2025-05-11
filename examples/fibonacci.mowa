@@ -1,0 +1,4 @@
+mowa "Hello Fib\n";
+idhi a = 10 - 2 + (2.4 -2);
+
+mowa a;

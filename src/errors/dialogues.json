@@ -1,0 +1,54 @@
+{
+  "all": {
+    "success": [
+      "Prabhas: 'Jai Maahishmathi!'",
+      "Prabhas: 'Baahubali code run ayindhi!'",
+      "AA: 'Mowa... Assala Thaggedeley'",
+      "NTR: 'Devara code raasinadu ante program run ayindhani ardham.'",
+      "Mahesh: 'Pokiri style lo code execute ayindhi!'",
+      "Vijay: 'Thalaiva, program hit ra!'",
+      "Ram: 'iSmart code, perfect run!'",
+      "Chiranjeevi: 'Boss is back with clean execution!'",
+      "Pawan: 'Power Star approves this run!'",
+      "Nani: 'Natural star says: Code is a hit!'"
+    ],
+    "failure": [
+      "Prabhas: 'Thappu chesaav Devasena ...'",
+      "Prabhas: 'Saaho, we crashed ra!'",
+      "AA: 'Konni Saarlu gelavadam kante, odipodame goppa'",
+      "Bhramhanandham: 'Arey Tuppas Edhava, Thappu Chesavu ra'",
+      "NTR: 'Okkasari check chey ra, error undhi!'",
+      "Mahesh: 'Srimanthudu kuda ee error fix cheyalenu!'",
+      "Vijay: 'Bigil mistake ra, debug chey!'",
+      "Ram: 'No ismartness here, error ra!'",
+      "Chiranjeevi: 'Khaidi says: Code jail lo undhi!'",
+      "Pawan: 'Vakeel Saab warns: Bug detected!'"
+    ]
+  },
+  "prabhas": {
+    "success": [
+      "Prabhas: 'Jai Maahishmathi!'",
+      "Prabhas :'Darling, needhi Isuzu engine aa?\nCode ni Rai rai rai… ani horsepower speed lo raasthunaav!'",
+      "Prabhas: 'Darling evaraina code raayali antey sketch eskoni raayali, kaani nv hanger ki unna shirt eskoni raaseoychu'",
+      "Prabhas: 'Trust No-One, Kill Anyone, Be Only One'",
+      "Prabhas: 'Darling! Nuvvu Yemudu Roopam lo vachina Rebel'",
+      "Prabhas: 'Rebel Time Starts'",
+      "Prabhas: 'Aalasyam ayindha Acharyaputhra'",
+      "Prabhas: 'Ah Seal ni puttinchindhey vaadu'",
+      "Prabhas: 'AI vaadi code evaraina copy chesthadu...\nKaani sonthanga code raasevaadike oka RANGE untadhi darling'",
+      "Prabhas: 'Records Choosko...Intha varaku oka fight kooda odipoledhu'"
+    ],
+    "failure": [
+      "Prabhas: 'Thappu chesaav Devasena ...'",
+      "Prabhas: 'Darling veelu ayithe code raadham poyedhi em undhi, maha ayithe errors vasthaayi'",
+      "Prabhas: 'Darling neeku oka good news, ne code lo errors unaayi.\nEnti good news ani bad news chepthunna anukuntunnara, adhe na Style!'",
+      "Prabhas: 'Darling, Me Padhathule Thappu'",
+      "Prabhas: 'Veelu cheppina reasons, Raasina reports kanna..\nEppudo raasina ne raatha goppadhi Prerana'",
+      "Prabhas: 'Intha varaku okka fight kooda odipoledhu, idhi kooda odiponu'",
+      "Prabhas: 'eeroju naaku clarity ga ardhamayindhi... Idhi na Life'",
+      "Prabhas: 'Edhagaali antey maraali, longaali, ongaali antey nen nammanu.\nmana deggara matter undaali...'",
+      "Prabhas: 'Mowa nuvvu ippudu choosthunna Jay veru.\nokappudu Jay veru vaadi character ye veru'",
+      "Prabhas: 'Adipurush says: Error in the code!'"
+    ]
+  }
+}

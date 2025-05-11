@@ -140,13 +140,13 @@ func parse_typeof_expr(p *parser) ast.Expr {
 	p.expect(lexer.OPEN_PAREN)
 	expr := parse_expr(p, default_bp)
 	if expr == nil {
-		p.errors.Report("Mowa, rakam argument parse cheyalenu ra!", p.line)
+		p.errors.Report("Mowa, rakam argument parse cheyalenu mowa!", p.line)
 		return nil
 	}
 	// Restrict to SymbolExpr or ArrayIndexExpr
 	if _, ok := expr.(ast.SymbolExpr); !ok {
 		if _, ok := expr.(ast.ArrayIndexExpr); !ok {
-			p.errors.Report("Mowa, rakam function variable or array index thiskuntadhi ra!", p.line)
+			p.errors.Report("Mowa, rakam function variable or array index thiskuntadhi mowa!", p.line)
 			return nil
 		}
 	}
