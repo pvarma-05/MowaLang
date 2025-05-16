@@ -5,7 +5,11 @@ export const myfont=localFont({
     variable : '--font-gw'
 })
 
-// export const myfont2=localFont({
-//     src:'./HeyBro.otf',
-//     variable: '--font-wg'
-// })
+export const myfont2=localFont({
+    src:'./blowbrush.ttf',
+    variable: '--font-wg'
+})
+export const myfont3=localFont({
+    src:'./Fonarto.ttf',
+    variable: '--font-ft'
+})
