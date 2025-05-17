@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     template: 'MowaLang Docs | %s',
     default: 'MowaLang Docs'
   },
-  description: "Documentation for MowaLang - A Telugu Based Toy Programming Language",
+  description: "Documentation for MowaLang - A Programming Language written in Go which supports telugu syntax and Movie Dialogues",
 }
 
 export default function Layout({ children }: { children: ReactNode }) {

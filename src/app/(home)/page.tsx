@@ -22,94 +22,98 @@ export default function Home() {
     )
       return;
 
-    const split = new SplitType(titleRef.current, { types: "chars" });
+    document.fonts.ready.then(() => {
+      const split = new SplitType(titleRef.current!, { types: "chars" });
 
-    // Initial state
-    gsap.set(titleRef.current, { visibility: "visible" });
-    gsap.set(split.chars, {
-      autoAlpha: 0,
-      y: 50,
-      scale: 0.6,
-      transformOrigin: "50% 50%",
-    });
-    gsap.set(subtitleRef.current, { autoAlpha: 0, visibility: "visible" });
-    gsap.set([button1Ref.current, button2Ref.current], {
-      autoAlpha: 0,
-      y: 30,
-      visibility: "visible",
-    });
+      // Initial state
+      gsap.set(titleRef.current, { visibility: "visible" });
+      gsap.set(split.chars, {
+        autoAlpha: 0,
+        y: 50,
+        scale: 0.6,
+        transformOrigin: "50% 50%",
+      });
+      gsap.set(subtitleRef.current, { autoAlpha: 0, visibility: "visible" });
+      gsap.set([button1Ref.current, button2Ref.current], {
+        autoAlpha: 0,
+        y: 30,
+        visibility: "visible",
+      });
 
-    const tl = gsap.timeline();
+      const tl = gsap.timeline();
 
-    tl.to(split.chars, {
-      autoAlpha: 1,
-      y: 0,
-      scale: 1.2,
-      ease: "back.out(3)",
-      duration: 0.4,
-      stagger: 0.08,
-    })
-      .to(
-        split.chars,
-        {
-          scale: 1,
-          duration: 0.3,
-          ease: "elastic.out(1, 0.5)",
-          stagger: 0.08,
-        },
-        "-=0.6"
-      )
-      .to(
-        titleRef.current,
-        {
-          scale: 1.05,
-          duration: 0.4,
-          ease: "power1.out",
-        },
-        "0"
-      )
-      .to(
-        titleRef.current,
-        {
-          scale: 1,
-          duration: 0.4,
-          ease: "elastic.out(1, 0.4)",
-        },
-        "-=0.2"
-      )
-      .to(
-        subtitleRef.current,
-        {
-          autoAlpha: 1,
-          text: {
-            value: "A programming language with Telugu syntax and Movie Dialogues.",
+      tl.to(split.chars, {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1.2,
+        ease: "back.out(3)",
+        duration: 0.4,
+        stagger: 0.08,
+      })
+        .to(
+          split.chars,
+          {
+            scale: 1,
+            duration: 0.3,
+            ease: "elastic.out(1, 0.5)",
+            stagger: 0.08,
           },
-          duration: 2.5,
-          ease: "none",
-        },
-        "+=0.2"
-      )
-      .to(
-        button1Ref.current,
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "power3.out",
-        },
-        "-=1.5"
-      )
-      .to(
-        button2Ref.current,
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "power3.out",
-        },
-        "-=1.5"
-      );
+          "-=0.6"
+        )
+        .to(
+          titleRef.current,
+          {
+            scale: 1.05,
+            duration: 0.4,
+            ease: "power1.out",
+          },
+          "0"
+        )
+        .to(
+          titleRef.current,
+          {
+            scale: 1,
+            duration: 0.4,
+            ease: "elastic.out(1, 0.4)",
+          },
+          "-=0.2"
+        )
+        .to(
+          subtitleRef.current,
+          {
+            autoAlpha: 1,
+            text: {
+              value:
+                "A programming language with Telugu syntax and Movie Dialogues.",
+            },
+            duration: 2.5,
+            ease: "none",
+          },
+          "+=0.2"
+        )
+        .to(
+          button1Ref.current,
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+          },
+          "-=1.5"
+        )
+        .to(
+          button2Ref.current,
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+          },
+          "-=1.5"
+        );
+    });
   }, []);
+
 
 
 
@@ -121,9 +125,7 @@ export default function Home() {
         <div className="text-center flex flex-col gap-5">
           <h1
             ref={titleRef}
-            className="text-[#A93E39] text-7xl md:text-[100px] lg:text-[155px] select-none font-wg tracking-wide invisible"
-          >
-            MOwa-Lang
+            className="font-wg text-[#A93E39] text-7xl md:text-[100px] lg:text-[155px] select-none invisible tracking-wide">MOwa-Lang
           </h1>
 
           <p

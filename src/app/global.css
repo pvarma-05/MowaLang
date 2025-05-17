@@ -4,22 +4,12 @@
 
 @source '../../node_modules/fumadocs-ui/dist/**/*.js';
 
-.font-gw {
-  font-family: var(--font-gw);
-}
 .font-wg {
   font-family: var(--font-wg);
-}
-.font-ft {
-  font-family: var(--font-ft);
 }
 
 .font-outfit {
   font-family: var(--font-outfit);
-}
-
-.font-at{
-  font-family: var(--font-at);
 }
 
 .font-fc{
@@ -31,3 +21,4 @@
   nocompatible: true;
   preferredStrategy: 'pseudoelements';
 }
+
