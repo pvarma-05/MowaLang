@@ -12,7 +12,8 @@ export default async function Page(props: {
   params: Promise<{ slug?: string[] }>;
 }) {
   const params = await props.params;
-  const page = source.getPage(params.slug);
+  const slug = params.slug ?? ['welcome'];
+  const page = source.getPage(slug);
   if (!page) notFound();
 
   const MDX = page.data.body;

@@ -145,7 +145,7 @@ export default function Home() {
             <Link
               ref={button2Ref}
               className="px-10 py-4 bg-[#A93E39]  text-white font-medium font-outfit text-md md:text-lg lg:text-xl rounded-md transition-all duration-300 hover:scale-105 invisible"
-              href={"/docs"}
+              href={"/docs/welcome"}
             >
               Docs
             </Link>
