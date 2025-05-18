@@ -22,3 +22,6 @@
   preferredStrategy: 'pseudoelements';
 }
 
+.shiki {
+  background: none !important;
+}

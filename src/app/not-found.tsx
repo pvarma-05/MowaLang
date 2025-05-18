@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { TextHoverEffect } from "@/app/components/ui/text-hover-effect";
+import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
