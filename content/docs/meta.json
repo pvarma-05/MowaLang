@@ -1,4 +1,24 @@
 {
   "title": "Documentation",
-  "pages": ["---Getting Started---","index","setup","first-program","---Core Concepts---","core/index"]
- }
+  "pages": [
+    "---Getting Started---",
+    "index",
+    "setup",
+    "first-program",
+    "---Core---",
+    "core/index",
+    "core/variables",
+    "core/data-types",
+    "core/arthimetic",
+    "core/print",
+    "core/input",
+    "core/conditional",
+    "---Advanced---",
+    "advanced/index",
+    "advanced/loops",
+    "advanced/functions",
+    "advanced/arrays",
+    "---Fun---",
+    "fun/index"
+  ]
+}
