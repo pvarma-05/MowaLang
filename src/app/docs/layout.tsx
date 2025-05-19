@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   description: "Documentation for MowaLang - A Programming Language written in Go which supports telugu syntax and Movie Dialogues",
 }
 
+
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div className='font-outfit'>

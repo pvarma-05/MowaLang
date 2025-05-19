@@ -7,4 +7,5 @@ export const baseOptions: BaseLayoutProps = {
       <span className='text-[#A93E39] font-medium text-4xl font-wg tracking-wider'>MOwa-Lang</span>
     ),
   },
+
 };

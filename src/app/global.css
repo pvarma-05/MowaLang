@@ -25,3 +25,12 @@
 .shiki {
   background: none !important;
 }
+
+:root {
+  --color-fd-primary: hsl(3, 55%, 51%);  /* #A93E39 in HSL */
+}
+
+.dark {
+  --color-fd-primary: hsl(3, 55%, 51%);  /* Same color for consistency */
+}
+

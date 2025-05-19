@@ -19,8 +19,8 @@ const firaCode = Fira_Code({
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={`${outfit.variable} ${myfont.variable}   ${firaCode.variable} antialiased`} suppressHydrationWarning>
-      <body className="flex flex-col min-h-screen scrollbar-thin scrollbar-thumb-[#263238] scrollbar-track-[#001220] ">
-        <RootProvider >
+      <body className="flex flex-col min-h-screen scrollbar-thin scrollbar-thumb-[#263238] scrollbar-track-[#001220]">
+        <RootProvider>
             {children}
         </RootProvider>
       </body>
