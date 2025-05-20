@@ -1,4 +1,5 @@
 {
   "title": "Setup",
-  "pages": ["installation","editor-support","cli-flags","playground-guide"]
+  "pages": ["installation","editor-support","cli-flags","playground-guide"],
+  "defaultOpen": true
  }

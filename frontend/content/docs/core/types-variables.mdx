@@ -1,0 +1,61 @@
+---
+title: Data Types & Variables
+description: Understand the core data types and learn how to declare and use variables in MowaLang.
+---
+
+## Overview
+In MowaLang, variables are declared using `idhi`.<br />
+You can define a variable by either assigning it a value directly (implicit declaration) or by specifying its type (explicit declaration).
+
+Every variable must have either a value or a type — MowaLang does not allow declarations without one of these.
+
+## Core Data Types
+MowaLang supports three fundamental data types:
+
+| Data Types        | Description                                       |
+|-------------------|---------------------------------------------------|
+| `number`          | for integers and decimal values                   |
+| `string`          | for text                                          |
+| `bool`            | for logical values: nijam (true), abadham (false) |
+
+**example:**
+```bash
+idhi age    =  20;               // number
+idhi name   = "Pradeep Varma";   // string
+idhi active =  nijam;            // bool
+```
+
+## Variable Declarations
+Under this, you can structure:
+
+### Implicit Declarations
+With implicit declarations, the type is inferred from the value you assign.
+
+**example:**
+
+```bash
+idhi x =  42;
+idhi y = "hello";
+idhi z =  abadham;
+```
+
+### Explicit Declarations
+If you're not assigning a value immediately, or if you plan to use the variable for user input, you must declare its type explicitly.
+
+**example:**
+
+```bash
+idhi x : number;
+idhi y : string;
+idhi z : bool;
+```
+
+<Callout title="Tip" >
+You can assign a value even when a variable is declared with an explicit type.<br />
+```bash
+idhi a : number = 20;
+```
+This is valid in MowaLang.
+</Callout>
+
+> Now that you know how to declare and use variables in MowaLang, you're now ready to display values using `mowa` and accept user input using `theekso` in your programs. Let’s move on!

@@ -1,5 +1,5 @@
 # deps
-/node_modules
+node_modules
 
 # generated content
 .contentlayer
@@ -8,7 +8,7 @@
 
 # test & build
 /coverage
-/.next/
+.next/
 /out/
 /build
 *.tsbuildinfo
