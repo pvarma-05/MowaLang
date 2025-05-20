@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+
+@source '../../node_modules/fumadocs-ui/dist/**/*.js';
+
+.font-wg {
+  font-family: var(--font-wg);
+}
+
+.font-outfit {
+  font-family: var(--font-outfit);
+}
+
+.font-fc{
+  font-family: var(--font-firacode);
+}
+
+
+@plugin 'tailwind-scrollbar' {
+  nocompatible: true;
+  preferredStrategy: 'pseudoelements';
+}
+
+.shiki {
+  background: none !important;
+}
+
+:root {
+  --color-fd-primary: hsl(3, 55%, 51%);  /* #A93E39 in HSL */
+}
+
+.dark {
+  --color-fd-primary: hsl(3, 55%, 51%);  /* Same color for consistency */
+}
+

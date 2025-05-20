@@ -1,0 +1,78 @@
+---
+title: Welcome to MowaLang
+description: This is the  Official Documentation of MowaLang.
+---
+
+import { Braces, ListChecks, BrainCircuit, Globe } from 'lucide-react';
+import Image from "next/image";
+
+## What is MowaLang ?
+<span className="font-semibold">MowaLang</span> is a <span className="underline underline-offset-4">dynamically typed</span>, Telugu-based programming language built with **Go**.
+It lets you write expressive programs using  Telugu syntax and shows **iconic Telugu movie dialogues** when your code succeeds or fails.
+
+## Why MowaLang?
+
+MowaLang was designed to make programming **fun**, **relatable**, and **culturally rooted** — especially for Telugu speakers.
+It’s also a passion project that explores concepts like:
+
+
+<Cards>
+  <Card icon={<Braces className="text-orange-300" />} title="Language Design">
+    Dive into how MowaLang is structured—from syntax rules to how expressions are formed in Telugu.
+  </Card>
+
+  <Card icon={<ListChecks className="text-blue-400" />} title="Type Systems">
+    Learn about MowaLang’s dynamic type system and how it handles variables and values at runtime.
+  </Card>
+
+  <Card icon={<BrainCircuit className="text-green-400" />} title="Interpreters & ASTs">
+    See how the language is parsed and executed using Abstract Syntax Trees and evaluation logic.
+  </Card>
+
+  <Card icon={<Globe className="text-purple-400" />} title="WASM for the Web">
+    MowaLang runs in the browser thanks to WebAssembly, making it fast and accessible online.
+    visit [Playground](/play) to try MowaLang
+  </Card>
+</Cards>
+
+
+
+
+### Telugu Syntax + Movie Dialogues = ❤️
+
+You don’t just write code—you write as if you’re speaking Telugu.
+And the output isn’t boring—it greets you with an **epic film dialogue** whenever your program succeeds or fails.
+
+**sample.mowa:**
+```bash
+mowa "Hello Mowa!";
+```
+**output:**
+```js
+Hello Mowa!
+
+Prabhas: 'Trust No-One, Kill Anyone, Be Only One'
+```
+
+<Image
+  src="/docs/billa.png"
+  alt="billa"
+  height={700}
+  width={700}
+  draggable={false}
+  className="h-auto w-auto object-cover select-none rounded-md"
+  priority={true}
+/>
+
+---
+## Who Should Use MowaLang?
+<ul>
+ <li>Beginners who want a fun introduction to programming</li>
+ <li>Telugu speakers who enjoy seeing their language and culture reflected in tech</li>
+ <li>Developers who are interested in language design, interpreters, and WebAssembly (WASM)</li>
+</ul>
+
+
+<br />
+
+> <span className="not-italic">"MowaLang is still evolving. Expect frequent updates, new Telugu dialogues, and additional tooling (CLI, VS Code extension, playground). Stay tuned! "</span>
