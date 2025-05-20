@@ -49,6 +49,14 @@
 //     mowa i;
 // }
 
+// idhi i : number;
+// varaku (i = 0; i < 5; i++) {
+//     okavela (i == 3) ayithe {
+//         kaani;
+//     }
+//     mowa i;
+// }
+
 // ---------------------------------------------
 
 // ARRAYS BASIC
@@ -141,17 +149,27 @@
 // ---------------------------------------------
 
 // TYPE OF - RAKAM
- idhi x: number = 42;
- idhi s: string = "hello";
- idhi arr: [number] = [1, 2, 3];
- idhi flag = nijam;
- pani add(a: number, b: number): number {
- ichey a + b;
- }
- mowa rakam(x), "\n"; // Outputs: number
- mowa rakam(s), "\n"; // Outputs: string
- mowa rakam(arr), "\n"; // Outputs: [number]
- mowa rakam(add), "\n"; // Outputs: function
- mowa rakam(arr[0]), "\n"; // Outputs: number
- mowa rakam(flag); // Outputs: boolean
+// idhi x: number = 42;
+// idhi s: string = "hello";
+// idhi arr: [number] = [1, 2, 3];
+// idhi flag = nijam;
+// pani add(a: number, b: number): number {
+// ichey a + b;
+// }
+// mowa rakam(x), "\n"; // Outputs: number
+// mowa rakam(s), "\n"; // Outputs: string
+// mowa rakam(arr), "\n"; // Outputs: [number]
+// mowa rakam(add), "\n"; // Outputs: function
+// mowa rakam(arr[0]), "\n"; // Outputs: number
+// mowa rakam(flag); // Outputs: boolean
+
+// idhi a = 0;
+//
+// okavela(a>1) ayithe{
+//   mowa "dhola";
+// }
+// ledhante (a<1){
+//    mowa "bokka";
+// }
+
 

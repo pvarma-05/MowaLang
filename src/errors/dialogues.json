@@ -50,5 +50,13 @@
       "Prabhas: 'Mowa nuvvu ippudu choosthunna Jay veru.\nokappudu Jay veru vaadi character ye veru'",
       "Prabhas: 'Adipurush says: Error in the code!'"
     ]
+  },
+  "AA": {
+    "success": [
+      "AA: 'Mowa... Assala Thaggedeley'"
+    ],
+    "failure": [
+      "AA: 'Konni Saarlu gelavadam kante, odipodame goppa'"
+    ]
   }
 }
