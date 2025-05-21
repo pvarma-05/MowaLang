@@ -1,4 +1,117 @@
 ---
-title: Conditional
-description: Components
+title: Conditionals
+description: Learn how to control the flow of your MowaLang programs using conditional statements.
 ---
+
+## Overview
+
+Conditional statements in MowaLang help you make decisions in your code. The language supports `if`, `else if`, and `else` structures using the following syntax:
+
+- `okavela` → `if`
+- `ayithe` → `then` (marks the start of the code block)
+- `ledhante` → `else if`
+- `ledha` → `else`
+
+<Callout title="note">
+The `ayithe` keyword is **mandatory** — omitting it will result in an error.
+</Callout>
+
+---
+
+### Basic Syntax
+This is the standard way to check conditions and run different code blocks based on different outcomes.
+
+
+```bash
+idhi age = 18;
+
+okavela(age > 18) ayithe {
+  mowa "You're an Adult!";
+}
+ledhante(age == 18) {
+  mowa "Just turned Adult!";
+}
+ledha {
+  mowa "You're a Minor.";
+}
+```
+**output:**
+```bash
+Just turned Adult
+```
+
+### Using Boolean Values Directly
+You can also pass boolean variables like `nijam` or `abadham` directly into conditionals.
+
+bash
+Copy
+Edit
+
+
+```bash
+idhi flag : bool = nijam;
+
+okavela(flag) ayithe {
+  mowa "Condition is true.";
+}
+
+```
+
+**ouptut:**
+```bash
+Condition is true.
+```
+
+
+### Comparison Operators
+Use comparison operators to compare values inside your conditional expressions.
+
+
+| Operator           | Meaning                 |
+|--------------------|-------------------------|
+|`==`                | Equal to                |
+|`!=`                | Not Equal to            |
+|`>`                 | Greater than            |
+|`<`                 | Less than               |
+|`>=`                | Greater or equal        |
+|`<=`                | Less or equal           |
+
+### Logical Operators
+Logical operators help combine multiple conditions in a single statement.
+
+
+| Operator           | Meaning                 |
+|--------------------|-------------------------|
+|`&&`                | Logical AND             |
+|`\|\|`                | Logical OR              |
+
+> ❌ MowaLang does not support the ! (NOT) operator as of now. If you'd like to invert logic, you can manually structure your condition or check against `abadham`.
+
+### Nested Conditionals
+You can place one conditional block inside another to build more complex decision structures.
+
+```bash
+idhi score = 100;
+
+okavela(score > 90) ayithe {
+  mowa "Excellent!";
+  okavela(score > 95) ayithe {
+    mowa "\nTop performer!";
+  }
+}
+ledha {
+  mowa "Keep improving!";
+}
+
+```
+**output:**
+```bash
+Excellent!
+Top performer
+```
+---
+
+
+## 🎉 That’s a Wrap on Core Concepts!
+
+> You’ve now mastered the building blocks of MowaLang — from variables to conditionals. With these fundamentals, you're ready to tackle more advanced concepts and write meaningful programs.

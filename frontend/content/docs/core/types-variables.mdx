@@ -58,4 +58,27 @@ idhi a : number = 20;
 This is valid in MowaLang.
 </Callout>
 
+## Utility Statements
+
+### Checking Types with `rakam`
+MowaLang provides a utility called `rakam` to check the data type of a variable or value at runtime.
+
+It behaves like the **typeof** operator in other languages and returns the type as a string (`"number"`, `"string"`, or `"bool"`).
+
+**example:**
+```bash
+idhi name = "mowa";
+mowa rakam(name);
+```
+**output:**
+```bash
+string
+```
+
+<Callout title="Note">
+`rakam` can detect the following types: `number`, `string`, `bool`, `[number]` (number array), `[string]` (string array), and `function`.
+</Callout>
+
+---
+
 > Now that you know how to declare and use variables in MowaLang, you're now ready to display values using `mowa` and accept user input using `theekso` in your programs. Let’s move on!

@@ -1,0 +1,73 @@
+---
+title: Arthimetic
+description: Learn how to perform mathematical operations and use arithmetic expressions in MowaLang.
+---
+
+## Overview
+MowaLang supports common arithmetic operations like addition, subtraction, multiplication, division, and more advanced expressions like power and increment operators.
+
+All operations work on `number` type values.
+
+---
+
+### Basic Arthimetic Operations
+
+| Operator          | Description              | Example                                  |
+|-------------------|------------------------- |------------------------------------------|
+| `+`               | Addition                 | `idhi a = 10 + 5;`                       |
+| `-`               | Subtraction              | `idhi b = 20 - 4;`                       |
+| `*`               | Multiplication           | `idhi c = 3 * 7;`                        |
+| `/`               | Division                 | `idhi d = 15 / 3;`                       |
+| `**`              | Power (Exponent)         | `idhi e = 2 ** 3;`                       |
+
+
+### Compound Assignment
+You can simplify expressions using compound operators:
+
+```bash
+idhi x = 5;
+x += 3;      // x = x + 3 → x becomes 8
+x -= 2;      // x = x - 2 → x becomes 6
+x *= 2;      // x = x * 2 → x becomes 12
+x /= 4;      // x = x / 4 → x becomes 3
+
+```
+
+### Increment and Decrement
+MowaLang supports both post and pre increment/decrement:
+
+```bash
+idhi a = 5;
+
+a++;       // Post-increment: value used, then increased
+++a;       // Pre-increment: value increased, then used
+
+```
+These also work with -- for decrementing.
+
+## Using in Expressions
+You can use arithmetic results directly in `mowa`:
+```bash
+idhi n = 4;
+mowa "Square is:", n ** 2;
+```
+
+Or perform in-place updates:
+```bash
+idhi counter = 0;
+counter += 1;
+mowa "Counter:", counter;
+```
+
+<Callout title="Note">
+MowaLang also Supports String Concatenation
+```bash
+idhi first = "Mowa";
+idhi second = "Lang";
+
+idhi result = first + " " + second;
+mowa result;
+```
+this will print `Mowa Lang`
+</Callout>
+> You now know how to perform arithmetic in MowaLang using both basic and advanced expressions. Next, we’ll look at conditionals to control how your code behaves based on different values.

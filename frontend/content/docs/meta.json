@@ -8,15 +8,16 @@
     "---Core---",
     "core/index",
     "core/types-variables",
-    "core/arthimetic",
     "core/print-input",
+    "core/arthimetic",
     "core/conditional",
     "---Advanced---",
     "advanced/index",
+    "advanced/switch",
     "advanced/loops",
     "advanced/functions",
     "advanced/arrays",
     "---Fun---",
-    "fun/index"
+    "fun/algorithms"
   ]
 }

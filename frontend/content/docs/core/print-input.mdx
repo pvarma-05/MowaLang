@@ -5,20 +5,93 @@ description: Learn how to display output and take user input in MowaLang.
 
 ## Overview
 
-In MowaLang, you can **display output** to the console using the `mowa` keyword and **accept user input** using the `theesko` keyword. These two operations are essential for interacting with your programs.
+MowaLang provides two core keywords for interacting with the user:
 
-## Input-Ready Variables
-To take input from the user, the variable must have a type. Otherwise, MowaLang can’t infer what kind of input it should expect.
+1. `mowa`    – used to print output
+2. `theesko` – used to take input
 
+These are essential for building any interactive program.
 
-### Correct ✅:
+---
+
+## Printing Output with `mowa`
+Use `mowa` to display messages, variables, or results. You can print strings, numbers, boolean and even combine multiple values using commas.
+
+### Basic Usage
 
 ```bash
-idhi username : string;
-idhi age : number;
+mowa "Hello World!";
+mowa 24;
+mowa nijam;
 ```
-### Wrong ❌ (not allowed):
+**output:**
+```js
+Hello World!24true
+
+Prabhas: 'Trust No-One, Kill Anyone, Be Only One'
+```
+
+### Printing with Variables
 
 ```bash
-idhi something;
+idhi name = "Pradeep";
+idhi age = 20;
+
+mowa "Name:", name;
+mowa "Age:", age;
 ```
+**output:**
+```js
+Name:PradeepAge:20
+
+Prabhas: 'Trust No-One, Kill Anyone, Be Only One'
+```
+
+### Escape Sequences
+
+MowaLang supports standard escape characters like:
+
+1. `\n` - New Line
+2. `\t` - Tab
+
+**example:**
+```bash
+mowa "My Name is:\nPradeep\tVarma";
+```
+**output:**
+```js
+My Name is:
+Pradeep    Varma
+
+Prabhas: 'Trust No-One, Kill Anyone, Be Only One'
+```
+---
+
+## Taking Input with `theesko`
+Use `theesko` to take input from the user into a variable. The variable and its type must be declared beforehand.
+
+
+### Basic Usage
+
+```bash
+idhi greeting = "Namaste!";
+idhi name : string;
+
+mowa "peru -  ";
+theesko name;
+
+mowa greeting,"\nNa Peru ",name;
+```
+
+**output:**
+```js
+peru - Pradeep
+Namaste!
+Na Peru Pradeep
+
+Prabhas: 'Aalasyam ayindha Acharyaputhra'
+```
+
+<Callout title="Note"> Variables used for input must be declared with a type. If no type is given, the program will throw an error. </Callout>
+
+> Now that you know how to display output using `mowa` and read input using `theesko`, let’s move on to performing calculations and expressions with arithmetic operations in MowaLang.
