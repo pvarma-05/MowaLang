@@ -3,3 +3,97 @@ title: Switch Case
 description: Handle multiple conditions using the enchuko statement in MowaLang.
 ---
 
+## Overview
+
+
+When you want to match a value against multiple possibilities in MowaLang, use the `enchuko` block — our take on the classic `switch` statement. It's direct, clean, and works great for branching based on numbers, strings, or boolean values.
+
+Pair it with `aagipo;` to exit early, or leave it out if you’re okay with the next case running too. And yes — a `default` block has your back if nothing else matches.
+
+### Syntax
+
+```bash
+enchuko (expression) {
+  case value1:
+    // statements
+    aagipo;
+
+  case value2:
+    // statements
+    aagipo;
+
+  default:
+    // fallback statements
+    aagipo;
+}
+
+```
+
+### Example
+
+```bash
+idhi signal : string = "green";
+
+enchuko (signal) {
+  case "red":
+    mowa "Stop";
+    aagipo;
+  case "green":
+    mowa "Go";
+    aagipo;
+  case "orange":
+    mowa "Slow down";
+    aagipo;
+}
+```
+
+### Fallthrough Behavior
+Forget `aagipo`, and the execution falls through — the next case (and even default) will run. Useful sometimes, dangerous other times — you decide.
+
+```bash
+idhi x : number = 2;
+
+enchuko (x) {
+  case 2:
+    mowa "Two\n";
+  case 3:
+    mowa "Three\n";
+  default:
+    mowa "Done\n";
+}
+```
+**output**:
+```bash
+Two
+Three
+Done
+```
+Use `aagipo` if you want to avoid this.
+
+### Nested Blocks? No Problem.
+You can nest `enchuko` inside `okavela`, `varaku`(loops), or even other `enchuko` blocks. It just works.
+
+```bash
+idhi x : number = 1;
+idhi y : number = 2;
+
+enchuko (x) {
+  case 1:
+    enchuko (y) {
+      case 2:
+        mowa "Nested match!";
+        aagipo;
+    }
+    aagipo;
+}
+
+```
+**output:**
+```bash
+Nested match!
+
+Prabhas: 'Rebel Time Starts'
+```
+---
+
+> Now that you know how to handle multiple conditions using `enchuko`, it's time to control how your code repeats using loops.

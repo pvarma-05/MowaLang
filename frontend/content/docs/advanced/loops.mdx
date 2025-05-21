@@ -1,4 +1,104 @@
 ---
 title: Loops
-description: Start here to understand the foundation of MowaLang.
+description: Repeat blocks of code using the varaku in MowaLang.
 ---
+
+## Overview
+
+In MowaLang, you can perform repeated actions using the `varaku` loop — similar to the `for` loop in other languages. It's helpful when you want to execute a block of code multiple times with a condition.
+
+The loop follows a familiar structure: initialization, condition, and increment — all placed inside the `varaku` statement.
+
+## Syntax
+
+```bash
+varaku (initialization; condition; increment) {
+  // loop body
+}
+```
+**example:**
+```bash
+idhi i : number;
+
+varaku (i = 0; i < 5; i++) {
+  mowa i;
+}
+```
+**output:**
+```bash
+01234
+```
+
+## Loop Variable Scope
+Any variable declared before the loop is accessible inside. Variables declared inside the loop are scoped to the loop only and **cannot** be used outside.
+
+
+## Loop Control Statements
+MowaLang supports two control statements:
+
+- `aagipo` – exits the loop early (like break)
+- `kaani` – skips the current iteration and continues (like continue)
+
+### Example: Using `aagipo`
+```bash
+idhi i : number;
+
+varaku (i = 0; i < 5; i++) {
+  okavela (i == 3) ayithe {
+    aagipo;
+  }
+  mowa i"\n";
+}
+```
+**output:**
+```bash
+0
+1
+2
+```
+### Example: Using `kaani`
+```bash
+idhi i : number;
+
+varaku (i = 0; i < 5; i++) {
+  okavela (i == 3) ayithe {
+    kaani;
+  }
+  mowa i"\n";
+}
+```
+**output:**
+```bash
+0
+1
+2
+4
+```
+
+## Nested Loops
+MowaLang allows loops inside loops. This is useful for multi-level iterations, such as matrices or combinations.
+
+```bash
+idhi i : number;
+idhi j : number;
+
+varaku (i = 1; i <= 3; i++) {
+  varaku (j = 1; j <= 2; j++) {
+    mowa "i = ",i,", j = ",j;
+    mowa "\n";
+  }
+}
+```
+```bash
+i = 1, j = 1
+i = 1, j = 2
+i = 2, j = 1
+i = 2, j = 2
+i = 3, j = 1
+i = 3, j = 2
+```
+
+---
+
+> Ready to take your code to the next level?
+Learn how to organize and reuse logic using Functions with the `pani` keyword.

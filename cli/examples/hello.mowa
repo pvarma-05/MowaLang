@@ -36,13 +36,22 @@
 
 // ---------------------------------------------
 
+// INF LOOP
+// varaku(idhi i = 0; i>=0 ;i++){
+//   mowa i,"\n";
+// }
+
+// ---------------------------------------------
+// BASIC LOOP
 // idhi i : number;
 // varaku (i = 0; i < 5; i++) {
 //     mowa i;
 // }
 
+// Loops Using break and continue
+
 // idhi i : number;
-// varaku (i = 0; i < 5; i++) {
+// varaku (i = 0; i < 5; i=i+1) {
 //     okavela (i == 3) ayithe {
 //         aagipo;
 //     }
@@ -108,16 +117,10 @@
 // idhi a:number;
 // mowa "Edho oka number ivvu mowa:";
 // theesko a;
-// mowa "Factorial(",a,"): ",factorial(a);
+// mowa "Factorial: ",factorial(a);
 
 // ---------------------------------------------
 
-// INF LOOP
-// varaku(idhi i = 0; i>=0 ;i++){
-//   mowa i,"\n";
-// }
-
-// ---------------------------------------------
 
 // FUNCTIONS - (BINARY SORT)
 // pani sort(a: [number], s:number): [number] {
@@ -244,15 +247,65 @@
 //  }
 
 
-idhi x : number = 1;
-idhi y : number = 2;
+// idhi x : number = 1;
+// idhi y : number = 2;
+//
+// enchuko (x) {
+//   case 1:
+//     enchuko (y) {
+//       case 2:
+//         mowa "Nested match!";
+//         aagipo;
+//     }
+//     aagipo;
+// }
 
-enchuko (x) {
-  case 1:
-    enchuko (y) {
-      case 2:
-        mowa "Nested match!";
-        aagipo;
-    }
-    aagipo;
+// varaku (idhi i : number = 0; i < 3; i++) {
+//   mowa "Inside loop: ", i;
+// }
+//
+// mowa i;  // ❌ This will cause an error because 'i' is not accessible here
+
+
+// idhi i : number;
+//
+// varaku (i = 0; i < 3; i++) {
+//   mowa "Inside loop: ", i;
+// }
+//
+// mowa "Outside loop: ", i;  // ✅ Works fine
+
+
+
+// pani square(n: number): number {
+//   ichey n ** 2;
+// }
+//
+// idhi result = square(5);
+// mowa result;
+//
+
+
+//  mowa "Explicit array declaration\n";
+//  idhi arr1 : [number] = [0, 1, 2, 3, 4, 5];
+//  mowa "Explicit array: ", arr1, "\n";
+//
+// mowa "array length : ",arr1.length;
+//
+//  mowa "Implicit array declaration\n";
+//  idhi arr2 = [0, 1, 2, 3, 4, 5];
+//  mowa "Implicit array: ", arr2, "\n";
+//
+
+idhi a: number;
+mowa "Array Size ivvu mowa:";
+theesko a;
+
+idhi arr: [number(a)];
+mowa a, " values enter cheyyu mowa:\n";
+
+varaku (idhi i = 0; i < a; i++) {
+  theesko arr[i];
 }
+
+mowa "Array lo unna values: ",arr;

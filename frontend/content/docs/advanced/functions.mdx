@@ -1,4 +1,134 @@
 ---
 title: Functions
-description: Start here to understand the foundation of MowaLang.
+description: Reuse blocks of logic using reusable named functions in MowaLang.
 ---
+
+## Overview
+
+In MowaLang, you can define reusable blocks of code using **functions**, declared with the `pani` keyword. Functions help you organize logic into smaller parts, and can return values using the `ichey` keyword.
+
+<Callout title="Note" type="warn">
+MowaLang supports:
+- Only **named** functions (no anonymous/arrow functions).
+- No **function overloading**.
+- **Declaration before use** is mandatory.
+- **Local scoping** — variables inside functions cannot be accessed outside.
+</Callout>
+---
+
+## Syntax
+
+```bash
+pani functionName(parameter : parameterType): returnType {
+  // logic
+  ichey value;
+}
+```
+
+- Use `pani` to declare a function.
+- Specify parameters with types.
+- Use `ichey` to return a value.
+- `ReturnType` can be omitted for void functions.
+
+## Return Types
+In MowaLang, specifying a return type is optional. But if you do specify it, the function must use the `ichey` keyword to return a value. Otherwise, an error will occur.
+
+### Valid (with return type):
+```bash
+pani square(n: number): number {
+  ichey n * n;
+}
+```
+### Invalid (return type but no `ichey`):
+```bash
+pani value(): number {
+  idhi a = 5;
+  mowa a;
+}
+
+value();
+```
+**Output:**
+```bash
+Prabhas: 'Thappu chesaav Devasena ...'
+Mowa, errors unnai mowa:
+ln 2: Mowa, 'value' function return cheyyali mowa!
+```
+
+<Callout title="Note" type="info">
+Technically, **you don’t need to specify a return type** to use `ichey`. The function will still work as long as you return something properly.
+
+```bash
+pani factorial(n: number) {
+  okavela (n <= 1) ayithe {
+    ichey 1;
+  }
+  ichey n * factorial(n - 1);
+}
+```
+This is valid ✅ even without a return type.
+
+> I personally chose to support explicit return types because I liked the idea from GoLang — it's clean, self-documenting, and helps catch bugs early. You can think of it as a good habit rather than a strict rule in MowaLang.
+
+</Callout>
+
+## Types of Functions
+
+### 1. Void Functions (No Return)
+If a function doesn’t return anything, you can skip the return type entirely:
+
+```bash
+pani greet() {
+  mowa "Hello Mowa!";
+}
+
+greet();
+```
+**output:**
+
+```bash
+Hello Mowa!
+```
+
+### 2. Returnable Functions
+Functions can return values using `ichey`:
+
+
+```bash
+pani double(x: number): number {
+  ichey x * 2;
+}
+
+idhi result = double(10);
+mowa result;
+```
+**output:**
+
+```bash
+20
+```
+
+### 3. Recursive Functions
+Functions can call themselves to solve problems like factorials.
+
+**factorial.mowa:**
+```bash
+pani factorial(n: number): number {
+  okavela (n <= 1) ayithe {
+    ichey 1;
+  }
+  ichey n * factorial(n - 1);
+}
+
+idhi a = 5;
+mowa "Factorial: ", factorial(a);
+```
+**output:**
+```bash
+Factorial: 120
+```
+
+---
+
+
+> Next up: Arrays — explore how to declare, access, and manipulate lists of values in MowaLang!

@@ -1,4 +1,9 @@
-mowa "Hello Fib\n";
-idhi a = 10 - 2 + (2.4 -2);
+pani factorial(n: number) {
+  okavela (n <= 1) ayithe {
+    ichey 1;
+  }
+  ichey n * factorial(n - 1);
+}
 
-mowa a;
+idhi a = 5;
+mowa "Factorial: ", factorial(a);

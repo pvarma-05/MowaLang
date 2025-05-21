@@ -1,4 +1,88 @@
 ---
 title: Arrays
-description: Start here to understand the foundation of MowaLang.
+description: Declare, Access, and Manipulate collections of values using arrays in MowaLang.
 ---
+
+## Overview
+
+Arrays in MowaLang allow you to store multiple values in a single variable. You can declare arrays explicitly with a type or let MowaLang infer the type using implicit declaration. MowaLang supports arrays of `number`, `string`, and even **nested arrays** like `[[number]]`.
+
+All arrays are **homogeneous** — meaning all elements must be of the same type. Indexing is **zero-based**, and accessing an invalid index will result in an error.
+
+## Array Declaration
+
+### Implicit Declaration
+MowaLang will infer the type from the given values:
+
+```bash
+idhi arr1 = ["a", "b", "c"];
+mowa arr1;
+```
+
+### Explicit Declaration
+
+Use square brackets `[]` to define the type and initialize values:
+
+```bash
+idhi arr2: [number] = [0, 1, 2, 3];
+mowa arr2;
+```
+
+## Accessing and Updating Array Elements
+
+```bash
+idhi arr: [number] = [1, 2, 3];
+
+mowa arr[0];     // Prints 1
+arr[1] = 10;
+mowa arr[1];     // Prints 10
+```
+<Callout title="Important" type="warn"> Array indexing starts at `0`. Accessing any index below 0 or beyond `arr.length - 1` will throw an error. </Callout>
+
+## Array Length
+You can retrieve the size of an array using the `.length` property.
+
+```bash
+idhi arr = [4, 5, 6];
+mowa arr.length; // Prints 3
+```
+
+## Dynamic Arrays with User Input
+You can create dynamic arrays by taking input from users:
+
+```bash
+idhi a: number;
+mowa "Array Size ivvu mowa:";
+theesko a;
+
+idhi arr: [number(a)];
+mowa a, " values enter cheyyu mowa:\n";
+
+varaku (idhi i = 0; i < a; i++) {
+  theesko arr[i];
+}
+
+mowa "Array lo unna values: ",arr;
+```
+**output:**
+
+```bash
+Array Size ivvu mowa:5
+5 values enter cheyyu mowa:
+1
+2
+3
+4
+5
+Array lo unna values: [1, 2, 3, 4, 5]
+
+Prabhas: 'Trust No-One, Kill Anyone, Be Only One'
+```
+
+<Callout title="Congratulations Mowa 🥳" type="success">
+You’ve officially completed the **Docs section** of MowaLang! 🏁<br />
+From the basics to advanced features, you've learned everything needed to wield this language like a pro.
+
+
+Now that you’ve mastered the core concepts, it’s time to explore the **fun side** of MowaLang. If you're up for it, jump into the next section where we build **patterns**, solve **algorithms**, and create cool stuff — all using pure Mowa power.
+</Callout>
