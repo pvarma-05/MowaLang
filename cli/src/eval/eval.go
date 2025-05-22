@@ -386,6 +386,12 @@ func (e *Evaluator) evalPrintStmt(stmt ast.PrintStmt) {
 			return
 		}
 		switch v := value.(type) {
+		case bool:
+			if v {
+				output.WriteString("nijam")
+			} else {
+				output.WriteString("abadham")
+			}
 		case string:
 			// Handle escaped sequences
 			if strings.HasPrefix(v, `"`) && strings.HasSuffix(v, `"`) {
@@ -405,6 +411,12 @@ func (e *Evaluator) evalPrintStmt(stmt ast.PrintStmt) {
 				switch elem := elem.(type) {
 				case float64:
 					output.WriteString(fmt.Sprintf("%g", elem))
+				case bool:
+					if elem {
+						output.WriteString("nijam")
+					} else {
+						output.WriteString("abadham")
+					}
 				case string:
 					output.WriteString(fmt.Sprintf("%q", elem))
 				default:
