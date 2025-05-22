@@ -93,7 +93,7 @@ func createLexer(source string) *lexer {
 			// Numbers (e.g., "123", "3.14")
 			{regexp.MustCompile(`[0-9]+(\.[0-9]+)?`), numberHandler},
 			// Strings (e.g., "\"hello\"")
-			{regexp.MustCompile(`"[^"]*"`), stringHandler},
+			{regexp.MustCompile(`"[^"]*"|'[^']*'`), stringHandler},
 			// Comments (e.g., "// comment")
 			{regexp.MustCompile(`\/\/.*`), skipHandler},
 			// Whitespace (skipped)
@@ -147,7 +147,12 @@ func skipHandler(lex *lexer, regex *regexp.Regexp) {
 func stringHandler(lex *lexer, regex *regexp.Regexp) {
 	match := regex.FindStringIndex(lex.remainder())
 	stringLiteral := lex.remainder()[match[0]:match[1]]
-	lex.push(newToken(STRING, stringLiteral, lex.line))
+// Normalize to double quotes
+	normalized := stringLiteral
+	if stringLiteral[0] == '\'' {
+		normalized = `"` + stringLiteral[1:len(stringLiteral)-1] + `"`
+	}
+	lex.push(newToken(STRING, normalized, lex.line))
 	lex.advanceN(len(stringLiteral))
 }
 

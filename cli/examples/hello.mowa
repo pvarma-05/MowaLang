@@ -232,19 +232,19 @@
 // }
 
 
-//  idhi day = abadham;
+// idhi day = 'a';
 //
-//  enchuko (day) {
-//    case nijam:
-//      mowa "Monday";
-//      aagipo;
-//    case abadham:
-//      mowa "Tuesday";
-//      aagipo;
-//    default:
-//      mowa "Invalid day";
-//      aagipo;
-//  }
+// enchuko (day) {
+//   case 'a':
+//     mowa "Monday";
+//     aagipo;
+//   case 'b':
+//     mowa "Tuesday";
+//     aagipo;
+//   default:
+//     mowa "Invalid day";
+//     aagipo;
+// }
 
 
 // idhi x : number = 1;
@@ -297,15 +297,24 @@
 //  mowa "Implicit array: ", arr2, "\n";
 //
 
-idhi a: number;
-mowa "Array Size ivvu mowa:";
-theesko a;
+// idhi a: number;
+// mowa "Array Size ivvu mowa:";
+// theesko a;
+//
+// idhi arr: [number(a)];
+// mowa a, " values enter cheyyu mowa:\n";
+//
+// varaku (idhi i = 1; i <= a; i++) {
+//   theesko arr[i];
+// }
+//
+// mowa "Array lo unna values: ",arr;
 
-idhi arr: [number(a)];
-mowa a, " values enter cheyyu mowa:\n";
+// mowa nijam;
 
-varaku (idhi i = 0; i < a; i++) {
-  theesko arr[i];
-}
 
-mowa "Array lo unna values: ",arr;
+// varaku(idhi i = 0;i<5;i++){
+//   mowa i,"\n";
+// }
+// mowa i;
+

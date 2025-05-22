@@ -491,6 +491,11 @@ func (e *Evaluator) evalSwitchStmt(stmt ast.SwitchStmt) string {
 }
 
 func (e *Evaluator) evalForStmt(stmt ast.ForStmt) string {
+	// Adding loop Scopes
+	loopEnv := e.env.NewChildEnvironment()
+	prevEnv := e.env
+	e.env = loopEnv
+	defer func() { e.env = prevEnv }()
 	if stmt.Init != nil {
 		switch init := stmt.Init.(type) {
 		case ast.VarDeclStmt:
