@@ -318,4 +318,19 @@
 // }
 // mowa i;
 
-mowa nijam;
+// idhi arr1 : [string] = ['a','b','c'];
+//
+// mowa arr1;
+
+idhi a: number;
+mowa "Array Size ivvu mowa:";
+theesko a;
+
+idhi arr: [number(a)];
+mowa a, " values enter cheyyu mowa:\n";
+
+varaku (idhi i = 0; i < a; i++) {
+  theesko arr[i];
+}
+
+mowa "Array lo unna values: ",arr;

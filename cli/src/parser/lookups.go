@@ -21,7 +21,7 @@ const (
 	primary                             // Literals, identifiers
 )
 
-// Handler types for parsing statements and expressions.
+// statements and expressions.
 type stmt_handler func(p *parser) ast.Stmt
 type nud_handler func(p *parser) ast.Expr
 type led_handler func(p *parser, left ast.Expr, bp binding_power) ast.Expr
@@ -136,7 +136,7 @@ func parse_continue_stmt(p *parser) ast.Stmt {
 }
 
 func parse_typeof_expr(p *parser) ast.Expr {
-	op := p.advance() // Consume TYPEOF (rakam)
+	op := p.advance() // Consume rakam
 	p.expect(lexer.OPEN_PAREN)
 	expr := parse_expr(p, default_bp)
 	if expr == nil {

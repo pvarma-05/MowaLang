@@ -8,7 +8,6 @@ import (
 	"github.com/pvarma-05/MowaLang/src/lexer"
 )
 
-// parser holds the state of the parsing process.
 type parser struct {
 	tokens []lexer.Token
 	pos    int
@@ -16,9 +15,9 @@ type parser struct {
 	line   int
 }
 
-// createParser initializes a parser with tokens and sets up lookups.
+//  parser
 func createParser(tokens []lexer.Token) *parser {
-	// Initialize token and type lookup tables (defined in lookups.go, types.go).
+	// Initialize token and type lookup tables
 	createTokenLookups()
 	createTypeTokenLookups()
 	p := &parser{
@@ -33,20 +32,18 @@ func createParser(tokens []lexer.Token) *parser {
 	return p
 }
 
-// Parse converts tokens into an AST (BlockStmt representing the program).
+// Parse converts tokens into an AST
 // Returns the AST and any parsing errors.
 func Parse(tokens []lexer.Token) (ast.BlockStmt, *errors.ErrorReporter) {
 	Body := make([]ast.Stmt, 0)
 	p := createParser(tokens)
 
-	// Parse statements until no tokens remain or an error stops parsing.
 	for p.hasTokens() {
 		stmt := parse_stmt(p)
 		if stmt != nil {
 			Body = append(Body, stmt)
 		}
 		if p.errors.HasErrors() {
-			// Skip to next semicolon or EOF to recover
 			for p.hasTokens() && p.currentTokenKind() != lexer.SEMI_COLON && p.currentTokenKind() != lexer.EOF {
 				p.advance()
 			}
@@ -93,7 +90,6 @@ func Parse(tokens []lexer.Token) (ast.BlockStmt, *errors.ErrorReporter) {
 	return ast.BlockStmt{Body: Body}, p.errors
 }
 
-// currentToken returns the current token.
 func (p *parser) currentToken() lexer.Token {
 	if p.pos >= len(p.tokens) {
 		return lexer.Token{Kind: lexer.EOF, Value: "EOF", Line: p.line}
@@ -134,5 +130,3 @@ func (p *parser) expectError(expectedKind lexer.TokenKind, err any) lexer.Token 
 func (p *parser) expect(expectedKind lexer.TokenKind) lexer.Token {
 	return p.expectError(expectedKind, nil)
 }
-
-

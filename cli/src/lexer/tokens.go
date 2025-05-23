@@ -2,10 +2,8 @@ package lexer
 
 import "fmt"
 
-// TokenKind represents the type of a token in MowaLang.
 type TokenKind int
 
-// Token kind constants for MowaLang's syntax.
 const (
 	EOF            TokenKind = iota // End of file
 	NUMBER                          // Numeric literal (e.g., "123", "3.14")
@@ -84,7 +82,6 @@ var reserved_lu = map[string]TokenKind{
 	"theesko":  INPUT,
 	"nijam":    TRUE,
 	"abadham":  FALSE,
-	// "bokka":    NULL,
 	"aagipo": BREAK,
 	"kaani":  CONTINUE,
 	"rakam":  TYPEOF,
@@ -97,7 +94,6 @@ type Token struct {
 	Line  int
 }
 
-// isOneOfMany checks if the token's kind matches any of the provided kinds.
 func (token Token) isOneOfMany(expectedTokens ...TokenKind) bool {
 	for _, expected := range expectedTokens {
 		if expected == token.Kind {
@@ -225,8 +221,6 @@ func TokenKindString(kind TokenKind) string {
 		return "nijam"
 	case FALSE:
 		return "abadham"
-	// case NULL:
-	// 	return "bokka"
 	case BREAK:
 		return "aagipo"
 	case CONTINUE:

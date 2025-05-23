@@ -358,25 +358,3 @@ func parse_return_stmt(p *parser) ast.Stmt {
 	}
 	return ast.ReturnStmt{Value: value}
 }
-
-// parse_call_expr parses a function call (e.g., add(1, 2)).
-// func parse_call_expr(p *parser, left ast.Expr, bp binding_power) ast.Expr {
-// 	p.advance() // Consume OPEN_PAREN
-// 	arguments := []ast.Expr{}
-// 	if p.currentTokenKind() != lexer.CLOSE_PAREN {
-// 		for {
-// 			arg := parse_expr(p, default_bp)
-// 			if arg == nil {
-// 				p.errors.Report("Mowa, argument expression parse cheyalenu mowa!", p.line)
-// 				return nil
-// 			}
-// 			arguments = append(arguments, arg)
-// 			if p.currentTokenKind() != lexer.COMMA {
-// 				break
-// 			}
-// 			p.advance() // Consume comma
-// 		}
-// 	}
-// 	p.expect(lexer.CLOSE_PAREN)
-// 	return ast.CallExpr{Function: left, Arguments: arguments}
-// }

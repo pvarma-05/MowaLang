@@ -13,13 +13,13 @@ import (
 	"github.com/pvarma-05/MowaLang/src/lexer"
 )
 
-// Value represents a runtime value in MowaLang
+// runtime value in MowaLang
 type Value interface{}
 
-// Function represents a function definition at runtime.
+// function definition at runtime.
 type Function struct {
-	Decl    ast.FunctionDeclStmt // Function declaration
-	Closure *Environment         // Captured environment
+	Decl    ast.FunctionDeclStmt 
+	Closure *Environment         
 }
 
 // Environment holds variables, functions, and nested scopes.
@@ -302,9 +302,7 @@ func (e *Evaluator) evalInputStmt(stmt ast.InputStmt) {
 		e.errors.Report(fmt.Sprintf("Mowa, '%s' declare chesaka theesko vaadu mowa!", stmt.VarName), e.line)
 		return
 	}
-	reader := bufio.NewReader(os.Stdin)
-	input, _ := reader.ReadString('\n')
-	input = strings.TrimSpace(input)
+	input := inputHandler("") // Use custom input handler
 	typ, exists := e.env.types[stmt.VarName]
 	if !exists {
 		e.errors.Report(fmt.Sprintf("Mowa, '%s' type define cheyaledhu mowa!", stmt.VarName), e.line)
@@ -351,9 +349,7 @@ func (e *Evaluator) evalInputIndexStmt(stmt ast.InputIndexStmt) {
 		e.errors.Report(fmt.Sprintf("Mowa, invalid array index '%v' mowa!", index), e.line)
 		return
 	}
-	reader := bufio.NewReader(os.Stdin)
-	input, _ := reader.ReadString('\n')
-	input = strings.TrimSpace(input)
+	input := inputHandler("") // Use custom input handler
 	varName := stmt.Array.(ast.SymbolExpr).Value
 	typ, exists := e.env.types[varName]
 	if !exists {
@@ -428,7 +424,7 @@ func (e *Evaluator) evalPrintStmt(stmt ast.PrintStmt) {
 			output.WriteString(fmt.Sprint(v))
 		}
 	}
-	fmt.Print(output.String())
+	printHandler(output.String()) // Use printHandler instead of fmt.Fprint
 }
 
 func (e *Evaluator) evalIfStmt(stmt ast.IfStmt) string {
@@ -503,11 +499,6 @@ func (e *Evaluator) evalSwitchStmt(stmt ast.SwitchStmt) string {
 }
 
 func (e *Evaluator) evalForStmt(stmt ast.ForStmt) string {
-	// Adding loop Scopes
-	loopEnv := e.env.NewChildEnvironment()
-	prevEnv := e.env
-	e.env = loopEnv
-	defer func() { e.env = prevEnv }()
 	if stmt.Init != nil {
 		switch init := stmt.Init.(type) {
 		case ast.VarDeclStmt:
@@ -1176,4 +1167,38 @@ func equals(left, right Value) bool {
 		}
 	}
 	return false
+}
+
+// InputHandler is a function type for handling input.
+type InputHandler func(prompt string) string
+
+// defaultInputHandler reads input from stdin.
+func defaultInputHandler(prompt string) string {
+	reader := bufio.NewReader(os.Stdin)
+	input, _ := reader.ReadString('\n')
+	return strings.TrimSpace(input)
+}
+
+// inputHandler is the current input handler, defaulting to stdin.
+var inputHandler InputHandler = defaultInputHandler
+
+// SetInputHandler sets a custom input handler.
+func SetInputHandler(handler InputHandler) {
+	inputHandler = handler
+}
+
+var printHandler func(string)
+
+func init() {
+	// Default to writing to os.Stdout
+	printHandler = func(s string) {
+		fmt.Fprint(os.Stdout, s)
+	}
+}
+
+// SetPrintHandler sets a custom handler for print output.
+func SetPrintHandler(handler func(string)) {
+	if handler != nil {
+		printHandler = handler
+	}
 }
