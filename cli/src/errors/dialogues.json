@@ -10,9 +10,14 @@
       "Prabhas: 'Aalasyam ayindha Acharyaputhra'",
       "Prabhas: 'Ah Seal ni puttinchindhey vaadu'",
       "Prabhas: 'AI vaadi code evaraina copy chesthadu...\nKaani sonthanga code raasevaadike oka RANGE untadhi darling'",
-      "Prabhas: 'Records Choosko...Intha varaku oka fight kooda odipoledhu'",
+      "Prabhas: 'Records Choosko...Intha varaku okka fight kooda odipoledhu'",
       "AA: 'Mowa... Assala Thaggedeley'",
-      "NTR: 'Devara code raasinadu ante program run ayindhani ardham.'"
+      "NTR: 'Okati Gurthunchuko.\nNippu tho pettukuntey Kaalipothaav,Neeru tho pettukuntey Muligipothav\nee Sambha tho pettukuntey Chachipothaav.'",
+      "NTR: 'maadhi Raayalaseema anna..\nAmma Thodu entha mandhi vasthey antha mandhi ni addanga narikestha!'",
+      "NTR: 'Devara code raasinadu ante program run ayindhani ardham.'",
+      "NTR: 'Entha pedha udhyamam ayina oka adugu thone modhalu avthundhi.\nEntha Pedha pennu thoofan ayina oka chinuku thone prarambham avthundhi.'",
+      "NTR: 'aa Ravanudini champaali antey samudhram dhaataala.\nee Ravanudini champaali antey samudhram antha dh.. dhairyam undaala.. UNDHAA!'",
+      "NTR: 'Rey.. Na medha gelavaali ane ne thaapathryam naaku baaga nachindhi.\nKaani naaku otami antey ento thelidhu.'"
     ],
     "failure": [
       "Prabhas: 'Thappu chesaav Devasena ...'",
@@ -24,6 +29,8 @@
       "Prabhas: 'eeroju naaku clarity ga ardhamayindhi... Idhi na Life'",
       "Prabhas: 'Edhagaali antey maraali, longaali, ongaali antey nen nammanu.\nmana deggara matter undaali...'",
       "Prabhas: 'Mowa nuvvu ippudu choosthunna Jay veru.\nokappudu Jay veru vaadi character ye veru'",
+      "NTR: 'Padhathi Marchukomani okasaari cheppa, rendo saari chepthunna. Moodo saari cheppanu... Champestha!'",
+      "NTR: 'Reyy! Chepthunna kadha thappu aypoyindhi ani.. enti discussion enti ikkada...'",
       "AA: 'Konni Saarlu gelavadam kante, odipodame goppa'",
       "Bhramhanandham: 'Arey Tuppas Edhava, Thappu Chesavu ra'"
     ]
@@ -55,6 +62,20 @@
     ]
   },
   "AA": {
+    "success": [
+      "NTR: 'Okati Gurthunchuko.\nNippu tho pettukuntey Kaalipothaav,Neeru tho pettukuntey Muligipothav\nee Sambha tho pettukuntey Chachipothaav.'",
+      "NTR: 'maadhi Raayalaseema anna..\nAmma Thodu entha mandhi vasthey antha mandhi ni addanga narikestha!'",
+      "NTR: 'Devara code raasinadu ante program run ayindhani ardham.'",
+      "NTR: 'Entha pedha udhyamam ayina oka adugu thone modhalu avthundhi.\nEntha Pedha pennu thoofan ayina oka chinuku thone prarambham avthundhi.'",
+      "NTR: 'aa Ravanudini champaali antey samudhram dhaataala.\nee Ravanudini champaali antey samudhram antha dh.. dhairyam undaala.. UNDHAA!'",
+      "NTR: 'Rey.. Na medha gelavaali ane ne thaapathryam naaku baaga nachindhi.\nKaani naaku otami antey ento thelidhu.'"
+    ],
+    "failure": [
+      "NTR: 'Padhathi Marchukomani okasaari cheppa, rendo saari chepthunna. Moodo saari cheppanu... Champestha!'",
+      "NTR: 'Reyy! Chepthunna kadha thappu aypoyindhi ani.. enti discussion enti ikkada...'"
+    ]
+  },
+  "NTR": {
     "success": [
       "AA: 'Mowa... Assala Thaggedeley'"
     ],
