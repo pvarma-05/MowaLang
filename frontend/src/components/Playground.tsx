@@ -28,33 +28,57 @@ export default function Playground() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          loadWasm();
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+
     const loadWasm = async () => {
       if (!(window as any).Go) {
         const script = document.createElement("script");
         script.src = "/wasm_exec.js";
         script.async = true;
         script.onload = () => initializeWasm();
-        script.onerror = () => setOutput("Mowa, wasm_exec.js load avvaledhu!");
+        script.onerror = () => {
+          console.error("Failed to load wasm_exec.js");
+          setOutput("Mowa, wasm_exec.js load avvaledhu!");
+        };
         document.head.appendChild(script);
       } else {
         initializeWasm();
       }
     };
 
-    const initializeWasm = () => {
+    const initializeWasm = async () => {
       const Go = (window as any).Go;
-      if (!Go) return setOutput("Go class not found!");
+      if (!Go) {
+        console.error("Go class not found");
+        setOutput("Go class not found!");
+        return;
+      }
 
       const go = new Go();
-      WebAssembly.instantiateStreaming(fetch("/mowalang.wasm"), go.importObject)
-        .then((result) => {
-          go.run(result.instance);
-          setWasmReady(true);
-        })
-        .catch((err) => setOutput(`MowaLang Load Error: ${err.message}`));
+      try {
+        const response = await fetch("/mowalang.wasm");
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const buffer = await response.arrayBuffer();
+        const module = await WebAssembly.compile(buffer);
+        const instance = await WebAssembly.instantiate(module, go.importObject);
+        go.run(instance);
+        setWasmReady(true);
+      } catch (err) {
+        setOutput(`MowaLang Load Error: ${(err as Error).message}`);
+      }
     };
 
-    loadWasm();
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -64,36 +88,16 @@ export default function Playground() {
 
     gsap.set([titleRef.current, editorRef.current, outputRef.current], {
       autoAlpha: 0,
-      y: 50,
+      y: 30,
     });
 
     const tl = gsap.timeline({
-      defaults: { ease: "power2.out", duration: reduceMotion ? 0 : 0.8 },
+      defaults: { ease: "power2.out", duration: reduceMotion ? 0 : 0.6 },
     });
 
-    tl.to(titleRef.current, {
-      autoAlpha: 1,
-      y: 0,
-      duration: reduceMotion ? 0 : 1,
-    })
-      .to(
-        editorRef.current,
-        {
-          autoAlpha: 1,
-          y: 0,
-          stagger: 0.2,
-        },
-        "-=0.4"
-      )
-      .to(
-        outputRef.current,
-        {
-          autoAlpha: 1,
-          y: 0,
-          stagger: 0.2,
-        },
-        "-=0.4"
-      );
+    tl.to(titleRef.current, { autoAlpha: 1, y: 0 })
+      .to(editorRef.current, { autoAlpha: 1, y: 0 }, "-=0.3")
+      .to(outputRef.current, { autoAlpha: 1, y: 0 }, "-=0.3");
   }, []);
 
   useEffect(() => {
@@ -103,15 +107,14 @@ export default function Playground() {
 
     gsap.set([dialogueRef.current, errorsRef.current].filter(Boolean), {
       autoAlpha: 0,
-      y: 20,
+      y: 15,
     });
 
     gsap.to([dialogueRef.current, errorsRef.current].filter(Boolean), {
       autoAlpha: 1,
       y: 0,
-      duration: reduceMotion ? 0 : 0.5,
+      duration: reduceMotion ? 0 : 0.3,
       ease: "power2.out",
-      stagger: 0.1,
     });
   }, [dialogue, errors]);
 
@@ -136,7 +139,7 @@ export default function Playground() {
 
       const dialogueMatch = outputText.match(/\[DIALOGUE\]((?:.|\n)*?)\[\/DIALOGUE\]/);
       let dialogueText = dialogueMatch ? dialogueMatch[1] : "";
-      dialogueText = dialogueText.replace(/\\n/g, '\n');
+      dialogueText = dialogueText.replace(/\\n/g, "\n");
 
       let remainingText = dialogueMatch ? outputText.replace(/\[DIALOGUE\]((?:.|\n)*?)\[\/DIALOGUE\]/, "").trim() : outputText;
 
@@ -152,6 +155,7 @@ export default function Playground() {
       setErrors(errorLines);
       setIsError(errorLines.length > 0 || outputText.includes("Mowa, errors unnai mowa:"));
     } catch (err: any) {
+      console.error("Run Error:", err);
       setDialogue("");
       setErrors([`Error: ${err.message}`]);
       setIsError(true);
@@ -171,7 +175,7 @@ export default function Playground() {
   return (
     <section
       ref={sectionRef}
-      className="w-full px-4 py-12  md:py-16"
+      className="w-full px-4 py-12 md:py-16"
       aria-labelledby="playground-title"
     >
       <h2
@@ -183,7 +187,6 @@ export default function Playground() {
       </h2>
       <div className="container mx-auto max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Editor Panel */}
           <div ref={editorRef} className="bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="flex justify-between items-center bg-[#A93E39] text-white p-4">
               <span className="font-outfit font-semibold select-none" aria-hidden="true">
@@ -193,7 +196,7 @@ export default function Playground() {
                 <button
                   onClick={handleRun}
                   disabled={loading || !wasmReady}
-                  className="px-4 py-2 bg-[#A93E39] text-white rounded-md font-outfit font-medium hover:scale-105 transition-transform duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7B2D2A] cursor-pointer"
+                  className="px-4 py-2 bg-[#A93E39] text-white rounded-md font-outfit font-medium hover:scale-105 transition-transform duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7B2D2A]"
                   aria-label={loading ? "Running code" : "Run MowaLang code"}
                   title={loading ? "Running..." : "Run code"}
                 >
@@ -202,7 +205,7 @@ export default function Playground() {
                 </button>
                 <button
                   onClick={handleClear}
-                  className="cursor-pointer px-4 py-2 bg-[#A93E39] text-white rounded-md font-outfit font-medium hover:scale-105 transition-transform duration-300 flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7B2D2A]"
+                  className="px-4 py-2 bg-[#A93E39] text-white rounded-md font-outfit font-medium hover:scale-105 transition-transform duration-200 flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7B2D2A]"
                   aria-label="Clear editor and output"
                   title="Clear editor"
                 >
@@ -220,7 +223,6 @@ export default function Playground() {
               options={{
                 fontSize: 16,
                 fontFamily: "'Outfit', monospace",
-                fontLigatures: false,
                 minimap: { enabled: false },
                 wordWrap: "on",
                 automaticLayout: true,
@@ -230,15 +232,15 @@ export default function Playground() {
                 lineNumbers: "on",
                 renderLineHighlight: "line",
                 scrollbar: { vertical: "auto", horizontal: "auto" },
-                smoothScrolling: true,
                 cursorBlinking: "smooth",
                 accessibilitySupport: "on",
+                formatOnPaste: true, // Enable pasting
+                domReadOnly: false,
+                readOnly: false,
               }}
-              aria-label="MowaLang code editor"
+              aria-label="MowaLang code editor with paste support"
             />
           </div>
-
-          {/* Output Panel */}
           <div ref={outputRef} className="bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="bg-[#A93E39] text-white p-4 font-outfit font-semibold select-none" aria-hidden="true">
               Output
