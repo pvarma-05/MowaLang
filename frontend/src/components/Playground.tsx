@@ -4,10 +4,12 @@ import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import { Play, Trash2 } from "lucide-react";
 import gsap from "gsap";
+import type { editor } from "monaco-editor";
+import type { Monaco } from "@monaco-editor/react";
 
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
   ssr: false,
-  loading: () => <div className="text-center text-gray-500">Loading editor...</div>,
+  loading: () => <div className="text-center text-gray-500 p-4">Loading editor...</div>,
 });
 
 export default function Playground() {
@@ -73,7 +75,9 @@ export default function Playground() {
         const instance = await WebAssembly.instantiate(module, go.importObject);
         go.run(instance);
         setWasmReady(true);
+        console.log("WASM loaded successfully");
       } catch (err) {
+        console.error("WASM Load Error:", err);
         setOutput(`MowaLang Load Error: ${(err as Error).message}`);
       }
     };
@@ -88,16 +92,16 @@ export default function Playground() {
 
     gsap.set([titleRef.current, editorRef.current, outputRef.current], {
       autoAlpha: 0,
-      y: 30,
+      y: 20,
     });
 
     const tl = gsap.timeline({
-      defaults: { ease: "power2.out", duration: reduceMotion ? 0 : 0.6 },
+      defaults: { ease: "power2.out", duration: reduceMotion ? 0 : 0.5 },
     });
 
     tl.to(titleRef.current, { autoAlpha: 1, y: 0 })
-      .to(editorRef.current, { autoAlpha: 1, y: 0 }, "-=0.3")
-      .to(outputRef.current, { autoAlpha: 1, y: 0 }, "-=0.3");
+      .to(editorRef.current, { autoAlpha: 1, y: 0 }, "-=0.2")
+      .to(outputRef.current, { autoAlpha: 1, y: 0 }, "-=0.2");
   }, []);
 
   useEffect(() => {
@@ -107,13 +111,13 @@ export default function Playground() {
 
     gsap.set([dialogueRef.current, errorsRef.current].filter(Boolean), {
       autoAlpha: 0,
-      y: 15,
+      y: 10,
     });
 
     gsap.to([dialogueRef.current, errorsRef.current].filter(Boolean), {
       autoAlpha: 1,
       y: 0,
-      duration: reduceMotion ? 0 : 0.3,
+      duration: reduceMotion ? 0 : 0.2,
       ease: "power2.out",
     });
   }, [dialogue, errors]);
@@ -172,6 +176,26 @@ export default function Playground() {
     setIsError(false);
   };
 
+  const handleEditorMount = (editor: editor.IStandaloneCodeEditor, monaco: Monaco) => {
+    const textarea = editor.getDomNode()?.querySelector("textarea");
+    if (textarea) {
+      textarea.removeAttribute("autocomplete");
+      textarea.removeAttribute("autocorrect");
+      textarea.removeAttribute("autocapitalize");
+      textarea.addEventListener(
+        "paste",
+        (e) => {
+          console.log("Paste event detected");
+          e.stopPropagation();
+        },
+        true
+      );
+    }
+    // Configure Monaco for mowalang language (if custom setup exists)
+    monaco.languages.register({ id: "mowalang" });
+    monaco.editor.setTheme("mowaTheme");
+  };
+
   return (
     <section
       ref={sectionRef}
@@ -220,6 +244,7 @@ export default function Playground() {
               theme="mowaTheme"
               value={code}
               onChange={(value) => setCode(value || "")}
+              onMount={handleEditorMount}
               options={{
                 fontSize: 16,
                 fontFamily: "'Outfit', monospace",
@@ -234,7 +259,6 @@ export default function Playground() {
                 scrollbar: { vertical: "auto", horizontal: "auto" },
                 cursorBlinking: "smooth",
                 accessibilitySupport: "on",
-                formatOnPaste: true, // Enable pasting
                 domReadOnly: false,
                 readOnly: false,
               }}

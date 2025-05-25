@@ -14,11 +14,25 @@ export default function Home() {
   const subtitleRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
-    if (
-      !titleRef.current ||
-      !subtitleRef.current
-    )
-      return;
+    if (!titleRef.current || !subtitleRef.current) return;
+
+    // Preload Monaco and WASM assets
+    const preloadAssets = () => {
+      const assets = [
+        { href: "/monaco/min/vs/loader.js", as: "script" },
+        { href: "/wasm_exec.js", as: "script" },
+        { href: "/mowalang.wasm", as: "fetch", crossOrigin: "anonymous" },
+      ];
+      assets.forEach(({ href, as, crossOrigin }) => {
+        const link = document.createElement("link");
+        link.rel = "preload";
+        link.href = href;
+        link.as = as;
+        if (crossOrigin) link.crossOrigin = crossOrigin;
+        document.head.appendChild(link);
+      });
+    };
+    preloadAssets();
 
     document.fonts.ready.then(() => {
       const split = new SplitType(titleRef.current!, { types: "chars" });
@@ -87,38 +101,37 @@ export default function Home() {
     });
   }, []);
 
-
   return (
     <div className="flex flex-col min-h-screen">
       <section className="w-full h-screen flex items-center justify-center text-white overflow-hidden">
         <div className="text-center flex flex-col gap-5">
           <h1
             ref={titleRef}
-            className="font-wg text-[#A93E39] text-7xl md:text-[100px] lg:text-[155px] select-none invisible tracking-wide">MOwa-Lang
+            className="font-wg text-[#A93E39] text-7xl md:text-[100px] lg:text-[155px] select-none invisible tracking-wide"
+          >
+            MOwa-Lang
           </h1>
-
           <p
             ref={subtitleRef}
             className="font-outfit font-serif select-none text-lg md:text-xl lg:text-2xl text-black min-h-[2.5rem] invisible"
-          >
-          </p>
-
+          ></p>
           <div className="mt-8 flex flex-wrap justify-center items-center gap-4 md:gap-6 select-none px-4">
             <Link
-              className="px-5 md:px-10 py-4 bg-[#A93E39]  text-white font-medium font-outfit text-md md:text-lg lg:text-xl rounded-md transition-all duration-300 hover:scale-105"
-              href={"#playground"}
+              className="px-5 md:px-10 py-4 bg-[#A93E39] text-white font-medium font-outfit text-md md:text-lg lg:text-xl rounded-md transition-all duration-300 hover:scale-105"
+              href="#playground"
             >
               Try It
             </Link>
             <Link
-              className="px-5 md:px-10 py-4 bg-[#A93E39]  text-white font-medium font-outfit text-md md:text-lg lg:text-xl rounded-md transition-all duration-300 hover:scale-105"
-              href={"/docs"}
+              className="px-5 md:px-10 py-4 bg-[#A93E39] text-white font-medium font-outfit text-md md:text-lg lg:text-xl rounded-md transition-all duration-300 hover:scale-105"
+              href="/docs"
             >
               Docs
             </Link>
             <Link
               className="px-5 md:px-10 py-4 bg-[#A93E39] text-white font-medium font-outfit text-md md:text-lg lg:text-xl rounded-md transition-all duration-300 hover:scale-105"
-              href={"https://github.com/pvarma-05/MowaLang-Web"} target="_blank"
+              href="https://github.com/pvarma-05/MowaLang-Web"
+              target="_blank"
             >
               Source
             </Link>
