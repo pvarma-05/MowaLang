@@ -83,7 +83,7 @@ func runMowa(code string, inputCallback js.Value) (string, error) {
 	errReporter := evaluator.Evaluate(ast)
 
 	// Combine program output with dialogue/error message
-	programOutput := writer.String()
+	programOutput := strings.TrimSpace(writer.String())
 	result := errReporterToString(errReporter, actorDialogues)
 	if programOutput != "" {
 		if result != "" {
@@ -98,9 +98,9 @@ func runMowa(code string, inputCallback js.Value) (string, error) {
 func formatErrorOutput(programOutput string, actorDialogues errors.ActorDialogues, errReporter *errors.ErrorReporter) string {
 	var output strings.Builder
 	if len(actorDialogues.Failure) == 0 {
-		output.WriteString("Mowa, no failure dialogues found for 'all' mowa!\n")
+		output.WriteString("[DIALOGUE]Mowa, no failure dialogues found for 'all' mowa![/DIALOGUE]\n")
 	} else {
-		output.WriteString(actorDialogues.Failure[rand.IntN(len(actorDialogues.Failure))] + "\n")
+		output.WriteString(fmt.Sprintf("[DIALOGUE]%s[/DIALOGUE]\n", actorDialogues.Failure[rand.IntN(len(actorDialogues.Failure))]))
 	}
 	output.WriteString("Mowa, errors unnai mowa:\n")
 	for _, err := range errReporter.Errors {
@@ -116,31 +116,13 @@ func formatErrorOutput(programOutput string, actorDialogues errors.ActorDialogue
 	return output.String()
 }
 
-// converts lexer errors to a string
-func lexErrorsToString(errReporter *errors.ErrorReporter) string {
-	var output strings.Builder
-	for _, err := range errReporter.Errors {
-		if err.LineNumber > 0 {
-			output.WriteString(fmt.Sprintf("ln %d: %s\n", err.LineNumber, err.Message))
-		} else {
-			output.WriteString(fmt.Sprintf("-: %s\n", err.Message))
-		}
-	}
-	return output.String()
-}
-
-// converts parser errors to a string
-func parseErrorsToString(errReporter *errors.ErrorReporter) string {
-	return lexErrorsToString(errReporter)
-}
-
 // converts evaluation errors or success dialogues to a string
 func errReporterToString(errReporter *errors.ErrorReporter, actorDialogues errors.ActorDialogues) string {
 	if !errReporter.HasErrors() {
 		if len(actorDialogues.Success) == 0 {
-			return "Mowa, no success dialogues found for 'all' mowa!"
+			return "[DIALOGUE]Mowa, no success dialogues found for 'all' mowa![/DIALOGUE]"
 		}
-		return actorDialogues.Success[rand.IntN(len(actorDialogues.Success))]
+		return fmt.Sprintf("[DIALOGUE]%s[/DIALOGUE]", actorDialogues.Success[rand.IntN(len(actorDialogues.Success))])
 	}
 	return formatErrorOutput("", actorDialogues, errReporter)
 }

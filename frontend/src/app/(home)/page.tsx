@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import SplitType from "split-type";
 import { TextPlugin } from "gsap/TextPlugin";
+import Playground from "@/components/Playground";
+import Footer from "@/components/Footer";
 
 gsap.registerPlugin(TextPlugin);
 
@@ -86,10 +88,6 @@ export default function Home() {
   }, []);
 
 
-
-
-
-
   return (
     <div className="flex flex-col min-h-screen">
       <section className="w-full h-screen flex items-center justify-center text-white overflow-hidden">
@@ -108,7 +106,7 @@ export default function Home() {
           <div className="mt-8 flex flex-wrap justify-center items-center gap-4 md:gap-6 select-none px-4">
             <Link
               className="px-5 md:px-10 py-4 bg-[#A93E39]  text-white font-medium font-outfit text-md md:text-lg lg:text-xl rounded-md transition-all duration-300 hover:scale-105"
-              href={"/play"}
+              href={"#playground"}
             >
               Try It
             </Link>
@@ -119,7 +117,7 @@ export default function Home() {
               Docs
             </Link>
             <Link
-              className="px-5 md:px-10 py-4 bg-[#A93E39]  text-white font-medium font-outfit text-md md:text-lg lg:text-xl rounded-md transition-all duration-300 hover:scale-105"
+              className="px-5 md:px-10 py-4 bg-[#A93E39] text-white font-medium font-outfit text-md md:text-lg lg:text-xl rounded-md transition-all duration-300 hover:scale-105"
               href={"https://github.com/pvarma-05/MowaLang-Web"} target="_blank"
             >
               Source
@@ -127,6 +125,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <div id="playground">
+        <Playground />
+      </div>
+      <Footer />
     </div>
   );
 }

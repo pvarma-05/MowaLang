@@ -108,16 +108,16 @@
 // ---------------------------------------------
 
 // RECURSIVE FUNCTIONS
- pani factorial(n: number): number {
-     okavela (n <= 1) ayithe {
-         ichey 1;
-     }
-     ichey n * factorial(n - 1);
- };
- idhi a:number;
- mowa "Edho oka number ivvu mowa:";
- theesko a;
- mowa "Factorial: ",factorial(a);
+//  pani factorial(n: number): number {
+//      okavela (n <= 1) ayithe {
+//          ichey 1;
+//      }
+//      ichey n * factorial(n - 1);
+//  };
+//  idhi a:number;
+//  mowa "Edho oka number ivvu mowa:";
+//  theesko a;
+//  mowa "Factorial: ",factorial(a);
 
 // ---------------------------------------------
 

@@ -18,8 +18,8 @@ type Value interface{}
 
 // function definition at runtime.
 type Function struct {
-	Decl    ast.FunctionDeclStmt 
-	Closure *Environment         
+	Decl    ast.FunctionDeclStmt
+	Closure *Environment
 }
 
 // Environment holds variables, functions, and nested scopes.
