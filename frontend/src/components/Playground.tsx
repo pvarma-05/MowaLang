@@ -7,7 +7,10 @@ import gsap from "gsap";
 import type { editor } from "monaco-editor";
 import type { Monaco } from "@monaco-editor/react";
 
-const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
+const MonacoEditor = dynamic(() => import("@monaco-editor/react").then((mod) => {
+  // console.log("Monaco Editor module loaded");
+  return mod;
+}), {
   ssr: false,
   loading: () => <div className="text-center text-gray-500 p-4">Loading editor...</div>,
 });
@@ -33,6 +36,7 @@ export default function Playground() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
+          preloadAssets();
           loadWasm();
           observer.disconnect();
         }
@@ -41,6 +45,22 @@ export default function Playground() {
     );
 
     if (sectionRef.current) observer.observe(sectionRef.current);
+
+    const preloadAssets = () => {
+      const assets = [
+        { href: "/wasm_exec.js", as: "script" },
+        { href: "/mowalang.wasm", as: "fetch", crossOrigin: "anonymous" },
+      ];
+      assets.forEach(({ href, as, crossOrigin }) => {
+        const link = document.createElement("link");
+        link.rel = "preload";
+        link.href = href;
+        link.as = as;
+        if (crossOrigin) link.crossOrigin = crossOrigin;
+        document.head.appendChild(link);
+      });
+      // console.log("Preloaded WASM assets");
+    };
 
     const loadWasm = async () => {
       if (!(window as any).Go) {
@@ -75,7 +95,7 @@ export default function Playground() {
         const instance = await WebAssembly.instantiate(module, go.importObject);
         go.run(instance);
         setWasmReady(true);
-        console.log("WASM loaded successfully");
+        // console.log("WASM loaded successfully");
       } catch (err) {
         console.error("WASM Load Error:", err);
         setOutput(`MowaLang Load Error: ${(err as Error).message}`);
@@ -185,7 +205,7 @@ export default function Playground() {
       textarea.addEventListener(
         "paste",
         (e) => {
-          console.log("Paste event detected");
+          // console.log("Paste event detected");
           e.stopPropagation();
         },
         true

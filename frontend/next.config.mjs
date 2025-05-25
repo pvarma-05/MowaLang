@@ -8,21 +8,21 @@ const config = {
   async headers() {
     return [
       {
-        source: '/mowalang.wasm',
+        source: "/monaco/(.*)",
         headers: [
-          {
-            key: 'Content-Type',
-            value: 'application/wasm',
-          },
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],
       },
       {
-        source: '/wasm_exec.js',
+        source: "/mowalang.wasm",
         headers: [
-          {
-            key: 'Content-Type',
-            value: 'text/javascript',
-          },
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/wasm_exec.js",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],
       },
     ];

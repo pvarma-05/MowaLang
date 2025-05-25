@@ -3,6 +3,7 @@ import { RootProvider } from 'fumadocs-ui/provider';
 import { Outfit, Fira_Code } from 'next/font/google';
 import type { ReactNode } from 'react';
 import { myfont } from "./assets/fonts"
+import '@/app/monaco-config'
 
 const outfit = Outfit({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],

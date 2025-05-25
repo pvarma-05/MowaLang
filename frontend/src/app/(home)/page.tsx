@@ -16,24 +16,6 @@ export default function Home() {
   useEffect(() => {
     if (!titleRef.current || !subtitleRef.current) return;
 
-    // Preload Monaco and WASM assets
-    const preloadAssets = () => {
-      const assets = [
-        { href: "/monaco/min/vs/loader.js", as: "script" },
-        { href: "/wasm_exec.js", as: "script" },
-        { href: "/mowalang.wasm", as: "fetch", crossOrigin: "anonymous" },
-      ];
-      assets.forEach(({ href, as, crossOrigin }) => {
-        const link = document.createElement("link");
-        link.rel = "preload";
-        link.href = href;
-        link.as = as;
-        if (crossOrigin) link.crossOrigin = crossOrigin;
-        document.head.appendChild(link);
-      });
-    };
-    preloadAssets();
-
     document.fonts.ready.then(() => {
       const split = new SplitType(titleRef.current!, { types: "chars" });
 
