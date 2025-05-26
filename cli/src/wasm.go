@@ -30,7 +30,7 @@ func (w *outputWriter) String() string {
 	return w.buffer.String()
 }
 
-// loads dialogues.json
+// loads dialogues
 func loadDialogues() (errors.ActorDialogues, error) {
 	data, err := errors.DialoguesFS.ReadFile("dialogues.json")
 	if err != nil {
