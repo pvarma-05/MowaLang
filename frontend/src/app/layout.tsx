@@ -24,8 +24,8 @@ export default function Layout({ children }: { children: ReactNode }) {
       <body className="flex flex-col min-h-screen scrollbar-thin scrollbar-thumb-[#263238] scrollbar-track-[#001220] selection:bg-red-200/35 selection:text-[#A93E39] dark:selection:bg-red-400/8">
         <RootProvider>
           {children}
-          <Analytics />
         </RootProvider>
+        <Analytics />
       </body>
     </html>
   );
