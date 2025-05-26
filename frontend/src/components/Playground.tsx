@@ -88,7 +88,7 @@ export default function Playground() {
 
       const go = new Go();
       try {
-        const response = await fetch("/mowalang.wasm");
+        const response = await fetch("/main.wasm");
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const buffer = await response.arrayBuffer();
         const module = await WebAssembly.compile(buffer);
