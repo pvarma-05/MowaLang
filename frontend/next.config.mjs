@@ -13,12 +13,12 @@ const config = {
           { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],
       },
-      {
-        source: "/main.wasm",
-        headers: [
-          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
-        ],
-      },
+      // {
+      //   source: "/main.wasm",
+      //   headers: [
+      //     { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+      //   ],
+      // },
       {
         source: "/wasm_exec.js",
         headers: [
