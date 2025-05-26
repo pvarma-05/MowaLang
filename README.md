@@ -47,6 +47,3 @@ Enhance your coding with our MowaLang VS Code extension:
 
 ## 📌 License
 Apache 2.0
-
-## 🙏 Inspired by
-BHAILANG
