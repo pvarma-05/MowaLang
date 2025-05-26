@@ -49,7 +49,7 @@ export default function Playground() {
     const preloadAssets = () => {
       const assets = [
         { href: "/wasm_exec.js", as: "script" },
-        { href: "/mowalang.wasm", as: "fetch", crossOrigin: "anonymous" },
+        { href: "/main.wasm", as: "fetch", crossOrigin: "anonymous" },
       ];
       assets.forEach(({ href, as, crossOrigin }) => {
         const link = document.createElement("link");
