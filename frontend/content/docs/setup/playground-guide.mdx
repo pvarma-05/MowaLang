@@ -1,6 +1,64 @@
 ---
-title: Playground Guide
-description: Inka Modhaledadhama?
+title: Using the MowaLang Playground
+description: Learn how to write, run, and test MowaLang code directly in your browser with the interactive playground.
 ---
 
-## Hello Guysss
+## Overview
+The **MowaLang Playground** lets you run MowaLang code right from your browser — no installation, no setup. It’s the fastest way to try out the language and experience our legendary dialogues!
+
+---
+
+import Image from "next/image";
+
+### Features
+
+- **Code Editor**
+  Write your `.mowa` code using our in-browser editor.
+
+- **Output Screen**
+  See both the **output** of your program and a **dialogue** (based on success or failure).
+
+- **Run Button**
+  Instantly runs your code and displays results.
+
+- **Clear Button**
+  Clears both the **code editor** and **output window** in one click.
+
+- **Default Template**
+  Every time you load the page, a ready-to-run MowaLang snippet is auto-filled for you.
+
+---
+
+### ⚠️ Important Notes
+
+- The playground does **not** support CLI flags like `-p` or `--preference`.
+  Hero dialogues are **randomized**, similar to using `mowa -p all`.
+
+- There is **no file upload/download** support currently.
+
+- The theme is fixed — there’s no option to toggle between light/dark modes (for now).
+
+---
+
+### How to Use
+
+1. Go to the [Playground](/#playground)
+2. Start coding or use the default example
+3. Click **Run**
+4. View your program's output and enjoy a dramatic hero dialogue
+5. Click **Clear** to reset everything
+
+---
+
+### Preview
+If you'd like to include a visual preview, you can use a screenshot like this:
+
+<Image
+  src="/docs/playground.png"
+  alt="MowaLang Playground Screenshot"
+  width={900}
+  height={500}
+  className="object-cover select-none rounded-md w-auto h-auto"
+  priority={true}
+  draggable={false}
+/>

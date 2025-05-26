@@ -1,0 +1,228 @@
+---
+title: Patterns
+description: Build stars, pyramids, and other creative shapes using loops in MowaLang.
+---
+
+Now that you've mastered the syntax, it's time to **build cool things** using MowaLang!
+
+## ⭐ Patterns in MowaLang
+
+Below are `8` classic patterns implemented in MowaLang using `varaku` (loops) and printing logic.
+
+Each pattern takes an input `n` and displays a specific pattern.
+
+---
+
+### Pattern 1
+
+```bash
+idhi n : number;
+theesko n;
+mowa"\n\n";
+varaku (idhi i = 0; i < n; i = i + 1) {
+  varaku (idhi j = 0; j < 5; j = j + 1) {
+    mowa "*";
+  }
+  mowa "\n";
+}
+
+```
+
+**output:**
+```bash
+*****
+*****
+*****
+*****
+*****
+
+PSPK: 'Aadu na FAN...
+Nenu Cheppina okatey.. Na FANS cheppina okatey.
+```
+
+### Pattern 2
+
+```bash
+idhi n : number;
+theesko n;
+mowa"\n\n";
+varaku(idhi i = 1; i <= n; i = i + 1) {
+  varaku(idhi j = 1; j <= i; j = j + 1) {
+    mowa "*";
+  }
+  mowa "\n";
+}
+
+```
+
+**output:**
+```bash
+*
+**
+***
+****
+*****
+
+NTR: 'maadhi Raayalaseema anna..
+Amma Thodu entha mandhi vasthey antha mandhi ni addanga narikestha!'
+```
+
+### Pattern 3
+
+```bash
+idhi n : number;
+theesko n;
+mowa"\n\n";
+varaku (idhi i = 1; i <= n; i = i + 1) {
+  varaku (idhi j = 1; j <= i; j = j + 1) {
+    mowa j;
+  }
+  mowa "\n";
+}
+```
+
+**output:**
+```bash
+1
+12
+123
+1234
+12345
+
+Prabhas: 'Tipper lorry velli scooter ni guddithe elaa untaadho thelusaa? alaa untaadhi nenu guddithey'
+```
+
+### Pattern 4
+
+```bash
+idhi n : number;
+theesko n;
+mowa"\n\n";
+varaku(idhi i = 1; i <= n; i = i + 1) {
+  varaku(idhi j = 1; j <= i; j = j + 1) {
+    mowa i;
+  }
+  mowa "\n";
+}
+```
+
+**output:**
+```bash
+1
+22
+333
+4444
+55555
+
+Mahesh Babu: 'Ila Round-up chesi confuse cheyyodhu..Endukantey Confusion lo ekkuva kottesthaanu.'
+```
+
+### Pattern 5
+
+```bash
+idhi n : number;
+theesko n;
+mowa"\n\n";
+varaku (idhi i = 1; i <= n; i = i + 1) {
+  varaku (idhi j = n; j >= i; j = j - 1) {
+    mowa "*";
+  }
+  mowa "\n";
+}
+```
+
+**output:**
+```bash
+*****
+****
+***
+**
+*
+
+balayya: 'Flute Jinka mundhu oodhu, Simham Mundhu kaadhu'
+```
+
+### Pattern 6
+
+```bash
+idhi n : number;
+theesko n;
+mowa"\n\n";
+varaku (idhi i = 0; i < n; i = i + 1) {
+  varaku (idhi j = 1; j <= n - i; j = j + 1) {
+    mowa j;
+  }
+  mowa "\n";
+}
+```
+
+**output:**
+```bash
+12345
+1234
+123
+12
+1
+
+Mahesh Babu: 'Noru thiruguthundhi kadha ani Ra gey aneykodadhu.
+dhaani tharvaatha na cheyya tirugudhi, etu thipputhaano naakey thelidhu'
+```
+
+### Pattern 7
+
+```bash
+idhi n : number;
+mowa "Number Mowa:";
+theesko n;
+mowa"\n\n";
+varaku (idhi i = 0; i < n; i = i + 1) {
+  varaku (idhi j = 0; j < n - i; j = j + 1) {
+    mowa " ";
+  }
+  varaku (idhi j = 0; j < (2 * i) + 1; j = j + 1) {
+    mowa "*";
+  }
+  mowa "\n";
+}
+```
+
+**output:**
+```bash
+     *
+    ***
+   *****
+  *******
+ *********
+
+AA: 'e kaalu naadhey, ee kaalu naadhe.
+Na Kaala medha na kaalu eskuntine, Ne Owner medha esina emi?'
+```
+
+### Pattern 8
+
+```bash
+idhi n : number;
+theesko n;
+mowa"\n\n";
+varaku (idhi i = 0; i < n; i = i + 1) {
+  varaku (idhi j = 0; j < i; j = j + 1) {
+    mowa " ";
+  }
+  varaku (idhi j = 0; j < (2 * n) - (2 * i) - 1; j = j + 1) {
+    mowa "*";
+  }
+  mowa "\n";
+}
+```
+
+**output:**
+```bash
+*********
+ *******
+  *****
+   ***
+    *
+
+AA: 'aa bidda thirigi vachenthadhaaka ee jilla lo undedhi governement rule kaadhu.
+Pushpa Gaadi Rule-U..'
+```

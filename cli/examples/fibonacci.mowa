@@ -1,9 +1,12 @@
-pani factorial(n: number) {
-  okavela (n <= 1) ayithe {
-    ichey 1;
+idhi n : number;
+theesko n;
+mowa"\n\n";
+varaku (idhi i = 0; i < n; i = i + 1) {
+  varaku (idhi j = 0; j < n - i; j = j + 1) {
+    mowa " ";
   }
-  ichey n * factorial(n - 1);
+  varaku (idhi j = 0; j < (2 * i) + 1; j = j + 1) {
+    mowa "*";
+  }
+  mowa "\n";
 }
-
-idhi a = 5;
-mowa "Factorial: ", factorial(a);

@@ -1,6 +1,132 @@
 ---
-title: CLI FLags
-description: Inka Modhaledadhama?
+title: MowaLang CLI Flags
+description: Learn how to use MowaLang from the terminal using CLI flags for help, running files, setting actor preferences, and more.
 ---
 
-## Hello Guysss
+import Image from "next/image";
+import { Callout } from "fumadocs-ui/components/callout";
+
+Learn how to control MowaLang via the terminal using CLI flags. Whether you're looking to run a file, get help, check your version, or customize the hero dialogue experience — we’ve got you covered!
+
+---
+
+## Basic CLI Usage
+
+Once you’ve [installed MowaLang](/docs/setup/installation), you can run MowaLang from your terminal using:
+
+```bash
+mowa <flag >
+```
+
+MowaLang supports both short `-h` and long `--help` versions of flags.
+
+> <span className="not-italic">If no flag is passed, the help message will be shown by default.</span>
+
+
+## Available Flags 🚩
+
+| Flag                    | Description                                       |
+|-------------------------|---------------------------------------------------|
+|`-h`,`--help`            | Display the help message                          |
+|`-v`,`--version`         | Show the installed MowaLang version               |
+|`-r`,`--run`             | Run a `.mowa` file (requires filename)            |
+|`-p`,`--preference`      | Set hero preference for success/failure dialogues |
+
+### `-h`,`--help` Flag
+Use this flag to display a guide to all available commands.
+
+```bash
+mowa -h
+```
+
+**Output:**
+```bash
+ /$$      /$$                                         /$$
+| $$$    /$$$                                        | $$
+| $$$$  /$$$$  /$$$$$$  /$$  /$$  /$$  /$$$$$$       | $$        /$$$$$$  /$$$$$$$   /$$$$$$
+| $$ $$/$$ $$ /$$__  $$| $$ | $$ | $$ |____  $$      | $$       |____  $$| $$__  $$ /$$__  $$
+| $$  $$$| $$| $$  \ $$| $$ | $$ | $$  /$$$$$$$ /$$$$| $$        /$$$$$$$| $$  \ $$| $$  \ $$
+| $$\  $ | $$| $$  | $$| $$ | $$ | $$ /$$__  $$|____/| $$       /$$__  $$| $$  | $$| $$  | $$
+| $$ \/  | $$|  $$$$$$/|  $$$$$/$$$$/|  $$$$$$$      | $$$$$$$$|  $$$$$$$| $$  | $$|  $$$$$$$
+|__/     |__/ \______/  \_____/\___/  \_______/      |________/ \_______/|__/  |__/ \____  $$
+                                                                                    /$$  \ $$
+                                                                                   |  $$$$$$/
+                                                                                    \______/
+
+----------------------------------------------------------------------------------------------
+
+Thanks For Downloading MowaLang - A Custom Built Interpreter for Telugu Users
+
+Description:
+MOWALANG is a dramatic programming language inspired by Telugu movies and mass dialogues.
+Write expressive code, get dialogues on success or errors, and enjoy coding like never before.
+
+Developed by Pradeep Varma
+
+----------------------------------------------------------------------------------------------
+
+USAGE:
+  mowa <command>
+
+FLAGS:
+  -h, --help                help for mowa
+  -p, --preference string   Set the dialogue actor preference
+  -r, --run string          Run a MowaLang file
+  -v, --version             Print the version of MowaLang
+```
+
+<Callout type="info" title="Auto Help"> Running `mowa` without any flag also shows this help message. </Callout>
+
+
+### `-v`,`--version` Flag
+This flag displays the currently installed version of MowaLang.
+
+```bash
+mowa --version
+```
+**output**:
+```
+MowaLang v1.0.0
+```
+
+### `-r`,`--run` Flag
+Use this flag to run a .mowa file from your terminal.
+
+```bash
+mowa --r hello.mowa
+```
+> The `--run` flag supports only one file at a time. You cannot pass multiple files.
+
+**Example output:**
+```bash
+Hello, MowaLang!
+Prabhas: Jai Maahishmathi!
+```
+
+### `-p`,`--preference` Flag
+Customize the movie hero for success or failure dialogues!
+
+```bash
+mowa -p pspk
+```
+
+**output:**
+```bash
+Mowa, actor preference set to 'pspk'!
+```
+<Callout type="info" title="Reset Preferences"> To reset to all heroes, run: ```bash mowa --preference all ```</Callout>
+
+### Available Heroes
+
+- `pspk` : Pawan Kalyan
+- `aa` : Allu Arjun
+- `ntr` : Jr NTR
+- `prabhas` : Prabhas
+- `bob` : Mahesh Babu
+- `balayya` : Balakrishna
+- `all` (default) : All Heroes
+
+
+<Callout type="warning" title="Invalid Preference"> If you enter an unknown hero name, MowaLang will show a list of available heroes. </Callout>
+
+> Next up: Explore the Playground to practice live!

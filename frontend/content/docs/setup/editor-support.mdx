@@ -1,6 +1,111 @@
 ---
-title: Editor Setup
-description: Inka Modhaledadhama?
+title: Setting Up MowaLang in VS Code
+description: Learn how to set up and run MowaLang in Visual Studio Code using our custom extension.
 ---
+import Image from "next/image";
 
-## Hello Guysss
+This guide will walk you through setting up MowaLang in VS Code using our custom Mowa-Lang extension. You’ll learn how to install the extension, run MowaLang code, and take advantage of features like syntax highlighting and autocompletion. Let’s get started, mowa!
+
+## Prerequisites
+
+Before diving in, ensure you’ve installed MowaLang on your system. Follow the [Installation Guide](/docs/setup/installation) to install the appropriate script for your operating system (Windows, Linux, or macOS). Make sure to run the installation scripts in **admin or sudo mode** for proper setup.
+
+## Installing the MowaLang VS Code Extension
+
+To enhance your MowaLang coding experience in VS Code, install our official MowaLang extension. It provides syntax highlighting, autocompletions, and more, making it easier to write code!
+
+### Step-by-Step Installation
+
+1. **Open VS Code**:
+   Launch Visual Studio Code on your computer.
+
+2. **Go to Extensions**:
+   Click the Extensions icon in the Activity Bar (or press `Ctrl+Shift+X` / `Cmd+Shift+X`).
+
+3. **Search for MowaLang**:
+   In the Extensions view, type “MowaLang” in the search bar.
+
+4. **Install the Extension**:
+   Find the “MowaLang” extension (published by [Pradeep Varma]), and click **Install**.
+
+<Image
+  src={"/docs/extension.png"}
+  alt={"Extension Screenshot"}
+  height={900}
+  width={900}
+  className="object-cover select-none rounded-md h-auto w-auto"
+  draggable={false}
+  priority={true}
+  >
+  </Image>
+
+5. **Verify Installation**:
+   Once installed, the extension activates automatically for files with the `.mowa` extension. You’ll see the MowaLang logo in the status bar when editing `.mowa` files.
+
+## Extension Features
+
+The MowaLang extension makes coding in VS Code a breeze with these features:
+
+- **Logo Recognition**: Save your file with a `.mowa` extension, and the MowaLang logo appears, confirming the file type.
+- **Syntax Highlighting**: Enjoy colorful highlighting for MowaLang’s Telugu-based syntax, like `mowa`, `idhi`, `okavela`,`enchuko` and more.
+- **Autocompletions**: Get suggestions for MowaLang keywords and constructs as you type, speeding up your coding.
+- **CodeLens**: See inline actions above your code to run it directly in VS Code.
+
+<Callout title="Note" type="info">
+The CodeLens “Run MowaLang” button might not work on all setups just yet. You can always run your code using the terminal with `mowa filename.mowa`.
+</Callout>
+
+
+## Running MowaLang Code
+
+After installing MowaLang and the VS Code extension, you’re ready to run your code. Since the CodeLens “Run” button isn’t active yet, you’ll use the terminal to execute your `.mowa` files. Here’s how:
+
+### Step-by-Step Guide
+
+1. **Create a MowaLang File**:
+   - Open VS Code and create a new file.
+   - Save it with a `.mowa` extension (e.g., `hello.mowa`).
+   - Write some MowaLang code, like this “Hello World” example:
+
+     ```bash
+     mowa "Hello, MowaLang!";
+     ```
+
+2. **Open the Terminal**:
+   - In VS Code, open the integrated terminal.
+
+3. **Navigate to Your File’s Directory**:
+   - Use the `cd` command to go to the folder containing your `.mowa` file. For example:
+     ```bash
+     cd path/to/your/folder
+     ```
+
+4. **Run the Code**:
+   - Execute the MowaLang file using the `mowa` command:
+
+       ```bash
+       mowa hello.mowa
+       ```
+
+5. **View the Output**:
+   - If successful, you’ll see the output (e.g., “Hello, MowaLang!”) and possibly a movie dialogue like “Prabhas: ‘Jai Maahishmathi!’”.
+   - If there’s an error, check the terminal for details (e.g., syntax issues).
+
+6. **Example Code**:
+
+<Image
+  src={"/docs/execution.png"}
+  alt={"Extension Screenshot"}
+  height={800}
+  width={800}
+  className="object-cover select-none rounded-md h-auto w-auto"
+  draggable={false}
+  priority={true}
+  >
+</Image>
+
+<Callout title="Note" type="info">
+You can either run the code using the `Run MowaLang` Codelens which is present above the code. Or You can go to terminal and type `mowa -r {filename}`
+</Callout>
+
+> Now that you’ve learned how to run MowaLang code in VS Code, the next step is exploring how to use CLI flags to enhance your workflow.

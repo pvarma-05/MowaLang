@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import SplitType from "split-type";
 import { TextPlugin } from "gsap/TextPlugin";
-import Playground from "@/components/Playground";
+import Playground, { PlaygroundHandle } from "@/components/Playground";
 import Footer from "@/components/Footer";
 
 gsap.registerPlugin(TextPlugin);
@@ -12,6 +12,7 @@ gsap.registerPlugin(TextPlugin);
 export default function Home() {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const playgroundRef = useRef<PlaygroundHandle>(null);
 
   useEffect(() => {
     if (!titleRef.current || !subtitleRef.current) return;
@@ -121,7 +122,7 @@ export default function Home() {
         </div>
       </section>
       <div id="playground">
-        <Playground />
+        <Playground ref={playgroundRef} />
       </div>
       <Footer />
     </div>

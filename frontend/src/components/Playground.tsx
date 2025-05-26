@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from "react";
 import dynamic from "next/dynamic";
 import { Play, Trash2 } from "lucide-react";
 import gsap from "gsap";
@@ -15,8 +15,19 @@ const MonacoEditor = dynamic(() => import("@monaco-editor/react").then((mod) => 
   loading: () => <div className="text-center text-gray-500 p-4">Loading editor...</div>,
 });
 
-export default function Playground() {
-  const [code, setCode] = useState("");
+export interface PlaygroundHandle {
+  setCode: (code: string) => void;
+}
+
+const Playground = forwardRef<PlaygroundHandle>((props, ref) => {
+  const [code, setCode] = useState(`pani greet(name : string):string{
+    ichey "Hello "+name+"!,Thanks For Using MowaLang."
+    }
+    idhi name : string;
+    mowa "Name : ";
+    theesko name;
+    mowa greet(name);
+    `);
   const [output, setOutput] = useState("");
   const [dialogue, setDialogue] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
@@ -29,6 +40,17 @@ export default function Playground() {
   const outputRef = useRef<HTMLDivElement>(null);
   const dialogueRef = useRef<HTMLParagraphElement>(null);
   const errorsRef = useRef<HTMLUListElement>(null);
+  const monacoEditorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+
+  useImperativeHandle(ref, () => ({
+    setCode: (newCode: string) => {
+      setCode(newCode);
+      if (monacoEditorRef.current) {
+        monacoEditorRef.current.setValue(newCode);
+        monacoEditorRef.current.focus();
+      }
+    },
+  }));
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -197,6 +219,7 @@ export default function Playground() {
   };
 
   const handleEditorMount = (editor: editor.IStandaloneCodeEditor, monaco: Monaco) => {
+    monacoEditorRef.current = editor;
     const textarea = editor.getDomNode()?.querySelector("textarea");
     if (textarea) {
       textarea.removeAttribute("autocomplete");
@@ -211,7 +234,6 @@ export default function Playground() {
         true
       );
     }
-    // Configure Monaco for mowalang language (if custom setup exists)
     monaco.languages.register({ id: "mowalang" });
     monaco.editor.setTheme("mowaTheme");
   };
@@ -331,4 +353,8 @@ export default function Playground() {
       </div>
     </section>
   );
-}
+});
+
+Playground.displayName = "Playground";
+
+export default Playground;

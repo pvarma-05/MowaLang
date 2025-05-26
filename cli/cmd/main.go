@@ -138,8 +138,8 @@ func main() {
 Thanks For Downloading MowaLang - A Custom Built Interpreter for Telugu Users
 
 Description:
-MOWALANG is a dramatic programming language inspired by Telugu movies and mass dialogues.
-Write expressive code, get dialogues on success or errors, and enjoy coding like never before.
+MowaLang is a dynamically typed, Telugu-based programming language built with Go.
+It lets you write expressive programs using Telugu syntax and shows iconic Telugu movie dialogues when your code succeeds or fails.
 
 Developed by Pradeep Varma
 

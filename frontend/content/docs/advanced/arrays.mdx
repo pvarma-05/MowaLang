@@ -5,7 +5,7 @@ description: Declare, Access, and Manipulate collections of values using arrays 
 
 ## Overview
 
-Arrays in MowaLang allow you to store multiple values in a single variable. You can declare arrays explicitly with a type or let MowaLang infer the type using implicit declaration. MowaLang supports arrays of `number`, `string`, and even **nested arrays** like `[[number]]`.
+Arrays in MowaLang let you store multiple values under a single variable. You can declare arrays with or without specifying their type. Arrays support only `number`, `string`, and `bool` types.
 
 All arrays are **homogeneous** — meaning all elements must be of the same type. Indexing is **zero-based**, and accessing an invalid index will result in an error.
 
@@ -29,6 +29,7 @@ mowa arr2;
 ```
 
 ## Accessing and Updating Array Elements
+MowaLang uses zero-based indexing (just like most popular programming languages). The first element is at index 0.
 
 ```bash
 idhi arr: [number] = [1, 2, 3];
@@ -37,7 +38,7 @@ mowa arr[0];     // Prints 1
 arr[1] = 10;
 mowa arr[1];     // Prints 10
 ```
-<Callout title="Important" type="warn"> Array indexing starts at `0`. Accessing any index below 0 or beyond `arr.length - 1` will throw an error. </Callout>
+<Callout title="Important" type="warn"> Array indexing starts strictly at `0`. You **cannot** define custom start indexes like `arr[1] = ...` without declaring index 0 first. Accessing negative indexes or indexes beyond `arr.length - 1` will result in an error. </Callout>
 
 ## Array Length
 You can retrieve the size of an array using the `.length` property.
@@ -48,7 +49,7 @@ mowa arr.length; // Prints 3
 ```
 
 ## Dynamic Arrays with User Input
-You can create dynamic arrays by taking input from users:
+You can dynamically create arrays by asking the user for the size:
 
 ```bash
 idhi a: number;
@@ -79,10 +80,45 @@ Array lo unna values: [1, 2, 3, 4, 5]
 Prabhas: 'Trust No-One, Kill Anyone, Be Only One'
 ```
 
+## Binary Sort Example
+```bash
+pani sort(a: [number], s:number): [number] {
+    varaku (idhi i = 0; i < s - 1; i++) {
+        varaku (idhi j = 0; j < s - i - 1; j++) {
+            okavela (a[j] > a[j + 1]) ayithe {
+                idhi temp: number = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = temp;
+            }
+        }
+    }
+    ichey a;
+}
+
+idhi a: number;
+mowa "Array Size ivvu mowa: ";
+theesko a;
+idhi arr: [number(a)];
+mowa a, " values enter cheyyu mowa: \n";
+varaku (idhi i = 0; i < a; i++) {
+    theesko arr[i];
+}
+mowa "Array lo unna values: ",arr;
+
+idhi sorted: [number] = sort(arr, a);
+mowa "\nSorted array: ",sorted;
+```
+
+**output:**
+```bash
+Array Size ivvu mowa: 5 values enter cheyyu mowa:
+Array lo unna values: [6, 7, 10, 67, 12]
+Sorted array: [6, 7, 10, 12, 67]
+AA: 'Nenu Ikkada Business loki yelu etti kelakadaaniki raale, eeleyadaaniki vachinaa..Thaggedheley'
+```
+
 <Callout title="Congratulations Mowa 🥳" type="success">
-You’ve officially completed the **Docs section** of MowaLang! 🏁<br />
-From the basics to advanced features, you've learned everything needed to wield this language like a pro.
+ You've completed the **Docs section** of MowaLang! 🏁<br /> From basics to advanced concepts, you're now ready to wield MowaLang like a pro.
 
-
-Now that you’ve mastered the core concepts, it’s time to explore the **fun side** of MowaLang. If you're up for it, jump into the next section where we build **patterns**, solve **algorithms**, and create cool stuff — all using pure Mowa power.
+But wait — there's more fun ahead! Explore the Fun section next to build patterns, and unlock your creative coding side 💥.
 </Callout>
