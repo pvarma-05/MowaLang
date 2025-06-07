@@ -113,7 +113,7 @@ export default function Home() {
             </Link>
             <Link
               className="px-5 md:px-10 py-4 bg-[#A93E39] text-white font-medium font-outfit text-md md:text-lg lg:text-xl rounded-md transition-all duration-300 hover:scale-105"
-              href="https://github.com/pvarma-05/MowaLang-Web"
+              href="https://github.com/pvarma-05/MowaLang"
               target="_blank"
             >
               Source
